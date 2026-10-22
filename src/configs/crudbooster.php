@@ -69,6 +69,14 @@ return [
     'ADMIN_LAYOUT' => '',
 
     /*
+    * PHP 8 turned many PHP 7 notices (undefined array key / property / variable) into warnings,
+    * which Laravel throws as exceptions. CRUDBooster and generated module controllers rely on the
+    * PHP 7 behaviour, so these specific warnings are ignored inside CRUDBooster code, compiled views
+    * and app/Http/Controllers. Set to false to surface them.
+    */
+    'LEGACY_NOTICE_COMPAT' => env('CB_LEGACY_NOTICE_COMPAT', true),
+
+    /*
     * NOTE :
     * Make sure yo clear your config cache by using command : php artisan config:clear
     */

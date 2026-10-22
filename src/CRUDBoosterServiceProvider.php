@@ -2,6 +2,8 @@
 
 use crocodicstudio\crudbooster\commands\CrudboosterVersionCommand;
 use crocodicstudio\crudbooster\commands\Mailqueues;
+use crocodicstudio\crudbooster\database\seeds\CBSeeder;
+use crocodicstudio\crudbooster\helpers\LegacyNoticeHandler;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -28,7 +30,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if($this->app->runningInConsole()) {
-            $this->registerSeedsFrom(__DIR__.'/database/seeds');
+            $this->registerSeeder();
             $this->publishes([__DIR__.'/configs/crudbooster.php' => config_path('crudbooster.php')],'cb_config');
             $this->publishes([__DIR__.'/userfiles/controllers/CBHook.php' => app_path('Http/Controllers/CBHook.php')],'CBHook');
             $this->publishes([__DIR__.'/userfiles/controllers/AdminCmsUsersController.php' => app_path('Http/Controllers/AdminCmsUsersController.php')],'cb_user_controller');
@@ -36,6 +38,10 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         }
 
         $this->customValidation();
+
+        if (config('crudbooster.LEGACY_NOTICE_COMPAT', true)) {
+            LegacyNoticeHandler::register([__DIR__, config('view.compiled'), app_path('Http/Controllers')]);
+        }
     }
 
     /**
@@ -60,9 +66,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         }
 
         $loader = AliasLoader::getInstance();
-        $loader->alias('PDF', 'Barryvdh\DomPDF\Facade');
+        $loader->alias('PDF', 'Barryvdh\DomPDF\Facade\Pdf');
         $loader->alias('Excel', 'Maatwebsite\Excel\Facades\Excel');
-        $loader->alias('Image', 'Intervention\Image\ImageManagerStatic');
+        $loader->alias('Image', 'crocodicstudio\crudbooster\helpers\CBImage');
         $loader->alias('CRUDBooster', 'crocodicstudio\crudbooster\helpers\CRUDBooster');
         $loader->alias('CB', 'crocodicstudio\crudbooster\helpers\CB');
     }
@@ -91,22 +97,19 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         });
     }
 
-    protected function registerSeedsFrom($path)
+    protected function registerSeeder()
     {
-        foreach (glob("$path/*.php") as $filename)
-        {
-            include $filename;
-            $classes = get_declared_classes();
-            $class = end($classes);
+        // `db:seed --class=CBSeeder` resolves to Database\Seeders\CBSeeder on Laravel 8+.
+        if (! class_exists('Database\\Seeders\\CBSeeder')) {
+            class_alias(CBSeeder::class, 'Database\\Seeders\\CBSeeder');
+        }
 
-            $command = request()->server('argv', null);
-            if (is_array($command)) {
-                $command = implode(' ', $command);
-                if ($command == "artisan db:seed") {
-                    Artisan::call('db:seed', ['--class' => $class]);
-                }
+        $command = request()->server('argv', null);
+        if (is_array($command)) {
+            $command = implode(' ', $command);
+            if ($command == "artisan db:seed") {
+                Artisan::call('db:seed', ['--class' => CBSeeder::class]);
             }
-
         }
     }
 

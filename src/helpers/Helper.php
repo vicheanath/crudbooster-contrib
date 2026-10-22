@@ -59,8 +59,8 @@ if(!function_exists('assetResize')) {
         if(Storage::exists($newLocation)) {
             return asset($newLocation);
         }else{
-            $img = Image::make(storage_path($path))->fit($width,$height);
-            $img->save(storage_path($newLocation),$quality);
+            $img = Image::read(storage_path($path))->cover((int) $width, (int) ($height ?: $width));
+            $img->save(storage_path($newLocation), quality: $quality);
             return asset($newLocation);
         }
     }

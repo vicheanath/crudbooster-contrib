@@ -6,6 +6,7 @@ use CRUDBooster;
 use DB;
 use Illuminate\Console\Command;
 use Request;
+use crocodicstudio\crudbooster\database\seeds\CBSeeder;
 use Symfony\Component\Process\Process;
 
 class CrudboosterInstallationCommand extends Command
@@ -50,20 +51,15 @@ class CrudboosterInstallationCommand extends Command
             $this->info('Dumping the autoloaded files and reloading all new files...');
             $composer = $this->findComposer();
 
-            $process = (app()->version() >= 7.0)
-                ? new Process([$composer.' dumpautoload'])
-                : new Process($composer.' dumpautoload');
-
-            $process->setWorkingDirectory(base_path())->run();
+            Process::fromShellCommandline($composer.' dump-autoload')
+                ->setWorkingDirectory(base_path())
+                ->run();
 
             $this->info('Migrating database...');
 
             $this->call('migrate');
-            $this->call('db:seed', ['--class' => 'CBSeeder']);
+            $this->call('db:seed', ['--class' => CBSeeder::class]);
             $this->call('config:clear');
-            if (app()->version() < 5.6) {
-                $this->call('optimize');
-            }
 
             $this->info('Installing CRUDBooster Is Completed ! Thank You :)');
         } else {
@@ -97,17 +93,17 @@ class CrudboosterInstallationCommand extends Command
         $this->info("Your laravel version: ".$laravel::VERSION);
         $this->info("---");
 
-        if (version_compare($laravel::VERSION, "6.0", ">=")) {
-            $this->info('Laravel Version (>= 6.x): [Good]');
+        if (version_compare($laravel::VERSION, "11.0", ">=")) {
+            $this->info('Laravel Version (>= 11.x): [Good]');
         } else {
-            $this->info('Laravel Version (>= 6.x): [Bad]');
+            $this->info('Laravel Version (>= 11.x): [Bad]');
             $system_failed++;
         }
 
-        if (version_compare(phpversion(), '7.2.0', '>=')) {
-            $this->info('PHP Version (>= 7.2.*): [Good]');
+        if (version_compare(phpversion(), '8.2.0', '>=')) {
+            $this->info('PHP Version (>= 8.2.*): [Good]');
         } else {
-            $this->info('PHP Version (>= 7.2.*): [Bad] Yours: '.phpversion());
+            $this->info('PHP Version (>= 8.2.*): [Bad] Yours: '.phpversion());
             $system_failed++;
         }
 

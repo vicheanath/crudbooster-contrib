@@ -1,5 +1,6 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
+use Cache;
 use File;
 use Image;
 use Request;
@@ -57,18 +58,16 @@ class FileController extends Controller
                 $h = Request::get('h') ?: $w;
             }
 
-            $imgRaw = Image::cache(function ($image) use ($fullStoragePath, $w, $h) {
-                $im = $image->make($fullStoragePath);
+            // Replaces intervention/imagecache: keep the 5 minute lifetime it used by default.
+            $cacheKey = 'cb_image_'.md5($fullStoragePath.'|'.$w.'|'.$h.'|'.filemtime($fullStoragePath));
+            $imgRaw = base64_decode(Cache::remember($cacheKey, 300, function () use ($fullStoragePath, $w, $h) {
+                $im = Image::read($fullStoragePath);
                 if ($w) {
-                    if (! $h) {
-                        $im->fit($w);
-                    } else {
-                        $im->fit($w, $h);
-                    }
+                    $im->cover((int) $w, (int) ($h ?: $w));
                 }
 
-                return $im;
-            });
+                return base64_encode($im->encode()->toString());
+            }));
 
             $imageFileSize = mb_strlen($imgRaw, '8bit') ?: 0;
         }

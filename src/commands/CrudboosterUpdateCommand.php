@@ -6,6 +6,7 @@ use CRUDBooster;
 use DB;
 use Illuminate\Console\Command;
 use Request;
+use crocodicstudio\crudbooster\database\seeds\CBSeeder;
 use Symfony\Component\Process\Process;
 
 class CrudboosterUpdateCommand extends Command
@@ -62,13 +63,14 @@ class CrudboosterUpdateCommand extends Command
 
         $this->info('Dumping the autoloaded files and reloading all new files...');
         $composer = $this->findComposer();
-        $process = new Process($composer.' dumpautoload');
-        $process->setWorkingDirectory(base_path())->run();
+        Process::fromShellCommandline($composer.' dump-autoload')
+            ->setWorkingDirectory(base_path())
+            ->run();
 
         $this->info('Migrating database...');
         $this->call('migrate');
 
-        $this->call('db:seed', ['--class' => 'CBSeeder']);
+        $this->call('db:seed', ['--class' => CBSeeder::class]);
 
         $this->info('Clearing Cache...');
         Cache::flush();
@@ -99,17 +101,17 @@ class CrudboosterUpdateCommand extends Command
         $system_failed = 0;
         $laravel = app();
 
-        if ($laravel::VERSION >= 5.3) {
-            $this->info('Laravel Version (>= 5.3.*): [Good]');
+        if (version_compare($laravel::VERSION, '11.0', '>=')) {
+            $this->info('Laravel Version (>= 11.x): [Good]');
         } else {
-            $this->info('Laravel Version (>= 5.3.*): [Bad]');
+            $this->info('Laravel Version (>= 11.x): [Bad]');
             $system_failed++;
         }
 
-        if (version_compare(phpversion(), '5.6.0', '>=')) {
-            $this->info('PHP Version (>= 5.6.*): [Good]');
+        if (version_compare(phpversion(), '8.2.0', '>=')) {
+            $this->info('PHP Version (>= 8.2.*): [Good]');
         } else {
-            $this->info('PHP Version (>= 5.6.*): [Bad] Yours: '.phpversion());
+            $this->info('PHP Version (>= 8.2.*): [Bad] Yours: '.phpversion());
             $system_failed++;
         }
 
