@@ -1,4 +1,7 @@
+I have several projects built with **CRUDbooster**, but the original project is no longer actively maintained, and the original maintainer has released a new version with a completely different architecture from the old version my projects rely on. As a result, migrating to the new version would require significant changes to my existing codebase.
+
 # :rocket: CRUDBOOSTER - Laravel CRUD Generator
+
 [![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
 [![License](https://poser.pugx.org/crocodicstudio/crudbooster/license)](https://packagist.org/packages/crocodicstudio/crudbooster)
