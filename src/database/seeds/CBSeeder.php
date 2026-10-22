@@ -348,6 +348,16 @@ class CBSeeder extends Seeder
                 'dataenum' => null,
                 'helper' => null,
             ],
+            [
+                'created_at' => date('Y-m-d H:i:s'),
+                'name' => 'google_fcm_service_account',
+                'label' => 'Google FCM Service Account (JSON)',
+                'content' => '',
+                'content_input_type' => 'textarea',
+                'group_setting' => cbLang('application_setting'),
+                'dataenum' => null,
+                'helper' => 'Firebase console > Project settings > Service accounts > Generate new private key. Replaces the legacy FCM server key.',
+            ],
         ];
 
         foreach ($data as $row) {

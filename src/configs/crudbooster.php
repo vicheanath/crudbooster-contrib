@@ -74,6 +74,12 @@ return [
     * PHP 7 behaviour, so these specific warnings are ignored inside CRUDBooster code, compiled views
     * and app/Http/Controllers. Set to false to surface them.
     */
+    /*
+    * Path to a Firebase service account JSON file for push notifications (FCM HTTP v1).
+    * Used when the "Google FCM Service Account" setting is empty.
+    */
+    'FCM_SERVICE_ACCOUNT' => env('CB_FCM_SERVICE_ACCOUNT'),
+
     'LEGACY_NOTICE_COMPAT' => env('CB_LEGACY_NOTICE_COMPAT', true),
 
     /*
