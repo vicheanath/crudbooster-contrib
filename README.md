@@ -2,21 +2,32 @@ I have several projects built with **CRUDbooster**, but the original project is 
 
 # :rocket: CRUDBOOSTER - Laravel CRUD Generator
 
-[![Latest Stable Version](https://poser.pugx.org/crocodicstudio/crudbooster/v/stable)](https://packagist.org/packages/crocodicstudio/crudbooster)
-[![Total Downloads](https://poser.pugx.org/crocodicstudio/crudbooster/downloads)](https://packagist.org/packages/crocodicstudio/crudbooster)
-[![License](https://poser.pugx.org/crocodicstudio/crudbooster/license)](https://packagist.org/packages/crocodicstudio/crudbooster)
+[![Latest Stable Version](https://poser.pugx.org/vicheanath/crudbooster/v/stable)](https://packagist.org/packages/vicheanath/crudbooster)
+[![Tests](https://github.com/vicheanath/crudbooster-contrib/actions/workflows/tests.yml/badge.svg)](https://github.com/vicheanath/crudbooster-contrib/actions/workflows/tests.yml)
+[![License](https://poser.pugx.org/vicheanath/crudbooster/license)](https://packagist.org/packages/vicheanath/crudbooster)
 
 > Laravel CRUD Generator, Make a Web Application Just In Minutes, Even With Less Code and fewer Steps !
 
 # About CRUDBooster
 CRUDBooster is a Laravel CRUD Generator. With a new concept of scaffolding, very easy for the beginner and professional. It's easy to use, easy to custom, and very flexible. Don't limit your mind, CRUDBooster gives us a true flexibility to develop an app. You can utilize its built in CRUD Generator or even you just need for your master data only.
 
+## This Fork
+`vicheanath/crudbooster` keeps the classic CRUDBooster 5.x architecture and runs it on **PHP 8.2 – 8.5** and **Laravel 12 / 13**.
+The namespace is unchanged, so existing modules keep working.
+
+```bash
+composer require vicheanath/crudbooster:^7.0
+php artisan crudbooster:install
+```
+
+Coming from `crocodicstudio/crudbooster` 5.x? Read [UPGRADE.md](UPGRADE.md). Release notes are in [CHANGELOG.md](CHANGELOG.md).
+
 ## Let's Get Started
 ### [Installation](/docs/en/installation.md)
 ### [Documentation](/docs/en/index.md)
 
 ## Support
-All issues, bugs or help are in one place, in [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). To request help or report a problem, centralize everything in the [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues). Follow the guidelines in the "Using CRUDBooster Issues Page" session.
+Issues with this fork go to [GitHub Issues](https://github.com/vicheanath/crudbooster-contrib/issues). To request help or report a problem, centralize everything there. Follow the guidelines in the "Using CRUDBooster Issues Page" session.
 
 ## Important Note To Developer
 Dear Developer, you are not end new user, to use CRUDBooster, **Laravel knowledge** is a must!, CRUDBooster is just an additional package **Laravel Framework** to help use more efficient in development. If you dont have a laravel knowledge, so nightmare will come to you :D. We can't help you as you want in every issues especially basic issues of web development instead you can find out in internet (stackoverflow or any other)
@@ -45,7 +56,7 @@ To contribute directly to the source code:
 
 ## Using GitHub Issues Page
 
-Do you have any doubt? Are you having some difficulty? Did you find a translation error, a bug, or any problem? Before posting, search on [CRUDBoster Issues](https://github.com/crocodic-studio/crudbooster/issues)  and make sure if anyone has not reported the same or similar problem.
+Do you have any doubt? Are you having some difficulty? Did you find a translation error, a bug, or any problem? Before posting, search the [issues](https://github.com/vicheanath/crudbooster-contrib/issues) and make sure if anyone has not reported the same or similar problem.
 
 To post you should detail the most about what happened. Specify in detail:
 
