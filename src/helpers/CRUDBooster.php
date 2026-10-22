@@ -1184,7 +1184,8 @@ class CRUDBooster
             }
         }
 
-        $accessToken = ltrim($authorization,"Bearer ");
+        // Strip the "Bearer " prefix; ltrim() with a character list also ate leading B/e/a/r from the token.
+        $accessToken = preg_replace('/^Bearer\s+/i', '', (string) $authorization);
         $accessTokenData = Cache::get("api_token_".$accessToken);
         if(!$accessTokenData) {
             throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json([
