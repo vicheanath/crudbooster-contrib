@@ -63,7 +63,9 @@
         try {
             $sessions = Session::all();
             foreach ($sessions as $key => $val) {
-                $value = str_replace("[".$key."]", $val, $value);
+                if (is_scalar($val) || $val === null) {
+                    $value = str_replace("[".$key."]", $val, $value);
+                }
             }
             $row = (array) (DB::select($value)[0] ?? []);
             echo reset($row);

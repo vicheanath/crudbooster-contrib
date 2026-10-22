@@ -59,7 +59,9 @@
 
             $sessions = Session::all();
             foreach ($sessions as $key => $val) {
-                $sql = str_replace("[".$key."]", $val, $sql);
+                if (is_scalar($val) || $val === null) {
+                    $sql = str_replace("[".$key."]", $val, $sql);
+                }
             }
 
             try {

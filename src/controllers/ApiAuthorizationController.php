@@ -21,10 +21,11 @@ class ApiAuthorizationController extends Controller
             ->count();
         if($exists) {
             $accessToken = str_random($this->token_length);;
+            // $ttl is in minutes; Cache::put() takes seconds since Laravel 5.8.
             Cache::put("api_token_".$accessToken,[
-                "ip"=> $_SERVER['REMOTE_ADDR'],
-                "user_agent"=> $_SERVER['HTTP_USER_AGENT']
-            ], $this->ttl);
+                "ip"=> request()->ip(),
+                "user_agent"=> request()->userAgent()
+            ], now()->addMinutes($this->ttl));
 
             return response()->json([
                 'api_status'=>1,

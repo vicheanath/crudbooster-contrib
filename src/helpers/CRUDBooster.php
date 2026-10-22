@@ -791,6 +791,9 @@ class CRUDBooster
         $template = CRUDBooster::first('cms_email_templates', ['slug' => $template]);
         $html = $template->content;
         foreach ($data as $key => $val) {
+            if (! is_scalar($val) && $val !== null) {
+                continue;
+            }
             $html = str_replace('['.$key.']', $val, $html);
             $template->subject = str_replace('['.$key.']', $val, $template->subject);
         }

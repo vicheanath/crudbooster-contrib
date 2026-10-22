@@ -35,7 +35,9 @@ class CrudboosterInstallationCommand extends Command
 
         $this->header();
 
-        $this->checkRequirements();
+        if (! $this->checkRequirements()) {
+            return 1;
+        }
 
         $this->info('Installing: ');
 
@@ -68,6 +70,8 @@ class CrudboosterInstallationCommand extends Command
         }
 
         $this->footer();
+
+        return 0;
     }
 
     private function header()
@@ -166,8 +170,12 @@ class CrudboosterInstallationCommand extends Command
         if ($system_failed != 0) {
             $this->info('Sorry unfortunately your system is not meet with our requirements !');
             $this->footer(false);
+
+            return false;
         }
         $this->info('--');
+
+        return true;
     }
 
     private function footer($success = true)
@@ -182,7 +190,6 @@ class CrudboosterInstallationCommand extends Command
         } else {
             $this->info('------------------- :===: Failed !!    :===: ------------------------');
         }
-        exit;
     }
 
     /**

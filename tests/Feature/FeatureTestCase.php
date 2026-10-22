@@ -23,7 +23,15 @@ abstract class FeatureTestCase extends TestCase
     {
         parent::afterRefreshingDatabase();
 
-        // Module routes are read from cms_moduls at boot, before the test database exists.
+        $this->registerCrudboosterRoutes();
+    }
+
+    /**
+     * Module and API routes are discovered at boot (from cms_moduls and app/Http/Controllers),
+     * before the test database or generated controllers exist.
+     */
+    protected function registerCrudboosterRoutes()
+    {
         CBRouter::route();
         $routes = $this->app['router']->getRoutes();
         $routes->refreshNameLookups();
