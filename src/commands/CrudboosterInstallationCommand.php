@@ -93,10 +93,10 @@ class CrudboosterInstallationCommand extends Command
         $this->info("Your laravel version: ".$laravel::VERSION);
         $this->info("---");
 
-        if (version_compare($laravel::VERSION, "11.0", ">=")) {
-            $this->info('Laravel Version (>= 11.x): [Good]');
+        if (version_compare($laravel::VERSION, "12.0", ">=")) {
+            $this->info('Laravel Version (>= 12.x): [Good]');
         } else {
-            $this->info('Laravel Version (>= 11.x): [Bad]');
+            $this->info('Laravel Version (>= 12.x): [Bad]');
             $system_failed++;
         }
 

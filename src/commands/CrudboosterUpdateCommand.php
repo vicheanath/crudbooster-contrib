@@ -101,10 +101,10 @@ class CrudboosterUpdateCommand extends Command
         $system_failed = 0;
         $laravel = app();
 
-        if (version_compare($laravel::VERSION, '11.0', '>=')) {
-            $this->info('Laravel Version (>= 11.x): [Good]');
+        if (version_compare($laravel::VERSION, '12.0', '>=')) {
+            $this->info('Laravel Version (>= 12.x): [Good]');
         } else {
-            $this->info('Laravel Version (>= 11.x): [Bad]');
+            $this->info('Laravel Version (>= 12.x): [Bad]');
             $system_failed++;
         }
 
