@@ -18,6 +18,7 @@ class LegacyNoticeHandler
         'Trying to access array offset on',
         'Attempt to read property',
         'Uninitialized string offset',
+        'compact(): Undefined variable',
     ];
 
     private $paths;

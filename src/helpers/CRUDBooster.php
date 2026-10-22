@@ -111,7 +111,7 @@ class CRUDBooster
 
         if (in_array(strtolower($ext), $images_ext)) {
 
-            $img = Image::read(storage_path('app/'.$file_path.'/'.$filename));
+            $img = Image::read(Storage::path($file_path.'/'.$filename));
             if ($resize_width && $resize_height) {
                 $img->cover((int) $resize_width, (int) $resize_height);
             } elseif ($resize_width && ! $resize_height) {
@@ -121,11 +121,11 @@ class CRUDBooster
             } elseif ($img->width() > 1300) {
                 $img->scale(width: 1300);
             }
-            $img->save(storage_path('app/'.$file_path.'/'.$filename), quality: $qty);
+            $img->save(Storage::path($file_path.'/'.$filename), quality: $qty);
 
-            $img = Image::read(storage_path('app/'.$file_path.'/'.$filename));
+            $img = Image::read(Storage::path($file_path.'/'.$filename));
             $img->cover(350, 350);
-            $img->save(storage_path('app/'.$file_path_thumbnail.'/'.$filename), quality: $thumbQty);
+            $img->save(Storage::path($file_path_thumbnail.'/'.$filename), quality: $thumbQty);
         }
     }
 
@@ -250,13 +250,10 @@ class CRUDBooster
     {
 
         if (Request::ajax()) {
-            $resp = response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $_SERVER['HTTP_REFERER']])->send();
-            exit;
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $_SERVER['HTTP_REFERER']]));
         } else {
             $resp = redirect()->back()->with(['message' => $message, 'message_type' => $type]);
-            Session::driver()->save();
-            $resp->send();
-            exit;
+            throw new \Illuminate\Http\Exceptions\HttpResponseException($resp);
         }
     }
 
@@ -264,13 +261,10 @@ class CRUDBooster
     {
 
         if (Request::ajax()) {
-            $resp = response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to])->send();
-            exit;
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to]));
         } else {
             $resp = redirect($to)->with(['message' => $message, 'message_type' => $type]);
-            Session::driver()->save();
-            $resp->send();
-            exit;
+            throw new \Illuminate\Http\Exceptions\HttpResponseException($resp);
         }
     }
 
@@ -405,6 +399,11 @@ class CRUDBooster
     {
 
         $menu = DB::table('cms_menus')->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".self::myPrivilegeId()."')")->where('is_dashboard', 1)->where('is_active', 1)->first();
+
+        // No dashboard menu: PHP 7 auto-created this object, which keeps the default Dashboard link in the sidebar.
+        if (! $menu) {
+            return (object) ['id' => null, 'color' => null, 'url' => null];
+        }
 
         switch ($menu->type) {
             case 'Route':
@@ -824,13 +823,10 @@ class CRUDBooster
                 $result['api_status'] = 0;
                 $result['api_message'] = implode(', ', $message);
                 $res = response()->json($result, 200);
-                $res->send();
-                exit;
+                throw new \Illuminate\Http\Exceptions\HttpResponseException($res);
             } else {
                 $res = redirect()->back()->with(['message' => implode('<br/>', $message), 'message_type' => 'warning'])->withInput();
-                \Session::driver()->save();
-                $res->send();
-                exit;
+                throw new \Illuminate\Http\Exceptions\HttpResponseException($res);
             }
         }
     }
@@ -1075,6 +1071,12 @@ class CRUDBooster
         $multiple_db = ($multiple_db) ? $multiple_db : [];
         $db_database = config('crudbooster.MAIN_DB_DATABASE');
 
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'])) {
+            return array_map(function ($name) {
+                return (object) ['TABLE_NAME' => $name];
+            }, Schema::getTableListing(null, false));
+        }
+
         if ($multiple_db) {
             try {
                 $multiple_db[] = config('crudbooster.MAIN_DB_DATABASE');
@@ -1140,19 +1142,17 @@ class CRUDBooster
                 $result['api_status'] = 0;
                 $result['api_message'] = "THE DEVICE AGENT IS INVALID";
                 $res = response()->json($result, 400);
-                $res->send();
-                exit;
+                throw new \Illuminate\Http\Exceptions\HttpResponseException($res);
             }
         }
 
         $accessToken = ltrim($authorization,"Bearer ");
         $accessTokenData = Cache::get("api_token_".$accessToken);
         if(!$accessTokenData) {
-            response()->json([
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json([
                 'api_status'=> 0,
                 'api_message'=> 'Forbidden Access!'
-            ], 403)->send();
-            exit;
+            ], 403));
         }
     }
 
@@ -1217,6 +1217,9 @@ class CRUDBooster
     {
         //$cols = DB::getSchemaBuilder()->getColumnListing($table);
         $table = CRUDBooster::parseSqlTable($table);
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'])) {
+            return Schema::getColumnListing($table['table']);
+        }
         $cols = collect(DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table', [
             'database' => $table['database'],
             'table' => $table['table'],
