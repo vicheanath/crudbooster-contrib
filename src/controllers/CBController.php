@@ -673,7 +673,7 @@ class CBController extends Controller
     public function postDataQuery()
     {
         $query = request('query');
-        $query = DB::select(DB::raw($query));
+        $query = DB::select($query);
 
         return response()->json($query);
     }

@@ -21,7 +21,8 @@ abstract class TestCase extends Orchestra
 
     protected function defineEnvironment($app)
     {
-        $app['config']->set('database.default', 'testing');
+        // SQLite by default; CB_TEST_DB=mysql runs against MySQL (DB_* env vars), CRUDBooster's main target.
+        $app['config']->set('database.default', env('CB_TEST_DB', 'testing'));
 
         // CRUDBooster reads uploads via storage_path('app/...'); Laravel 11+ apps default the
         // local disk to storage/app/private, so mirror the layout existing installs use.
