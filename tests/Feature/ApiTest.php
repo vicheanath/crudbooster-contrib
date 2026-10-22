@@ -63,6 +63,26 @@ class ApiTest extends FeatureTestCase
             ->assertJsonFragment(['slug' => 'second']);
     }
 
+    public static function tokens()
+    {
+        // Tokens starting with B/e/a/r were truncated by ltrim($header, "Bearer ").
+        return [['abcd1234'], ['Bearer9x'], ['era0'], ['rrBBee'], ['xyz789']];
+    }
+
+    /**
+     * @dataProvider tokens
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('tokens')]
+    public function test_bearer_token_is_read_exactly($token)
+    {
+        \Illuminate\Support\Facades\Cache::put('api_token_'.$token, ['ip' => '127.0.0.1'], 60);
+        $this->app->instance('request', \Illuminate\Http\Request::create('/api/x', 'GET', [], [], [], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]));
+        \Illuminate\Support\Facades\Request::clearResolvedInstances();
+
+        \crocodicstudio\crudbooster\helpers\CRUDBooster::authAPI();
+        $this->addToAssertionCount(1);
+    }
+
     public function test_invalid_secret_is_rejected()
     {
         $this->postJson('/api/get-token', ['secret' => 'nope'])->assertJsonPath('api_status', 0);

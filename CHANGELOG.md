@@ -29,6 +29,7 @@ See [UPGRADE.md](UPGRADE.md).
 - Uploads follow the configured `local` disk root (Laravel 11+ `storage/app/private`).
 
 ### Other fixes
+- API: tokens starting with `B`, `e`, `a` or `r` were randomly rejected (403). `ltrim()` stripped those characters along with the `Bearer ` prefix.
 - API token lifetime now matches the advertised 48 hours.
 - Required fields submitted empty are validated.
 - Redirect helpers no longer `exit` (Octane/test friendly).
