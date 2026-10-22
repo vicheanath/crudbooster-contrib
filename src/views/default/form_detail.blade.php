@@ -7,7 +7,7 @@ $type = @$form['type'] ?: 'text';
 if (in_array($type, $asset_already)) continue;
 
 ?>
-@if(file_exists(base_path('/vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/asset.blade.php')))
+@if(file_exists(\crocodicstudio\crudbooster\helpers\CRUDBooster::packagePath('views/default/type_components/'.$type.'/asset.blade.php')))
     @include('crudbooster::default.type_components.'.$type.'.asset')
 @elseif(file_exists(resource_path('views/vendor/crudbooster/type_components/'.$type.'/asset.blade.php')))
     @include('vendor.crudbooster.type_components.'.$type.'.asset')
@@ -71,7 +71,7 @@ $asset_already[] = $type;
         $disabled = (@$form['disabled']) ? "disabled" : "";
         $jquery = @$form['jquery'];
         $placeholder = (@$form['placeholder']) ? "placeholder='".$form['placeholder']."'" : "";
-        $file_location = base_path('vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/component_detail.blade.php');
+        $file_location = \crocodicstudio\crudbooster\helpers\CRUDBooster::packagePath('views/default/type_components/'.$type.'/component_detail.blade.php');
         $user_location = resource_path('views/vendor/crudbooster/type_components/'.$type.'/component_detail.blade.php');
 
         ?>

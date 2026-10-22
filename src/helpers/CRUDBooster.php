@@ -259,6 +259,8 @@ class CRUDBooster
 
     public static function redirect($to, $message, $type = 'warning')
     {
+        // Callers often pass $_SERVER['HTTP_REFERER'], which is missing on direct requests.
+        $to = $to ?: url()->previous();
 
         if (Request::ajax()) {
             throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json(['message' => $message, 'message_type' => $type, 'redirect_url' => $to]));
@@ -393,6 +395,14 @@ class CRUDBooster
         } else {
             return Session::get('currentMenuId');
         }
+    }
+
+    /**
+     * Absolute path inside the package's src/ directory, wherever Composer installed it.
+     */
+    public static function packagePath($path = '')
+    {
+        return dirname(__DIR__).($path !== '' ? '/'.ltrim($path, '/') : '');
     }
 
     public static function sidebarDashboard()
@@ -700,13 +710,38 @@ class CRUDBooster
         return $string ? implode(', ', $string).' ' : 'just now';
     }
 
+    /**
+     * Mailer for the "Mail Driver" setting. Laravel 7+ ignores the old mail.driver/mail.host keys,
+     * so SMTP settings are applied as a dedicated mailer; "mail" keeps the app's default mailer.
+     */
+    public static function mailer()
+    {
+        $driver = self::getSetting('smtp_driver');
+
+        if ($driver == 'smtp' && self::getSetting('smtp_host')) {
+            config(['mail.mailers.cb_smtp' => [
+                'transport' => 'smtp',
+                'host' => self::getSetting('smtp_host'),
+                'port' => self::getSetting('smtp_port') ?: 587,
+                'username' => self::getSetting('smtp_username'),
+                'password' => self::getSetting('smtp_password'),
+                'timeout' => null,
+            ]]);
+            app('mail.manager')->purge('cb_smtp');
+
+            return 'cb_smtp';
+        }
+
+        if ($driver == 'sendmail' && config('mail.mailers.sendmail')) {
+            return 'sendmail';
+        }
+
+        return null;
+    }
+
     public static function sendEmailQueue($queue)
     {
-        \Config::set('mail.driver', self::getSetting('smtp_driver'));
-        \Config::set('mail.host', self::getSetting('smtp_host'));
-        \Config::set('mail.port', self::getSetting('smtp_port'));
-        \Config::set('mail.username', self::getSetting('smtp_username'));
-        \Config::set('mail.password', self::getSetting('smtp_password'));
+        $mailer = self::mailer();
 
         $html = $queue->email_content;
         $to = $queue->email_recipient;
@@ -716,7 +751,7 @@ class CRUDBooster
         $cc_email = $queue->email_cc_email;
         $attachments = unserialize($queue->email_attachments);
 
-        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use (
+        \Mail::mailer($mailer)->send("crudbooster::emails.blank", ['content' => $html], function ($message) use (
             $html,
             $to,
             $subject,
@@ -727,8 +762,12 @@ class CRUDBooster
         ) {
             $message->priority(1);
             $message->to($to);
-            $message->from($from_email, $from_name);
-            $message->cc($cc_email);
+            if ($from_email) {
+                $message->from($from_email, $from_name);
+            }
+            if ($cc_email) {
+                $message->cc($cc_email);
+            }
 
             if (count($attachments)) {
                 foreach ($attachments as $attachment) {
@@ -743,11 +782,7 @@ class CRUDBooster
     public static function sendEmail($config = [])
     {
 
-        \Config::set('mail.driver', self::getSetting('smtp_driver'));
-        \Config::set('mail.host', self::getSetting('smtp_host'));
-        \Config::set('mail.port', self::getSetting('smtp_port'));
-        \Config::set('mail.username', self::getSetting('smtp_username'));
-        \Config::set('mail.password', self::getSetting('smtp_password'));
+        $mailer = self::mailer();
 
         $to = $config['to'];
         $data = $config['data'];
@@ -778,7 +813,7 @@ class CRUDBooster
             return true;
         }
 
-        \Mail::send("crudbooster::emails.blank", ['content' => $html], function ($message) use ($to, $subject, $template, $attachments) {
+        \Mail::mailer($mailer)->send("crudbooster::emails.blank", ['content' => $html], function ($message) use ($to, $subject, $template, $attachments) {
             $message->priority(1);
             $message->to($to);
 

@@ -33,7 +33,7 @@ class UploadTest extends FeatureTestCase
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
             'photo' => $photo,
-            'id_cms_privileges' => 1,
+            'id_cms_privileges' => DB::table('cms_privileges')->value('id'),
             'password' => 'secret123',
             'password_confirmation' => 'secret123',
         ])->assertRedirect();

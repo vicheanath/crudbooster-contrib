@@ -45,9 +45,9 @@ class Mailqueues extends Command
         foreach ($queues as $q) {
             if (filter_var($q->email_recipient, FILTER_VALIDATE_EMAIL) !== false) {
                 CRUDBooster::sendEmailQueue($q);
-                $this->comment('Email send -> '.$q->subject);
+                $this->comment('Email send -> '.$q->email_subject);
             }
-            DB::table('mailqueues')->where('id', $q->id)->delete();
+            DB::table('cms_email_queues')->where('id', $q->id)->delete();
         }
     }
 }
