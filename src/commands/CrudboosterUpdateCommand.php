@@ -192,8 +192,8 @@ class CrudboosterUpdateCommand extends Command
     {
         $this->info('--');
         $this->info('Homepage : http://www.crudbooster.com');
-        $this->info('Github : https://github.com/crocodic-studio/crudbooster');
-        $this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');
+        $this->info('Github : https://github.com/vicheanath/crudbooster-contrib');
+        $this->info('Documentation : https://github.com/vicheanath/crudbooster-contrib/blob/main/docs/en/index.md');
         $this->info('====================================================================');
         if ($success == true) {
             $this->info('------------------- :===: Completed !! :===: ------------------------');

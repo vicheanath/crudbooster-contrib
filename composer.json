@@ -1,6 +1,7 @@
 {
-    "name": "crocodicstudio/crudbooster",
-    "description": "CRUDBooster Is CRUD Generator Based On Laravel Easy To Make An Advanced Backend",
+    "name": "vicheanath/crudbooster",
+    "description": "CRUDBooster (classic 5.x architecture) maintained for PHP 8.2+ and Laravel 12/13 - CRUD generator for an advanced Laravel backend",
+    "homepage": "https://github.com/vicheanath/crudbooster-contrib",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -15,7 +16,13 @@
     "authors": [
         {
             "name": "Ferry",
-            "email": "ferry@crocodic.com"
+            "email": "ferry@crocodic.com",
+            "role": "Original author"
+        },
+        {
+            "name": "Vichea",
+            "homepage": "https://github.com/vicheanath",
+            "role": "Maintainer"
         }
     ],
     "minimum-stability": "stable",
@@ -29,6 +36,9 @@
     "require-dev": {
         "orchestra/testbench": "^10.0|^11.0",
         "phpunit/phpunit": "^10.5|^11.0|^12.0"
+    },
+    "conflict": {
+        "crocodicstudio/crudbooster": "*"
     },
     "autoload": {
         "psr-4": {
@@ -52,5 +62,9 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "support": {
+        "issues": "https://github.com/vicheanath/crudbooster-contrib/issues",
+        "source": "https://github.com/vicheanath/crudbooster-contrib"
     }
 }
