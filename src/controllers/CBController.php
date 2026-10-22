@@ -857,7 +857,9 @@ class CBController extends Controller
             $ai = [];
             $name = $di['name'];
 
-            if (! isset($request_all[$name])) {
+            // Empty inputs arrive as null (ConvertEmptyStringsToNull): still validate them when the field is required.
+            $submittedEmpty = array_key_exists($name, $request_all) && (@$di['required'] || str_contains((string) @$di['validation'], 'required'));
+            if (! isset($request_all[$name]) && ! $submittedEmpty) {
                 continue;
             }
 

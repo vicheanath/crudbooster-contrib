@@ -24,7 +24,7 @@ class CBSeeder extends Seeder
                 'name' => 'Super Admin',
                 'email' => 'admin@crudbooster.com',
                 'password' => $password,
-                'id_cms_privileges' => 1,
+                'id_cms_privileges' => $this->superAdminPrivilegeId(),
                 'status' => 'Active',
             ]);
         }
@@ -375,14 +375,7 @@ class CBSeeder extends Seeder
         # CB Setting End
 
         # CB Privilege
-        if (DB::table('cms_privileges')->where('name', 'Super Administrator')->count() == 0) {
-            DB::table('cms_privileges')->insert([
-                'created_at' => date('Y-m-d H:i:s'),
-                'name' => 'Super Administrator',
-                'is_superadmin' => 1,
-                'theme_color' => 'skin-red',
-            ]);
-        }
+        $superAdminId = $this->superAdminPrivilegeId();
         if (DB::table('cms_privileges_roles')->count() == 0) {
             $modules = DB::table('cms_moduls')->get();
             $i = 1;
@@ -417,7 +410,7 @@ class CBSeeder extends Seeder
                     'is_edit' => $is_edit,
                     'is_delete' => $is_delete,
                     'is_read' => $is_read,
-                    'id_cms_privileges' => 1,
+                    'id_cms_privileges' => $superAdminId,
                     'id_cms_moduls' => $module->id,
                 ]);
                 $i++;
@@ -427,5 +420,20 @@ class CBSeeder extends Seeder
         # CB Privilege End
 
         $this->command->info('All cb seeders completed !');
+    }
+
+    private function superAdminPrivilegeId()
+    {
+        $id = DB::table('cms_privileges')->where('name', 'Super Administrator')->value('id');
+        if (! $id) {
+            $id = DB::table('cms_privileges')->insertGetId([
+                'created_at' => date('Y-m-d H:i:s'),
+                'name' => 'Super Administrator',
+                'is_superadmin' => 1,
+                'theme_color' => 'skin-red',
+            ]);
+        }
+
+        return $id;
     }
 }
