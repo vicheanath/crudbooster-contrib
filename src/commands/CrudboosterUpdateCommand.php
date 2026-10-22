@@ -6,6 +6,7 @@ use CRUDBooster;
 use DB;
 use Illuminate\Console\Command;
 use Request;
+use crocodicstudio\crudbooster\CRUDBoosterServiceProvider;
 use crocodicstudio\crudbooster\database\seeds\CBSeeder;
 use Symfony\Component\Process\Process;
 
@@ -34,7 +35,9 @@ class CrudboosterUpdateCommand extends Command
     {
 
         $this->header();
-        $this->checkRequirements();
+        if (! $this->checkRequirements()) {
+            return 1;
+        }
 
         $this->info('Updating: ');
 
@@ -43,23 +46,24 @@ class CrudboosterUpdateCommand extends Command
         }
 
         $this->info('Publishing CRUDBooster needs file...');
-        $this->call('vendor:publish');
-        $this->call('vendor:publish', ['--tag' => 'cb_migration', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'cb_lfm', '--force' => true]);
-        $this->call('vendor:publish', ['--tag' => 'cb_localization', '--force' => true]);
+        $this->call('vendor:publish', ['--provider' => CRUDBoosterServiceProvider::class]);
+        $this->call('vendor:publish', ['--tag' => 'cb_asset', '--force' => true]);
 
-        $configLFM = config_path('lfm.php');
-        $configLFM = file_get_contents($configLFM);
-        $configLFMModified = str_replace("['web','auth']", "['web','\crocodicstudio\crudbooster\middlewares\CBBackend']", $configLFM);
-        $configLFMModified = str_replace('Unisharp\Laravelfilemanager\Handlers\ConfigHandler::class', 'function() {return Session::get("admin_id");}', $configLFMModified);
-        $configLFMModified = str_replace('auth()->user()->id', 'Session::get("admin_id")', $configLFMModified);
-        $configLFMModified = str_replace("'alphanumeric_filename' => false", "'alphanumeric_filename' => true", $configLFMModified);
-        $configLFMModified = str_replace("'alphanumeric_directory' => false", "'alphanumeric_directory' => true", $configLFMModified);
-        $configLFMModified = str_replace("'alphanumeric_directory' => false", "'alphanumeric_directory' => true", $configLFMModified);
-        $configLFMModified = str_replace("'base_directory' => 'public'", "'base_directory' => 'storage/app'", $configLFMModified);
-        $configLFMModified = str_replace("'images_folder_name' => 'photos'", "'images_folder_name' => 'uploads'", $configLFMModified);
-        $configLFMModified = str_replace("'files_folder_name'  => 'files'", "'files_folder_name'  => 'uploads'", $configLFMModified);
-        file_put_contents(config_path('lfm.php'), $configLFMModified);
+        // Only when unisharp/laravel-filemanager is installed and its config published.
+        if (file_exists(config_path('lfm.php'))) {
+            $configLFM = config_path('lfm.php');
+            $configLFM = file_get_contents($configLFM);
+            $configLFMModified = str_replace("['web','auth']", "['web','\crocodicstudio\crudbooster\middlewares\CBBackend']", $configLFM);
+            $configLFMModified = str_replace('Unisharp\Laravelfilemanager\Handlers\ConfigHandler::class', 'function() {return Session::get("admin_id");}', $configLFMModified);
+            $configLFMModified = str_replace('auth()->user()->id', 'Session::get("admin_id")', $configLFMModified);
+            $configLFMModified = str_replace("'alphanumeric_filename' => false", "'alphanumeric_filename' => true", $configLFMModified);
+            $configLFMModified = str_replace("'alphanumeric_directory' => false", "'alphanumeric_directory' => true", $configLFMModified);
+            $configLFMModified = str_replace("'alphanumeric_directory' => false", "'alphanumeric_directory' => true", $configLFMModified);
+            $configLFMModified = str_replace("'base_directory' => 'public'", "'base_directory' => 'storage/app'", $configLFMModified);
+            $configLFMModified = str_replace("'images_folder_name' => 'photos'", "'images_folder_name' => 'uploads'", $configLFMModified);
+            $configLFMModified = str_replace("'files_folder_name'  => 'files'", "'files_folder_name'  => 'uploads'", $configLFMModified);
+            file_put_contents(config_path('lfm.php'), $configLFMModified);
+        }
 
         $this->info('Dumping the autoloaded files and reloading all new files...');
         $composer = $this->findComposer();
@@ -79,6 +83,8 @@ class CrudboosterUpdateCommand extends Command
         $this->call('config:clear');
 
         $this->footer();
+
+        return 0;
     }
 
     private function header()
@@ -174,8 +180,12 @@ class CrudboosterUpdateCommand extends Command
         if ($system_failed != 0) {
             $this->info('Sorry unfortunately your system is not meet with our requirements !');
             $this->footer(false);
+
+            return false;
         }
         $this->info('--');
+
+        return true;
     }
 
     private function footer($success = true)
@@ -190,7 +200,6 @@ class CrudboosterUpdateCommand extends Command
         } else {
             $this->info('------------------- :===: Failed !!    :===: ------------------------');
         }
-        exit;
     }
 
     /**

@@ -295,7 +295,7 @@ class ApiCustomController extends CBController
         $params_used = g('params_used');
         $json = [];
 
-        for ($i = 0; $i <= count($params_name); $i++) {
+        for ($i = 0; $i <= count((array) $params_name); $i++) {
             if ($params_name[$i]) {
                 $json[] = [
                     'name' => $params_name[$i],
@@ -317,7 +317,7 @@ class ApiCustomController extends CBController
         $responses_subquery = g('responses_subquery');
         $responses_used = g('responses_used');
         $json = [];
-        for ($i = 0; $i <= count($responses_name); $i++) {
+        for ($i = 0; $i <= count((array) $responses_name); $i++) {
             if ($responses_name[$i]) {
                 $json[] = [
                     'name' => $responses_name[$i],
