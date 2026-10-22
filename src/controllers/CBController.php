@@ -5,6 +5,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 use CB;
 use crocodicstudio\crudbooster\export\DefaultExportXls;
+use crocodicstudio\crudbooster\export\DefaultImportRows;
 use CRUDBooster;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
@@ -965,19 +966,16 @@ class CBController extends Controller
             $message_all = $message->all();
 
             if (Request::ajax()) {
-                $res = response()->json([
+                throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json([
                     'message' => cbLang('alert_validation_error', ['error' => implode(', ', $message_all)]),
                     'message_type' => 'warning',
-                ])->send();
-                exit;
+                ]));
             } else {
                 $res = redirect()->back()->with("errors", $message)->with([
                     'message' => cbLang('alert_validation_error', ['error' => implode(', ', $message_all)]),
                     'message_type' => 'warning',
                 ])->withInput();
-                \Session::driver()->save();
-                $res->send();
-                exit;
+                throw new \Illuminate\Http\Exceptions\HttpResponseException($res);
             }
         }
     }
@@ -1465,9 +1463,8 @@ class CBController extends Controller
 
         if (request('file') && ! request('import')) {
             $file = base64_decode(request('file'));
-            $file = storage_path('app/'.$file);
-            $rows = Excel::load($file, function ($reader) {
-            })->get();
+            $file = Storage::path($file);
+            $rows = DefaultImportRows::read($file);
             
             $countRows = ($rows)?count($rows):0;
             
@@ -1525,10 +1522,9 @@ class CBController extends Controller
         $table_columns = DB::getSchemaBuilder()->getColumnListing($this->table);
 
         $file = base64_decode(request('file'));
-        $file = storage_path('app/'.$file);
+        $file = Storage::path($file);
 
-        $rows = Excel::load($file, function ($reader) {
-        })->get();
+        $rows = DefaultImportRows::read($file);
 
         $has_created_at = false;
         if (CRUDBooster::isColumnExists($this->table, 'created_at')) {

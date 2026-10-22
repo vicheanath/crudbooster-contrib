@@ -32,7 +32,7 @@ class FileController extends Controller
             $filename = $one;
         }
 
-        $fullStoragePath = storage_path('app/'.$fullFilePath);
+        $fullStoragePath = Storage::path($fullFilePath);
         $lifetime = 31556926; // One year in seconds
 
         
@@ -41,7 +41,7 @@ class FileController extends Controller
             abort(404);
         }
 
-        $handler = new \Symfony\Component\HttpFoundation\File\File(storage_path('app/'.$fullFilePath));
+        $handler = new \Symfony\Component\HttpFoundation\File\File(Storage::path($fullFilePath));
         
         $extension = strtolower(File::extension($fullStoragePath));
         $images_ext = config('crudbooster.IMAGE_EXTENSIONS', 'jpg,png,gif,bmp');
@@ -111,9 +111,9 @@ class FileController extends Controller
             }
         } else {
             if (Request::get('download')) {
-                return Response::download(storage_path('app/'.$fullFilePath), $filename, $headers);
+                return Response::download(Storage::path($fullFilePath), $filename, $headers);
             } else {
-                return Response::file(storage_path('app/'.$fullFilePath), $headers);
+                return Response::file(Storage::path($fullFilePath), $headers);
             }
         }
     }
