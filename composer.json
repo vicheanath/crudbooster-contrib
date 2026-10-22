@@ -24,10 +24,10 @@
         "barryvdh/laravel-dompdf": "^3.1",
         "maatwebsite/excel": "^3.1.70|^4.0",
         "intervention/image": "^3.11",
-        "laravel/framework": "^11.0|^12.0|^13.0"
+        "laravel/framework": "^12.0|^13.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "orchestra/testbench": "^10.0|^11.0",
         "phpunit/phpunit": "^10.5|^11.0|^12.0"
     },
     "autoload": {
