@@ -44,7 +44,7 @@
         foreach ($sessions as $key => $val) {
             $value = str_replace("[".$key."]", $val, $value);
         }
-        $sql = DB::select(DB::raw($value));
+        $sql = DB::select($value);
     } catch (\Exception $e) {
         die('ERROR');
     }

@@ -36,3 +36,39 @@ jobs:
 
       - name: Run tests
         run: vendor/bin/phpunit
+
+  mysql:
+    runs-on: ubuntu-latest
+    name: MySQL / PHP 8.5 / Laravel 13
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: crudbooster_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, gd, zip, pdo_mysql, fileinfo
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+        env:
+          CB_TEST_DB: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: crudbooster_test
+          DB_USERNAME: root
+          DB_PASSWORD: ''

@@ -72,7 +72,7 @@
             if (! $form['parent_select']) {
                 if (@$form['dataquery']):
 
-                    $query = DB::select(DB::raw($form['dataquery']));
+                    $query = DB::select($form['dataquery']);
                     if ($query) {
                         foreach ($query as $q) {
                             $selected = ($value == $q->value) ? "selected" : "";
