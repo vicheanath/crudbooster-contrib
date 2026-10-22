@@ -111,35 +111,21 @@ class CRUDBooster
 
         if (in_array(strtolower($ext), $images_ext)) {
 
+            $img = Image::read(storage_path('app/'.$file_path.'/'.$filename));
             if ($resize_width && $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-                $img->fit($resize_width, $resize_height);
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+                $img->cover((int) $resize_width, (int) $resize_height);
             } elseif ($resize_width && ! $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-                $img->resize($resize_width, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+                $img->scale(width: (int) $resize_width);
             } elseif (! $resize_width && $resize_height) {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-                $img->resize(null, $resize_height, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
-            } else {
-                $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-                if ($img->width() > 1300) {
-                    $img->resize(1300, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-                }
-                $img->save(storage_path('app/'.$file_path.'/'.$filename), $qty);
+                $img->scale(height: (int) $resize_height);
+            } elseif ($img->width() > 1300) {
+                $img->scale(width: 1300);
             }
+            $img->save(storage_path('app/'.$file_path.'/'.$filename), quality: $qty);
 
-            $img = Image::make(storage_path('app/'.$file_path.'/'.$filename));
-            $img->fit(350, 350);
-            $img->save(storage_path('app/'.$file_path_thumbnail.'/'.$filename), $thumbQty);
+            $img = Image::read(storage_path('app/'.$file_path.'/'.$filename));
+            $img->cover(350, 350);
+            $img->save(storage_path('app/'.$file_path_thumbnail.'/'.$filename), quality: $thumbQty);
         }
     }
 
@@ -948,11 +934,11 @@ class CRUDBooster
             return 'id';
         }
 
-        $pk = DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey();
+        $pk = collect(Schema::getIndexes($table))->firstWhere('primary', true);
         if(!$pk) {
             return null;
         }
-        return $pk->getColumns()[0];
+        return $pk['columns'][0];
     }
 
     public static function newId($table)
@@ -1190,7 +1176,7 @@ class CRUDBooster
         return true;
     }
 
-    public static function sendFCM($regID = [], $data)
+    public static function sendFCM($regID, $data)
     {
         if (! $data['title'] || ! $data['content']) {
             return 'title , content null !';
