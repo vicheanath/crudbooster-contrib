@@ -46,15 +46,15 @@
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <!-- The user image in the navbar-->
-                        <img src="{{ CRUDBooster::myPhoto() }}" class="user-image" alt="User Image"/>
-                        <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                        <!-- The user's initials in the navbar-->
+                        @include('crudbooster::components.user_initials', ['class' => 'user-image'])
+                        <!-- hidden-xs hides the username on small devices so only the initials appear. -->
                         <span class="hidden-xs">{{ CRUDBooster::myName() }}</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <!-- The user image in the menu -->
+                        <!-- The user's initials in the menu -->
                         <li class="user-header">
-                            <img src="{{ CRUDBooster::myPhoto() }}" class="img-circle" alt="User Image"/>
+                            @include('crudbooster::components.user_initials', ['class' => 'img-circle'])
                             <p>
                                 {{ CRUDBooster::myName() }}
                                 <small>{{ CRUDBooster::myPrivilegeName() }}</small>
