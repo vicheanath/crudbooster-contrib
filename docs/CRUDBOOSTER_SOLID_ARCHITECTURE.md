@@ -135,17 +135,22 @@ src/
 │   ├── Generator/ModuleGeneratorInterface.php, ApiGeneratorInterface.php
 │   ├── Grid/GridQueryBuilderInterface.php, GridFilterParserInterface.php
 │   ├── Mail/TemplateMailerInterface.php
+│   ├── Modules/ModuleRegistrarInterface.php
 │   ├── Navigation/MenuRepositoryInterface.php
 │   ├── Notifications/NotificationSenderInterface.php
 │   ├── Schema/SchemaInspectorInterface.php
-│   ├── Security/AuthenticationServiceInterface.php, PermissionCheckerInterface.php
+│   ├── Security/AuthenticationServiceInterface.php, PermissionCheckerInterface.php, PrivilegeRolesInterface.php
 │   └── Settings/SettingsRepositoryInterface.php
+│
+├── models/                             <-- Eloquent models for CRUDBooster's own cms_* tables
+│   └── CmsMenu.php, CmsModul.php, ...  (relations and named query scopes; see Phase 8)
 │
 ├── security/                           <-- Auth & RBAC
 │   ├── AdminAuthenticationService.php  (login, logout, lock screen, password reset)
 │   ├── AdminAuthenticationContext.php
 │   ├── SessionAuthenticationService.php (implements AuthenticationServiceInterface)
-│   └── PermissionManager.php           (implements PermissionCheckerInterface)
+│   ├── PermissionManager.php           (implements PermissionCheckerInterface)
+│   └── PrivilegeRoles.php              (role matrix, session roles; implements PrivilegeRolesInterface)
 ├── audit/AuditLogger.php               (implements AuditLoggerInterface)
 ├── schema/SchemaInspector.php          (columns, primary keys, types, nullability, cached)
 │
@@ -178,6 +183,7 @@ src/
 ├── navigation/MenuRepository.php       (sidebar and dashboard menus for the current privilege)
 ├── mail/TemplateMailer.php             (email templates, the queue, the SMTP mailer)
 ├── notifications/NotificationSender.php (cms_notifications)
+├── modules/ModuleRegistrar.php         (the sidebar menus that come with a module)
 ├── generator/                          <-- Module and API code generators
 │   ├── ModuleGenerator.php, ApiGenerator.php
 │   └── stubs/module_controller.stub, api_controller.stub
@@ -401,6 +407,44 @@ The helper still held whole domains after Phase 5. Each now has a contract, and 
   `getCurrentModule()`, `redirect()`), the small query shortcuts (`first()`, `get()`, `insert()`) and
   `routeController()`.
 
+### Phase 8: Laravel models for CRUDBooster's tables — **Implemented.**
+About 100 raw `DB::table('cms_…')` calls in the built-in controllers, views, router, middleware and helper now go
+through the models in `src/models`. The conventions:
+
+1. **CRUDBooster's own tables (`cms_*`) are read and written only through their models.** A query that is used
+   in more than one place, or that encodes a rule, is a named scope on the model: `CmsMenu::visibleTo()`,
+   `CmsModul::routable()`, `CmsNotification::visibleTo()->unread()`, `CmsEmailQueue::due()`. Callers never
+   repeat the SQL.
+2. **Steps that span several tables are services behind contracts.** `PrivilegeRolesInterface` owns the role
+   matrix and the session copy of it (five copies of the same query became one). `ModuleRegistrarInterface`
+   owns the menus created with a module (two copies). Services take models by constructor injection; controllers,
+   views and helpers use `Model::query()` or resolve the contract.
+3. **Module data stays on the query builder.** A module's own table is passed to hooks, `callback_php` and views
+   that iterate rows, and iterating an Eloquent model yields its properties, not its columns. `CBController`,
+   the actions and the form components therefore keep `DB::table($this->table)`.
+4. **Legacy shapes are kept where user code can see them.** `CRUDBooster::me()`, `getCurrentModule()`,
+   `myPrivilege()` and the `admin_privileges_roles` session key return plain rows through `->toBase()`, as in
+   5.x. Login used to store role models there and the refresh plain rows; both now store plain rows.
+5. **No `SoftDeletes` on `cms_moduls`.** CBController's delete action writes `deleted_at` itself and some reads
+   include deleted modules, so `notDeleted()` is applied explicitly.
+6. **Timestamps stay manual.** The models keep `$timestamps = false`, and code sets `created_at` where 5.x did,
+   so `updated_at` columns are not suddenly written.
+7. **Views do not query.** The privilege, menu and settings pages get their data from the controller (the menu
+   page eager-loads children and privileges instead of one query per menu). The settings page no longer writes
+   default labels during a GET; `CmsSetting::displayLabel()` derives them.
+
+Tests are split into two PHPUnit suites (`composer test:unit`, `composer test`):
+- `tests/Unit`: one model or service at a time, against the test database: every scope and relation, the
+  `PrivilegeRoles` and `ModuleRegistrar` services and `SettingsRepository`.
+- `tests/Feature`: whole requests. New tests log in as a non-superadmin (`loginAsStandardAdmin()`) to cover
+  access control, and cover each bug below. They were checked against the previous code: 8 of the 10 new
+  feature tests fail there, one per bug; the other 2 pin down behaviour that must not change.
+- The `Coverage` CI job runs the suite with PCOV, prints the summary and uploads a Clover report.
+  `composer test:coverage` does the same locally when PCOV or Xdebug is installed.
+
+The seeder keeps its plain inserts: it runs during installation and upgrades, where model behaviour such as
+casts adds nothing.
+
 ---
 
 ## 8. Summary of Benefits
@@ -457,3 +501,20 @@ Found by the characterization tests or while moving code:
 - Sending an email with a template slug that does not exist failed with "Attempt to assign property on null". It
   now throws an `InvalidArgumentException` that names the slug.
 - The sidebar menu queries interpolated the session's privilege id into SQL. It is now a bound parameter.
+- On MySQL, `SchemaInspector::columns()` read `information_schema` without `ORDER BY`, so the Module Generator
+  could shuffle columns and form fields.
+
+Found while moving the built-in controllers onto models (Phase 8):
+- Security: a standard (non-superadmin) admin could list API secret keys, create, disable or delete API keys,
+  generate API controllers (which writes PHP files into `app/Http/Controllers`), delete them, read any table's
+  columns through the API generator, change statistic dashboards and delete setting files. Those endpoints now
+  require a superadmin, like the rest of the API generator and statistic builder.
+- The Module Manager's add form saved the new module's full-access role with a null module id, so the module had
+  no permissions. Its menu group was also not linked to any privilege, so it never appeared in the sidebar.
+- Deleting a module with an empty `controller` ran `LIKE '%%'` and deleted every menu. Deleting a module also left
+  its empty menu group behind.
+- The notification bell listed read broadcast notifications: `id_cms_users = 0 OR (... AND is_read = 0)`.
+- `notifications/read/{id}` marked any user's notification as read. It now answers 404 for others' notifications.
+- "Save as default paper size" on export wrote the setting without clearing its cache, so the old value stayed.
+- The privilege edit page ran one query per module, the menu page one per menu, and the settings page wrote
+  missing labels to the database on every view.

@@ -2,7 +2,7 @@
 
 use Cache;
 use crocodicstudio\crudbooster\contracts\Mail\TemplateMailerInterface;
-use DB;
+use crocodicstudio\crudbooster\models\CmsEmailQueue;
 use Illuminate\Console\Command;
 use Request;
 
@@ -35,7 +35,7 @@ class Mailqueues extends Command
 
         $this->comment('Mail Queues Started '.$now);
 
-        $queues = db('cms_email_queues')->where('send_at', '<=', $now)->take(25)->get();
+        $queues = CmsEmailQueue::query()->due($now)->take(25)->get();
 
         $this->comment('Total Queues : '.count($queues));
 
@@ -47,7 +47,7 @@ class Mailqueues extends Command
                 $mailer->sendQueued($q);
                 $this->comment('Email send -> '.$q->email_subject);
             }
-            DB::table('cms_email_queues')->where('id', $q->id)->delete();
+            $q->delete();
         }
     }
 }

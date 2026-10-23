@@ -18,6 +18,13 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
   `NotificationSenderInterface`, `ModuleGeneratorInterface`, `ApiGeneratorInterface`). The generators render from
   stubs, and a golden-file test pins the generated source byte for byte.
 
+- CRUDBooster's own tables are read and written through the Eloquent models in `src/models`, with named scopes
+  for shared queries. New services: `PrivilegeRolesInterface` (role matrix and session roles) and
+  `ModuleRegistrarInterface` (a module's menus). Module data stays on the query builder. See Phase 8 in
+  `docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md`.
+- Tests are split into `Unit` and `Feature` suites (`composer test:unit`), and CI reports coverage
+  (`composer test:coverage` locally).
+
 ### Changed
 - Header and sidebar typography: one font stack, a light header shadow, uppercase section labels, tighter menu items
   and ellipsis for long names. Colours still come from each privilege's skin. Run `php artisan crudbooster:update`
@@ -43,6 +50,12 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
 - Sending email with an unknown template slug now throws a clear `InvalidArgumentException`.
 - On MySQL, table columns were read in no guaranteed order, so the Module Generator could shuffle grid columns
   and form fields.
+- Security: API key, API generator, statistic builder and setting-file endpoints that a standard admin could call
+  now require a superadmin, like the rest of those tools.
+- A module created with the Module Manager's add form had no permissions and an invisible menu group.
+- Deleting a module without a controller deleted every menu; deleting a module left its empty menu group.
+- The notification bell listed read broadcast notifications, and any user's notification could be marked read.
+- Saving the default export paper size did not refresh the cached setting.
 - Security: queued email attachments are unserialized with objects disallowed, and the sidebar menu queries bind
   the privilege id instead of interpolating it into SQL.
 

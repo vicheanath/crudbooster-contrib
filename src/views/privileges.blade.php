@@ -154,24 +154,24 @@
                             <?php $no = 1;?>
                             @foreach($moduls as $modul)
                                 <?php
-                                $roles = DB::table('cms_privileges_roles')->where('id_cms_moduls', $modul->id)->where('id_cms_privileges', $row->id)->first();
+                                $roles = $roles_by_module->get($modul->id);
                                 ?>
                                 <tr>
                                     <td><?php echo $no++;?></td>
                                     <td>{{$modul->name}}</td>
                                     <td class='info' align="center"><input type='checkbox' title='Check All Horizontal'
-                                                                           <?=($roles->is_create && $roles->is_read && $roles->is_edit && $roles->is_delete) ? "checked" : ""?> class='select_horizontal'/>
+                                                                           <?=($roles?->is_create && $roles?->is_read && $roles?->is_edit && $roles?->is_delete) ? "checked" : ""?> class='select_horizontal'/>
                                     </td>
                                     <td class='active' align="center"><input type='checkbox' class='is_visible' name='privileges[<?=$modul->id?>][is_visible]'
-                                                                             <?=@$roles->is_visible ? "checked" : ""?> value='1'/></td>
+                                                                             <?=$roles?->is_visible ? "checked" : ""?> value='1'/></td>
                                     <td class='warning' align="center"><input type='checkbox' class='is_create' name='privileges[<?=$modul->id?>][is_create]'
-                                                                              <?=@$roles->is_create ? "checked" : ""?> value='1'/></td>
+                                                                              <?=$roles?->is_create ? "checked" : ""?> value='1'/></td>
                                     <td class='info' align="center"><input type='checkbox' class='is_read' name='privileges[<?=$modul->id?>][is_read]'
-                                                                           <?=@$roles->is_read ? "checked" : ""?> value='1'/></td>
+                                                                           <?=$roles?->is_read ? "checked" : ""?> value='1'/></td>
                                     <td class='success' align="center"><input type='checkbox' class='is_edit' name='privileges[<?=$modul->id?>][is_edit]'
-                                                                              <?=@$roles->is_edit ? "checked" : ""?> value='1'/></td>
+                                                                              <?=$roles?->is_edit ? "checked" : ""?> value='1'/></td>
                                     <td class='danger' align="center"><input type='checkbox' class='is_delete' name='privileges[<?=$modul->id?>][is_delete]'
-                                                                             <?=@$roles->is_delete ? "checked" : ""?> value='1'/></td>
+                                                                             <?=$roles?->is_delete ? "checked" : ""?> value='1'/></td>
                                 </tr>
                             @endforeach
                             </tbody>

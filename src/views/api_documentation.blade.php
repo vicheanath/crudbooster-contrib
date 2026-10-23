@@ -170,8 +170,8 @@
 
                 @foreach($apis as $api)
                     <?php
-                    $parameters = ($api->parameters) ? unserialize($api->parameters) : array();
-                    $responses = ($api->responses) ? unserialize($api->responses) : array();
+                    $parameters = $api->parameterList();
+                    $responses = $api->responseList();
                     ?>
                     <tr>
                         <td><?= ++$no;?></td>

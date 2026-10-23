@@ -1,7 +1,9 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use CRUDBooster;
-use Illuminate\Support\Facades\DB;
+use crocodicstudio\crudbooster\contracts\Security\PrivilegeRolesInterface;
+use crocodicstudio\crudbooster\models\CmsModul;
+use crocodicstudio\crudbooster\models\CmsPrivilege;
 use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Request;
@@ -51,9 +53,9 @@ class PrivilegesController extends CBController
             CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang("denied_access"));
         }
 
-        $id = 0;
         $data['page_title'] = "Add Data";
-        $data['moduls'] = DB::table("cms_moduls")->where('is_protected', 0)->whereNull('deleted_at')->select("cms_moduls.*", DB::raw("(select is_visible from cms_privileges_roles where id_cms_moduls = cms_moduls.id and id_cms_privileges = '$id') as is_visible"), DB::raw("(select is_create from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_create"), DB::raw("(select is_read from cms_privileges_roles where id_cms_moduls    = cms_moduls.id and id_cms_privileges = '$id') as is_read"), DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls    = cms_moduls.id and id_cms_privileges = '$id') as is_edit"), DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_delete"))->orderby("name", "asc")->get();
+        $data['moduls'] = $this->assignableModules();
+        $data['roles_by_module'] = collect();
         $data['page_menu'] = Route::getCurrentRoute()->getActionName();
 
         return view('crudbooster::privileges', $data);
@@ -73,31 +75,14 @@ class PrivilegesController extends CBController
 
         $this->validation();
         $this->input_assignment();
-        $id = DB::table($this->table)->insertGetId($this->arr);
+        $id = CmsPrivilege::query()->create($this->arr)->id;
 
         //set theme
         Session::put('theme_color', $this->arr['theme_color']);
 
-        $priv = Request::input("privileges");
-        if ($priv) {
-            foreach ($priv as $id_modul => $data) {
-                $arrs = [];
-                $arrs['is_visible'] = @$data['is_visible'] ?: 0;
-                $arrs['is_create'] = @$data['is_create'] ?: 0;
-                $arrs['is_read'] = @$data['is_read'] ?: 0;
-                $arrs['is_edit'] = @$data['is_edit'] ?: 0;
-                $arrs['is_delete'] = @$data['is_delete'] ?: 0;
-                $arrs['id_cms_privileges'] = $id;
-                $arrs['id_cms_moduls'] = $id_modul;
-                DB::table("cms_privileges_roles")->insert($arrs);
-
-                $module = DB::table('cms_moduls')->where('id', $id_modul)->first();
-            }
-        }
-
-        //Refresh Session Roles
-        $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-        Session::put('admin_privileges_roles', $roles);
+        $roles = app(PrivilegeRolesInterface::class);
+        $roles->sync($id, (array) Request::input('privileges'));
+        $roles->refreshSession();
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), cbLang("alert_add_data_success"), 'success');
     }
@@ -106,7 +91,7 @@ class PrivilegesController extends CBController
     {
         $this->cbLoader();
 
-        $row = DB::table($this->table)->where("id", $id)->first();
+        $row = CmsPrivilege::query()->toBase()->find($id);
 
         if (! CRUDBooster::isRead() && $this->global_privilege == false) {
             CRUDBooster::insertLog(cbLang("log_try_edit", [
@@ -118,10 +103,11 @@ class PrivilegesController extends CBController
 
         $page_title = cbLang('edit_data_page_title', ['module' => 'Privilege', 'name' => $row->name]);
 
-        $moduls = DB::table("cms_moduls")->where('is_protected', 0)->where('deleted_at', null)->select("cms_moduls.*")->orderby("name", "asc")->get();
+        $moduls = $this->assignableModules();
+        $roles_by_module = app(PrivilegeRolesInterface::class)->byModule($id);
         $page_menu = Route::getCurrentRoute()->getActionName();
 
-        return view('crudbooster::privileges', compact('row', 'page_title', 'moduls', 'page_menu'));
+        return view('crudbooster::privileges', compact('row', 'page_title', 'moduls', 'roles_by_module', 'page_menu'));
     }
 
     public function postEditSave($id)
@@ -138,47 +124,13 @@ class PrivilegesController extends CBController
         $this->validation($id);
         $this->input_assignment($id);
 
-        DB::table($this->table)->where($this->primary_key, $id)->update($this->arr);
+        CmsPrivilege::query()->whereKey($id)->update($this->arr);
 
-        $priv = Request::input("privileges");
+        $roles = app(PrivilegeRolesInterface::class);
+        $roles->sync($id, (array) Request::input('privileges'));
 
-        // This solves issue #1074
-        DB::table("cms_privileges_roles")->where("id_cms_privileges", $id)->delete();
-
-        if ($priv) {
-
-            foreach ($priv as $id_modul => $data) {
-                //Check Menu
-                $module = DB::table('cms_moduls')->where('id', $id_modul)->first();
-                $currentPermission = DB::table('cms_privileges_roles')->where('id_cms_moduls', $id_modul)->where('id_cms_privileges', $id)->first();
-
-                if ($currentPermission) {
-                    $arrs = [];
-                    $arrs['is_visible'] = @$data['is_visible'] ?: 0;
-                    $arrs['is_create'] = @$data['is_create'] ?: 0;
-                    $arrs['is_read'] = @$data['is_read'] ?: 0;
-                    $arrs['is_edit'] = @$data['is_edit'] ?: 0;
-                    $arrs['is_delete'] = @$data['is_delete'] ?: 0;
-                    DB::table('cms_privileges_roles')->where('id', $currentPermission->id)->update($arrs);
-                } else {
-                    $arrs = [];
-                    $arrs['is_visible'] = @$data['is_visible'] ?: 0;
-                    $arrs['is_create'] = @$data['is_create'] ?: 0;
-                    $arrs['is_read'] = @$data['is_read'] ?: 0;
-                    $arrs['is_edit'] = @$data['is_edit'] ?: 0;
-                    $arrs['is_delete'] = @$data['is_delete'] ?: 0;
-                    $arrs['id_cms_privileges'] = $id;
-                    $arrs['id_cms_moduls'] = $id_modul;
-                    DB::table("cms_privileges_roles")->insert($arrs);
-                }
-            }
-        }
-
-        //Refresh Session Roles
         if ($id == CRUDBooster::myPrivilegeId()) {
-            $roles = DB::table('cms_privileges_roles')->where('id_cms_privileges', CRUDBooster::myPrivilegeId())->join('cms_moduls', 'cms_moduls.id', '=', 'id_cms_moduls')->select('cms_moduls.name', 'cms_moduls.path', 'is_visible', 'is_create', 'is_read', 'is_edit', 'is_delete')->get();
-            Session::put('admin_privileges_roles', $roles);
-
+            $roles->refreshSession();
             Session::put('theme_color', $this->arr['theme_color']);
         }
 
@@ -192,7 +144,7 @@ class PrivilegesController extends CBController
     {
         $this->cbLoader();
 
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
+        $row = CmsPrivilege::query()->toBase()->find($id);
 
         if (! CRUDBooster::isDelete() && $this->global_privilege == false) {
             CRUDBooster::insertLog(cbLang("log_try_delete", [
@@ -202,9 +154,17 @@ class PrivilegesController extends CBController
             CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
         }
 
-        DB::table($this->table)->where($this->primary_key, $id)->delete();
-        DB::table("cms_privileges_roles")->where("id_cms_privileges", $row->id)->delete();
+        CmsPrivilege::query()->whereKey($id)->delete();
+        app(PrivilegeRolesInterface::class)->sync($id, []);
 
         CRUDBooster::redirect(CRUDBooster::mainpath(), cbLang("alert_delete_data_success"), 'success');
+    }
+
+    /**
+     * Modules shown in the privilege form, by name.
+     */
+    private function assignableModules()
+    {
+        return CmsModul::query()->unprotected()->notDeleted()->orderBy('name', 'asc')->get();
     }
 }

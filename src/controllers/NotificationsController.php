@@ -1,7 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use CRUDBooster;
-use Illuminate\Support\Facades\DB;
+use crocodicstudio\crudbooster\models\CmsNotification;
 use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
 
@@ -46,20 +46,21 @@ class NotificationsController extends CBController
     public function getLatestJson()
     {
 
-        $rows = DB::table('cms_notifications')->where('id_cms_users', 0)->orWhere('id_cms_users', CRUDBooster::myId())->orderby('id', 'desc')->where('is_read', 0)->take(25);
+        $rows = CmsNotification::query()->visibleTo(CRUDBooster::myId())->unread()->orderBy('id', 'desc')->take(25);
         if (\Schema::hasColumn('cms_notifications', 'deleted_at')) {
             $rows->whereNull('deleted_at');
         }
 
-        $total = count($rows->get());
+        // Plain rows keep the JSON the header's notification list has always read (is_read as 0/1).
+        $items = $rows->toBase()->get();
 
-        return response()->json(['items' => $rows->get(), 'total' => $total]);
+        return response()->json(['items' => $items, 'total' => count($items)]);
     }
 
     public function getRead($id)
     {
-        DB::table('cms_notifications')->where('id', $id)->update(['is_read' => 1]);
-        $row = DB::table('cms_notifications')->where('id', $id)->first();
+        $row = CmsNotification::query()->visibleTo(CRUDBooster::myId())->findOrFail($id);
+        $row->update(['is_read' => 1]);
 
         return redirect($row->url);
     }

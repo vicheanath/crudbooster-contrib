@@ -58,12 +58,7 @@ final class MenuRepository implements MenuRepositoryInterface
     {
         $privilegeId = $this->session->get('admin_privileges');
 
-        return $this->menus->newQuery()->toBase()
-            ->select('cms_menus.*')
-            ->whereIn('cms_menus.id', function (Builder $query) use ($privilegeId) {
-                $query->select('id_cms_menus')->from('cms_menus_privileges')->where('id_cms_privileges', $privilegeId);
-            })
-            ->where('is_active', 1);
+        return $this->menus->newQuery()->visibleTo($privilegeId)->active()->select('cms_menus.*')->toBase();
     }
 
     private function link(object $menu): void

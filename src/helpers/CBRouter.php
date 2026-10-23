@@ -4,6 +4,8 @@ namespace crocodicstudio\crudbooster\helpers;
 
 
 use crocodicstudio\crudbooster\middlewares\CBAuthAPI;
+use crocodicstudio\crudbooster\models\CmsMenu;
+use crocodicstudio\crudbooster\models\CmsModul;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -75,15 +77,7 @@ class CBRouter
 
             $modules = [];
             try {
-                // Todo: change table
-                $modules = db('cms_moduls')
-                    ->where('path', '!=', '')
-                    ->where('controller', '!=', '')
-                    ->whereNotNull("path")
-                    ->whereNotNull("controller")
-                    ->where('is_protected', 0)
-                    ->where('deleted_at', null)
-                    ->get();
+                $modules = CmsModul::query()->routable()->unprotected()->notDeleted()->get();
             } catch (\Exception $e) {
                 Log::error("Load cms moduls is failed. Caused = " . $e->getMessage());
             }
@@ -107,9 +101,8 @@ class CBRouter
             'namespace' => static::$cb_namespace,
         ], function () {
 
-            // Todo: change table
             if (request()->is(config('crudbooster.ADMIN_PATH'))) {
-                $menus = db('cms_menus')->where('is_dashboard', 1)->first();
+                $menus = CmsMenu::query()->dashboard()->first();
                 if ($menus) {
                     Route::get('/', 'StatisticBuilderController@getDashboard');
                 } else {
@@ -120,10 +113,9 @@ class CBRouter
 
             CRUDBooster::routeController('api_generator', 'ApiCustomController', static::$cb_namespace);
 
-            // Todo: change table
             $modules = [];
             try {
-                $modules = db('cms_moduls')->whereIn('controller', CBRouter::getCBControllerFiles())->get();
+                $modules = CmsModul::query()->whereIn('controller', CBRouter::getCBControllerFiles())->get();
             } catch (\Exception $e) {
                 Log::error("Load cms moduls is failed. Caused = " . $e->getMessage());
             }

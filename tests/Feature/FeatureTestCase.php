@@ -54,4 +54,23 @@ abstract class FeatureTestCase extends TestCase
 
         return $this;
     }
+
+    /**
+     * Logs in as a new admin whose privilege is not superadmin and has no module roles.
+     */
+    protected function loginAsStandardAdmin()
+    {
+        $privilegeId = \Illuminate\Support\Facades\DB::table('cms_privileges')->insertGetId([
+            'name' => 'Staff', 'is_superadmin' => 0, 'theme_color' => 'skin-blue',
+        ]);
+        \Illuminate\Support\Facades\DB::table('cms_users')->insert([
+            'name' => 'Staff User', 'email' => 'staff@crudbooster.com', 'password' => \Illuminate\Support\Facades\Hash::make('secret'),
+            'id_cms_privileges' => $privilegeId, 'status' => 'Active',
+        ]);
+
+        $this->post($this->admin('login'), ['email' => 'staff@crudbooster.com', 'password' => 'secret'])->assertRedirect();
+        $this->assertFalse((bool) session('admin_is_superadmin'), 'Standard admin login failed');
+
+        return $this;
+    }
 }
