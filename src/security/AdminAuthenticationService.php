@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\services;
+namespace crocodicstudio\crudbooster\security;
 
 use CRUDBooster;
 use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
@@ -31,6 +31,11 @@ class AdminAuthenticationService implements AuthenticationServiceInterface
     public function currentUserId(): mixed
     {
         return $this->session->get('admin_id');
+    }
+
+    public function isSuperadmin(): bool
+    {
+        return (bool) $this->session->get('admin_is_superadmin');
     }
 
     public function unlock(?string $password): bool

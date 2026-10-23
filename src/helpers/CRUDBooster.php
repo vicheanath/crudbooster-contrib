@@ -4,7 +4,6 @@ namespace crocodicstudio\crudbooster\helpers;
 
 use Cache;
 use DB;
-use Image;
 use Request;
 use Route;
 use Schema;
@@ -12,6 +11,7 @@ use Session;
 use Storage;
 use Validator;
 use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
+use crocodicstudio\crudbooster\contracts\Files\FileUploaderInterface;
 use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
 use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
 use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
@@ -30,107 +30,12 @@ class CRUDBooster
 
     public static function uploadBase64($value, $id = null)
     {
-        if (! self::myId()) {
-            $userID = 0;
-        } else {
-            $userID = self::myId();
-        }
-
-        if ($id) {
-            $userID = $id;
-        }
-
-        $filedata = base64_decode($value);
-        $f = finfo_open();
-        $mime_type = finfo_buffer($f, $filedata, FILEINFO_MIME_TYPE);
-        @$mime_type = explode('/', $mime_type);
-        @$mime_type = $mime_type[1];
-        if ($mime_type) {
-            $filePath = 'uploads/'.$userID.'/'.date('Y-m');
-            Storage::makeDirectory($filePath);
-            $filename = md5(str_random(5)).'.'.$mime_type;
-            if (Storage::put($filePath.'/'.$filename, $filedata)) {
-                self::resizeImage($filePath.'/'.$filename);
-
-                return $filePath.'/'.$filename;
-            }
-        }
+        return app(FileUploaderInterface::class)->uploadBase64((string) $value, $id);
     }
 
     public static function uploadFile($name, $encrypt = false, $resize_width = null, $resize_height = null, $id = null)
     {
-        if (Request::hasFile($name)) {
-            if (! self::myId()) {
-                $userID = 0;
-            } else {
-                $userID = self::myId();
-            }
-
-            if ($id) {
-                $userID = $id;
-            }
-
-            $file = Request::file($name);
-            $ext = $file->getClientOriginalExtension();
-            $filename = str_slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-            if(method_exists($file, 'getClientSize')) {
-                $filesize = $file->getClientSize() / 1024;
-            } else {
-                $filesize = $file->getSize() / 1024;
-            }
-            $file_path = 'uploads/'.$userID.'/'.date('Y-m');
-
-            //Create Directory Monthly
-            Storage::makeDirectory($file_path);
-
-            if ($encrypt == true) {
-                $filename = md5(str_random(5)).'.'.$ext;
-            } else {
-                $filename = str_slug($filename, '_').'.'.$ext;
-            }
-
-            if (Storage::putFileAs($file_path, $file, $filename)) {
-                self::resizeImage($file_path.'/'.$filename, $resize_width, $resize_height);
-
-                return $file_path.'/'.$filename;
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    private static function resizeImage($fullFilePath, $resize_width = null, $resize_height = null, $qty = 100, $thumbQty = 75)
-    {
-        $images_ext = config('crudbooster.IMAGE_EXTENSIONS', 'jpg,png,gif,bmp');
-        $images_ext = explode(',', $images_ext);
-
-        $filename = basename($fullFilePath);
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        $file_path = trim(str_replace($filename, '', $fullFilePath), '/');
-
-        $file_path_thumbnail = 'uploads_thumbnail/'.date('Y-m');
-        Storage::makeDirectory($file_path_thumbnail);
-
-        if (in_array(strtolower($ext), $images_ext)) {
-
-            $img = Image::read(Storage::path($file_path.'/'.$filename));
-            if ($resize_width && $resize_height) {
-                $img->cover((int) $resize_width, (int) $resize_height);
-            } elseif ($resize_width && ! $resize_height) {
-                $img->scale(width: (int) $resize_width);
-            } elseif (! $resize_width && $resize_height) {
-                $img->scale(height: (int) $resize_height);
-            } elseif ($img->width() > 1300) {
-                $img->scale(width: 1300);
-            }
-            $img->save(Storage::path($file_path.'/'.$filename), quality: $qty);
-
-            $img = Image::read(Storage::path($file_path.'/'.$filename));
-            $img->cover(350, 350);
-            $img->save(Storage::path($file_path_thumbnail.'/'.$filename), quality: $thumbQty);
-        }
+        return app(FileUploaderInterface::class)->upload($name, (bool) $encrypt, $resize_width, $resize_height, $id);
     }
 
     public static function getSetting($name)
@@ -210,7 +115,7 @@ class CRUDBooster
 
     public static function isSuperadmin()
     {
-        return Session::get('admin_is_superadmin');
+        return app(AuthenticationServiceInterface::class)->isSuperadmin();
     }
 
     public static function myName()
@@ -569,45 +474,12 @@ class CRUDBooster
 
     public static function isColumnNULL($table, $field)
     {
-        if (Cache::has('field_isNull_'.$table.'_'.$field)) {
-            return Cache::get('field_isNull_'.$table.'_'.$field);
-        }
-
-        try {
-            $column = collect(Schema::getColumns($table))->firstWhere('name', $field);
-            $isNULL = $column ? (bool) $column['nullable'] : false;
-            Cache::forever('field_isNull_'.$table.'_'.$field, $isNULL);
-        } catch (\Exception $e) {
-            $isNULL = false;
-            Cache::forever('field_isNull_'.$table.'_'.$field, $isNULL);
-        }
-
-        return $isNULL;
+        return app(SchemaInspectorInterface::class)->isNullable((string) $table, (string) $field);
     }
 
     public static function getFieldType($table, $field)
     {
-        if (Cache::has('field_type_'.$table.'_'.$field)) {
-            return Cache::get('field_type_'.$table.'_'.$field);
-        }
-
-        $typedata = Cache::rememberForever('field_type_'.$table.'_'.$field, function () use ($table, $field) {
-
-            try {
-                $column = collect(Schema::getColumns($table))->firstWhere('name', $field);
-                $typedata = $column ? $column['type_name'] : null;
-            } catch (\Exception $e) {
-                $typedata = null;
-            }
-
-            if (! $typedata) {
-                $typedata = 'varchar';
-            }
-
-            return $typedata;
-        });
-
-        return $typedata;
+        return app(SchemaInspectorInterface::class)->columnType((string) $table, (string) $field);
     }
 
     public static function getValueFilter($field)
@@ -1049,9 +921,7 @@ class CRUDBooster
 
     public static function insertLog($description, $details = '')
     {
-        if (CRUDBooster::getSetting('api_debug_mode')) {
-            app(AuditLoggerInterface::class)->log($description, $details);
-        }
+        app(AuditLoggerInterface::class)->log((string) $description, (string) $details);
     }
 
     public static function referer()
@@ -1183,7 +1053,7 @@ class CRUDBooster
     public static function getTableColumns($table)
     {
         $table = CRUDBooster::parseSqlTable($table);
-        return app(SchemaInspectorInterface::class)->columns($table['database'].'.'.$table['table']);
+        return app(SchemaInspectorInterface::class)->columns(($table['database'] ? $table['database'].'.' : '').$table['table']);
     }
 
     public static function getNameTable($columns)

@@ -1,7 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use CRUDBooster;
-use crocodicstudio\crudbooster\services\AdminAuthenticationService;
+use crocodicstudio\crudbooster\security\AdminAuthenticationService;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;

@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\services;
+namespace crocodicstudio\crudbooster\security;
 
 use crocodicstudio\crudbooster\models\CmsPrivilege;
 use crocodicstudio\crudbooster\models\CmsUser;

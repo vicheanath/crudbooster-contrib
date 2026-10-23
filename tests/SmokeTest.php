@@ -105,12 +105,12 @@ class SmokeTest extends TestCase
     {
         $this->makePng('uploads/test/big.png', 2000, 1000);
 
-        $resize = new \ReflectionMethod(CRUDBooster::class, 'resizeImage');
-        $resize->invoke(null, 'uploads/test/big.png');
+        $path = CRUDBooster::uploadBase64(base64_encode(file_get_contents(storage_path('app/uploads/test/big.png'))));
 
-        $this->assertSame(1300, CBImage::read(storage_path('app/uploads/test/big.png'))->width());
+        $this->assertStringStartsWith('uploads/0/'.date('Y-m').'/', $path);
+        $this->assertSame(1300, CBImage::read(storage_path('app/'.$path))->width());
 
-        $thumb = CBImage::read(storage_path('app/uploads_thumbnail/'.date('Y-m').'/big.png'));
+        $thumb = CBImage::read(storage_path('app/uploads_thumbnail/'.date('Y-m').'/'.basename($path)));
         $this->assertSame([350, 350], [$thumb->width(), $thumb->height()]);
     }
 

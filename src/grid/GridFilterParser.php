@@ -1,6 +1,6 @@
 <?php
 
-namespace crocodicstudio\crudbooster\services;
+namespace crocodicstudio\crudbooster\grid;
 
 use crocodicstudio\crudbooster\contracts\Grid\GridFilterParserInterface;
 use Illuminate\Database\Query\Builder;
