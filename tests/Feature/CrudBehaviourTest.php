@@ -231,6 +231,22 @@ class CrudBehaviourTest extends FeatureTestCase
         $this->assertStringContainsString('Exported', file_get_contents($response->baseResponse->getFile()->getPathname()));
     }
 
+    public function test_export_xls_and_csv_handle_html_special_characters()
+    {
+        $this->product(['name' => 'Nuts & Bolts <M4>', 'note' => "line 1\nline 2"]);
+        $this->loginAsAdmin();
+
+        foreach (['csv', 'xls'] as $format) {
+            $response = $this->post($this->admin('cb_products/export-data'), [
+                'fileformat' => $format, 'filename' => 'products', 'limit' => 10, 'page_size' => 'A4', 'page_orientation' => 'potrait',
+            ])->assertOk();
+
+            if ($format == 'csv') {
+                $this->assertStringContainsString('Nuts & Bolts <M4>', file_get_contents($response->baseResponse->getFile()->getPathname()));
+            }
+        }
+    }
+
     public function test_lookup_endpoints_return_json()
     {
         [$categories] = $this->seedLookups();
