@@ -19,7 +19,8 @@ $asset_already[] = $type;
 
 @push('head')
     <style type="text/css">
-        #table-detail tr td:first-child {
+        /* The detail table's own label cells, not cells of a child table nested in a full-width row. */
+        #table-detail > tbody > tr > td:first-child:not([colspan]) {
             font-weight: bold;
             width: 25%;
         }

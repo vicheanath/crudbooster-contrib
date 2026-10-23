@@ -79,7 +79,7 @@ class MenusController extends CBController
 	                  var label = $(originalOption).text();
 	                  var val = $(originalOption).val();
 	                  if(!val) return label;
-	                  var \$resp = $('<span><i style=\"margin-top:5px\" class=\"pull-right ' + $(originalOption).val() + '\"></i> ' + $(originalOption).data('label') + '</span>');
+	                  var \$resp = $('<span><i style=\"margin-top:5px\" class=\"float-end ' + $(originalOption).val() + '\"></i> ' + $(originalOption).data('label') + '</span>');
 	                  return \$resp;
 	              }
 	              $('#list-icon').select2({

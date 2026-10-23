@@ -19,7 +19,7 @@
     </thead>
     <tbody>
     @if(count($result)==0)
-        <tr class='warning'>
+        <tr class='table-warning'>
             <td colspan='{{count($columns)+1}}' align="center">No Data Avaliable</td>
         </tr>
     @else
@@ -46,7 +46,7 @@
                         $pic = (strpos($value, 'http://') !== FALSE) ? $value : asset($value);
                         $pic_small = $pic;
                         if ($isPdf) {
-                            echo "<td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='".e($col['label'].': '.$title)."' href='".e($pic)."'><img class='img-circle' width='40px' height='40px' src='".e($pic_small)."'/></a></td>";
+                            echo "<td><a data-lightbox='roadtrip' rel='group_{{$table}}' title='".e($col['label'].': '.$title)."' href='".e($pic)."'><img class='rounded-circle' width='40px' height='40px' src='".e($pic_small)."'/></a></td>";
                         } else {
                             echo "<td>".e($pic)."</td>";
                         }

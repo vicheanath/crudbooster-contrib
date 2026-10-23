@@ -27,7 +27,7 @@
         </div><!-- /input-group -->
 
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        <p class='form-text'>{{ @$form['help'] }}</p>
     </div>
 </div>
 
@@ -64,7 +64,7 @@
         <div class="modal-dialog {{ $form['datamodal_size']=='large'?'modal-lg':'' }} " role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <h4 class="modal-title"><i class='fa fa-search'></i> {{cbLang('datamodal_browse_data')}} | {{$form['label']}}</h4>
                 </div>
                 <div class="modal-body">

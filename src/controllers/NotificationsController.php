@@ -28,7 +28,7 @@ class NotificationsController extends CBController
         $this->col[] = [
             'label' => 'Read',
             'name' => 'is_read',
-            'callback_php' => '($row->is_read)?"<span class=\"label label-default\">Already Read</span>":"<span class=\"label label-danger\">NEW</span>"',
+            'callback_php' => '($row->is_read)?"<span class=\"badge text-bg-secondary\">Already Read</span>":"<span class=\"badge text-bg-danger\">NEW</span>"',
         ];
 
         $this->form = [];

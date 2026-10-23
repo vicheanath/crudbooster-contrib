@@ -3,14 +3,14 @@
 @section('content')
 
     <ul class="nav nav-tabs">
-        <li><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li class="active"><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
-        <li><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ CRUDBooster::mainpath('screet-key') }}" aria-current="page"><i class='fa fa-key'></i> API Secret Key</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
     </ul>
 
-    <div class='box'>
+    <div class='card'>
 
-        <div class='box-body'>
+        <div class='card-body'>
 
 
             <p><a title='Generate API Key' class='btn btn-primary' href='javascript:void(0)' onclick='generate_screet_key()'><i class='fa fa-key'></i> Generate
@@ -33,7 +33,7 @@
                         <td>{{ ++$no }}</td>
                         <td>{{ $row->screetkey }}</td>
                         <td>{{ $row->hit }}</td>
-                        <td>{!! ($row->status=='active')?"<span class='label label-success'>Active</span>":"<span class='label label-default'>Non Active</span>" !!}</td>
+                        <td>{!! ($row->status=='active')?"<span class='badge text-bg-success'>Active</span>":"<span class='badge text-bg-secondary'>Non Active</span>" !!}</td>
                         <td>
                             @if($row->status == 'active')
                                 <a class='btn btn-xs btn-default' href='{{ CRUDBooster::mainpath("status-apikey?id=$row->id&status=0") }}'>Non Active</a>
@@ -61,7 +61,7 @@
                     function generate_screet_key() {
                         $.get("<?php echo route('ApiCustomControllerGetGenerateScreetKey')?>", function (resp) {
                             lastno += 1;
-                            $('#table-apikey').append("<tr><td>" + lastno + "</td><td>" + resp.key + "</td><td>0</td><td><span class='label label-success'>Active</span></td><td>" +
+                            $('#table-apikey').append("<tr><td>" + lastno + "</td><td>" + resp.key + "</td><td>0</td><td><span class='badge text-bg-success'>Active</span></td><td>" +
                                 "<a class='btn btn-xs btn-default' href='{{CRUDBooster::mainpath("status-apikey")}}?id=" + resp.id + "&status=0'>Non Active</a> <a class='btn btn-xs btn-danger' href='javascript:void(0)' onclick='deleteApi(" + resp.id + ")'>Delete</a> </td></tr>"
                             );
                             $('.no-screetkey').remove();

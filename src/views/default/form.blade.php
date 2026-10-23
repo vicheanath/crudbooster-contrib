@@ -13,12 +13,12 @@
             @endif
         @endif
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <strong><i class='{{CRUDBooster::getCurrentModule()->icon}}'></i> {!! $page_title !!}</strong>
             </div>
 
-            <div class="panel-body" style="padding:20px 0px 0px 0px">
+            <div class="card-body" style="padding:20px 0px 0px 0px">
                 <?php
                 $action = (@$row) ? CRUDBooster::mainpath("edit-save/$row->id") : CRUDBooster::mainpath("add-save");
                 $return_url = ($return_url) ?: g('return_url');
@@ -31,7 +31,7 @@
                     @if($hide_form)
                         <input type="hidden" name="hide_form" value='{!! serialize($hide_form) !!}'>
                     @endif
-                    <div class="box-body" id="parent-form-area">
+                    <div class="card-body" id="parent-form-area">
 
                         @if($command == 'detail')
                             @include("crudbooster::default.form_detail")
@@ -40,7 +40,7 @@
                         @endif
                     </div><!-- /.box-body -->
 
-                    <div class="box-footer" style="background: #F5F5F5">
+                    <div class="card-footer" style="background: #F5F5F5">
 
                         <div class="form-group">
                             <label class="control-label col-sm-2"></label>

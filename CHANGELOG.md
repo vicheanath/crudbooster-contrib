@@ -52,6 +52,21 @@ The admin UI moves from AdminLTE 2.3.8 (Bootstrap 3.4) to **AdminLTE 4.10 (Boots
   unchanged, so stored `fa fa-*` module and menu icons and custom scripts keep working. The AdminLTE 2 files stay
   in `assets/adminlte` for custom views that load its plugins.
 
+### Native AdminLTE 4 markup in every view
+The remaining views no longer rely on the Bootstrap 3 compatibility layer (it stays for apps' own views):
+- `box` and `panel` wrappers are AdminLTE 4 cards (`card`, `card-header`, `card-body`, `card-footer`, `card-tools`,
+  `card-primary card-outline`, ...): forms, detail, child rows, import, menu management, privileges, settings,
+  module generator, API generator and documentation, and the statistic builder widgets.
+- Tables use Bootstrap 5 classes (`table-sm`, `table-active`, `table-info`, ...), labels are `badge text-bg-*`,
+  help text is `form-text`, input add-ons are `input-group-text`, `pull-*` is `float-*`, and modals use `btn-close`
+  and `data-bs-*` attributes. Nav tabs use `nav-item` / `nav-link`.
+- Sidebar: the brand shows the favicon setting, or the app name's first letter, next to the name (it stays when the
+  sidebar collapses), and the user panel follows the sidebar's light or dark theme.
+- The section-header toggle and the statistic builder's drag handles select the new card classes as well as the
+  old ones, so custom forms built on `box-body` keep working.
+- Fixed: on the detail page, every cell of a child table was bold; the menu management form squeezed its labels
+  into a narrow column (it now stacks them, via the new `cb-form-stacked` form class).
+
 ### Data grid
 The module index page (`default/index`, `default/table`) is rebuilt on Bootstrap 5 / AdminLTE 4 markup:
 - One toolbar: bulk actions, search (press `/` to focus it), the filter button with a count of active filters, and a

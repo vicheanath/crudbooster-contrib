@@ -22,10 +22,10 @@
     @endpush
 
     <ul class="nav nav-tabs">
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep1')."/".$id}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
-        <li role="presentation" class="active"><a href="{{Route('ModulsControllerGetStep2')."/".$id}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep3')."/".$id}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep4')."/".$id}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="{{Route('ModulsControllerGetStep1')."/".$id}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link active" href="{{Route('ModulsControllerGetStep2')."/".$id}}" aria-current="page"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="{{Route('ModulsControllerGetStep3')."/".$id}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="{{Route('ModulsControllerGetStep4')."/".$id}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
     </ul>
     @push('head')
         <style>
@@ -278,11 +278,11 @@
         </script>
     @endpush
 
-    <div class="box box-default">
-        <div class="box-header with-border">
-            <h3 class="box-title">Table Display</h3>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Table Display</h3>
         </div>
-        <div class="box-body">
+        <div class="card-body">
 
             <div class="alert alert-info">
                 <strong>Warning</strong>. Make sure that your column format are normally, unless using this Tool maybe make your current configuration broken,
@@ -379,7 +379,7 @@
                 </table>
 
         </div>
-        <div class="box-footer">
+        <div class="card-footer">
             <div align="right">
                 <button type="button" onclick="location.href='{{CRUDBooster::mainpath('step1').'/'.$id}}'" class="btn btn-default">&laquo; Back</button>
                 <input type="submit" class="btn btn-primary" value="Step 3 &raquo;">

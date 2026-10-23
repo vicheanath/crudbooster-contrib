@@ -9,7 +9,7 @@
     <div class="{{$col_width?:'col-sm-10'}}">
         <div class="input-group">
 
-            <span class="input-group-addon"><a href='javascript:void(0)' onclick='$("#{{$name}}").data("daterangepicker").toggle();'><i
+            <span class="input-group-text"><a href='javascript:void(0)' onclick='$("#{{$name}}").data("daterangepicker").toggle();'><i
                             class='fa fa-calendar'></i></a></span>
 
             <input type='text' title="{{$form['label']}}" readonly
@@ -17,6 +17,6 @@
                    value='{{$value}}' />
         </div>
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        <p class='form-text'>{{ @$form['help'] }}</p>
     </div>
 </div>

@@ -338,10 +338,21 @@ small {
     float: none;
 }
 
-/* A narrow label column must not let a long word run into the field beside it. */
+/* A narrow label column hyphenates long words rather than running into the field beside it. */
 .form-horizontal .control-label {
-    overflow-wrap: break-word;
     hyphens: auto;
+}
+
+/* .cb-form-stacked: a horizontal form in a narrow container puts each label above its field. */
+.form-horizontal.cb-form-stacked .form-group > * {
+    width: 100%;
+    margin-left: 0;
+}
+
+.form-horizontal.cb-form-stacked .control-label {
+    padding-top: 0;
+    margin-bottom: .35rem;
+    text-align: left;
 }
 
 @media (min-width: 576px) {

@@ -13,17 +13,17 @@ $name = str_slug($form['label'], '');
     @if($form['columns'])
         <div class="col-sm-12">
 
-            <div id='panel-form-{{$name}}' class="panel panel-default">
-                <div class="panel-heading">
+            <div id='panel-form-{{$name}}' class="card">
+                <div class="card-header">
                     <i class='fa fa-bars'></i> {{$form['label']}}
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
 
                     <div class='row'>
                         <div class='col-sm-10'>
-                            <div class="panel panel-default">
-                                <div class="panel-heading"><i class="fa fa-pencil-square-o"></i> {{cbLang("text_form")}}</div>
-                                <div class="panel-body child-form-area">
+                            <div class="card">
+                                <div class="card-header"><i class="fa fa-pencil-square-o"></i> {{cbLang("text_form")}}</div>
+                                <div class="card-body child-form-area">
                                     @foreach($form['columns'] as $col)
                                         <?php $name_column = $name.$col['name'];?>
                                         <div class='form-group'>
@@ -110,8 +110,7 @@ $name = str_slug($form['label'], '');
                                                         <div class="modal-dialog {{ $col['datamodal_size']=='large'?'modal-lg':'' }} " role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                                                                aria-hidden="true">&times;</span></button>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     <h4 class="modal-title"><i
                                                                                 class='fa fa-search'></i> {{cbLang('datamodal_browse_data')}} {{$col['label']}}
                                                                     </h4>
@@ -337,7 +336,7 @@ $name = str_slug($form['label'], '');
                                                 @endif
 
                                                 @if($col['help'])
-                                                    <div class='help-block'>
+                                                    <div class='form-text'>
                                                         {{$col['help']}}
                                                     </div>
                                                 @endif
@@ -495,7 +494,7 @@ $name = str_slug($form['label'], '');
                                         </script>
                                     @endpush
                                 </div>
-                                <div class="panel-footer" align="right">
+                                <div class="card-footer" align="right">
                                     <input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()"
                                            value='{{cbLang("button_reset")}}'/>
                                     <input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary' onclick="addToTable{{$name}}()"
@@ -505,11 +504,11 @@ $name = str_slug($form['label'], '');
                         </div>
                     </div>
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                    <div class="card">
+                        <div class="card-header">
                             <i class='fa fa-table'></i> {{cbLang('table_detail')}}
                         </div>
-                        <div class="panel-body no-padding table-responsive" style="max-height: 400px;overflow: auto;">
+                        <div class="card-body p-0 table-responsive" style="max-height: 400px;overflow: auto;">
                             <table id='table-{{$name}}' class='table table-striped table-bordered'>
                                 <thead>
                                 <tr>

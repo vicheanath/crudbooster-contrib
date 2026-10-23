@@ -113,8 +113,31 @@
 		box-shadow: inset 3px 0 0 #fff;
 	}
 
+	.app-sidebar .sidebar-brand .brand-link .cb-brand-mark {
+		float: none;
+		display: inline-flex;
+		flex-shrink: 0;
+		margin-right: 0.5rem;
+		align-items: center;
+		justify-content: center;
+		width: 2.1rem;
+		height: 2.1rem;
+		max-height: none;
+		border-radius: var(--bs-border-radius);
+		background: rgba(255, 255, 255, 0.2);
+		color: var(--cb-skin-text);
+		font-weight: 700;
+		font-size: 1rem;
+		line-height: 1;
+	}
+	body.skin-black .app-sidebar .cb-brand-mark,
+	body.skin-black-light .app-sidebar .cb-brand-mark {
+		background: rgba(0, 0, 0, 0.08);
+	}
+
 	/* Sidebar user panel */
 	.user-panel {
+		color: var(--bs-body-color);
 		gap: 0.75rem;
 		padding: 0.85rem 1rem;
 		border-bottom: 1px solid var(--bs-border-color);
@@ -131,7 +154,7 @@
 	.user-panel > .info > a {
 		font-size: 11px;
 		opacity: 0.85;
-		color: var(--bs-body-color);
+		color: var(--bs-secondary-color);
 	}
 	.sidebar-mini.sidebar-collapse .app-sidebar:not(:hover) .user-panel > .info {
 		display: none;
