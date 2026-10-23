@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fields submitted empty skip validation again, as in 5.x. 7.0.0 validated required-but-empty fields, which broke the common pattern of a hidden `required` field (e.g. `site_id`) filled by `hook_before_add/edit`, so those forms could not be saved.
+- The edit form now requires update permission. Read-only roles could open it before (saving was already refused).
+
 ## v7.0.1
 
 - Delete confirmation uses SweetAlert2's `Swal.fire()` on pages that load it. SweetAlert2 also takes over the global `swal`, so the legacy call silently never deleted. Extra options via the new `SWEETALERT2_DELETE_OPTIONS` config key.
@@ -40,6 +43,5 @@ See [UPGRADE.md](UPGRADE.md).
 ### Other fixes
 - API: tokens starting with `B`, `e`, `a` or `r` were randomly rejected (403). `ltrim()` stripped those characters along with the `Bearer ` prefix.
 - API token lifetime now matches the advertised 48 hours.
-- Required fields submitted empty are validated.
 - Redirect helpers no longer `exit` (Octane/test friendly).
 - The seeder links the admin user to the real Super Administrator privilege id.

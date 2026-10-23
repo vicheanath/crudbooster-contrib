@@ -55,11 +55,26 @@ class ActionsTest extends FeatureTestCase
         $this->loginAsAdmin();
 
         $this->from($this->admin('email_templates/add'))
-            ->post($this->admin('email_templates/add-save'), $this->template(['subject' => '']))
+            ->post($this->admin('email_templates/add-save'), $this->template(['subject' => 'ab']))
             ->assertRedirect($this->admin('email_templates/add'))
             ->assertSessionHas('message_type', 'warning');
 
         $this->assertDatabaseMissing('cms_email_templates', ['slug' => 'order_shipped']);
+    }
+
+    public function test_hidden_required_field_filled_by_hook_is_saved()
+    {
+        require_once __DIR__.'/../fixtures/AdminHookFilledController.php';
+        DB::table('cms_moduls')->insert(['name' => 'Hook Filled', 'path' => 'hook_filled', 'table_name' => 'cms_email_templates', 'controller' => 'AdminHookFilledController', 'is_protected' => 0, 'is_active' => 1]);
+        $this->registerCrudboosterRoutes();
+        $this->loginAsAdmin();
+
+        // The hidden field is submitted empty, exactly as the browser sends it.
+        $this->post($this->admin('hook_filled/add-save'), ['description' => '', 'name' => 'Hooked', 'slug' => 'hooked'])
+            ->assertRedirect()
+            ->assertSessionHas('message_type', 'success');
+
+        $this->assertDatabaseHas('cms_email_templates', ['slug' => 'hooked', 'description' => 'filled by hook']);
     }
 
     public function test_bulk_delete_selected()
@@ -102,6 +117,21 @@ class ActionsTest extends FeatureTestCase
         $this->post($this->admin('login'), ['email' => 'viewer@example.com', 'password' => 'secret'])->assertRedirect();
 
         $this->get($this->admin('email_templates'))->assertRedirect();
+        $this->assertSame(cbLang('denied_access'), session('message'));
+    }
+
+    public function test_read_only_role_cannot_open_edit_form()
+    {
+        $privilege = DB::table('cms_privileges')->insertGetId(['name' => 'Reader', 'is_superadmin' => 0, 'theme_color' => 'skin-blue']);
+        $module = DB::table('cms_moduls')->where('path', 'email_templates')->value('id');
+        DB::table('cms_privileges_roles')->insert(['id_cms_privileges' => $privilege, 'id_cms_moduls' => $module, 'is_visible' => 1, 'is_read' => 1, 'is_create' => 0, 'is_edit' => 0, 'is_delete' => 0]);
+        DB::table('cms_users')->insert(['name' => 'Reader', 'email' => 'reader@example.com', 'password' => Hash::make('secret'), 'id_cms_privileges' => $privilege, 'status' => 'Active']);
+        $id = DB::table('cms_email_templates')->insertGetId($this->template(['slug' => 'readonly']));
+
+        $this->post($this->admin('login'), ['email' => 'reader@example.com', 'password' => 'secret'])->assertRedirect();
+
+        $this->get($this->admin("email_templates/detail/$id"))->assertOk();
+        $this->get($this->admin("email_templates/edit/$id"))->assertRedirect();
         $this->assertSame(cbLang('denied_access'), session('message'));
     }
 
