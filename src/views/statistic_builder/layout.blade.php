@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', App::getLocale()) }}" dir="{{ in_array(App::getLocale(), ['ar', 'fa']) ? 'rtl' : 'ltr' }}" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <title>{{ ($page_title)?Session::get('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
@@ -8,89 +8,90 @@
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <meta content='width=device-width, initial-scale=1' name='viewport'>
 
-    <!-- Bootstrap 3.3.2 -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
-    <!-- Font Awesome Icons -->
-    <link href="{{asset("vendor/crudbooster/assets/adminlte/font-awesome/css")}}/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <!-- AdminLTE 4, Font Awesome and the Bootstrap 3 compatibility layer -->
+    @include('crudbooster::partials.theme_styles')
     <!-- Ionicons -->
-    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="{{asset("vendor/crudbooster/ionic/css/ionicons.min.css")}}" rel="stylesheet" type="text/css"/>
+    <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css") }}'/>
 
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- REQUIRED JS SCRIPTS -->
-
-    <!-- jQuery 2.2.3 -->
-    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
-
-    <!-- Bootstrap 3.4.1 JS -->
-    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/dist/js/app.js') }}" type="text/javascript"></script>
-
-
-    <!-- Theme style -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
+    <!-- REQUIRED JS SCRIPTS: jQuery, Bootstrap 5 and the compatibility shim -->
+    @include('crudbooster::partials.theme_scripts')
 
     <!--SWEET ALERT-->
     <script src="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.min.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{asset('vendor/crudbooster/assets/sweetalert/dist/sweetalert.css')}}">
 
+    <style type="text/css">
+        /* The widget panel that slides in from the right (AdminLTE 2's control sidebar). */
+        .control-sidebar {
+            position: fixed;
+            top: 3.5rem;
+            right: 0;
+            bottom: 0;
+            z-index: 1040;
+            width: 230px;
+            overflow-y: auto;
+            color: #b8c7ce;
+            background: #222d32;
+            transform: translateX(100%);
+            transition: transform .3s ease-in-out;
+        }
+
+        .control-sidebar.control-sidebar-open {
+            transform: none;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, .25);
+        }
+
+        .app-header .navbar-nav > .nav-item > .nav-link {
+            color: var(--cb-skin-text);
+        }
+    </style>
+
     @stack('head')
 </head>
-<body class="<?php echo (Session::get('theme_color')) ?: 'skin-blue'?> old-transition layout-top-nav fixed">
-<div id='app' class="wrapper">
+<body class="{{ Session::get('theme_color') ?: 'skin-blue' }} layout-top-nav bg-body-tertiary">
+<div id='app' class="app-wrapper wrapper">
 
-    <header class="main-header">
-        <nav class="navbar navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{Session::get('appname')}}'
-                       class="navbar-brand">{{CRUDBooster::getSetting('appname')}}</a>
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                </div>
+    <nav class="app-header main-header navbar navbar-expand-md bg-body">
+        <div class="container">
+            <a href="{{url(config('crudbooster.ADMIN_PATH'))}}" title='{{Session::get('appname')}}'
+               class="navbar-brand fw-semibold" style="color: var(--cb-skin-text)">{{CRUDBooster::getSetting('appname')}}</a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse"
+                    aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars" style="color: var(--cb-skin-text)"></i>
+            </button>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a class='btn-save-statistic' href="#" title='Auto Save Status'><i class='fa fa-save'></i> Auto Save Ready</a></li>
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class='nav-link btn-save-statistic' href="#" title='Auto Save Status'><i class='fa fa-save'></i> Auto Save Ready</a></li>
+                </ul>
                 <!-- Navbar Right Menu -->
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
-                        <li><a href="#" class='btn-show-sidebar' data-toggle="control-sidebar"><i class='fa fa-bars'></i> Add Widget</a></li>
+                <ul class="navbar-nav navbar-custom-menu">
+                    <li class="nav-item"><a href="#" class='nav-link btn-show-sidebar' data-toggle="control-sidebar"><i class='fa fa-bars'></i> Add Widget</a></li>
 
-                        <li><a href="{{CRUDBooster::mainpath()}}"><i class='fa fa-sign-out'></i> Exit</a></li>
-                    </ul>
-                </div>
-                <!-- /.navbar-custom-menu -->
+                    <li class="nav-item"><a href="{{CRUDBooster::mainpath()}}" class="nav-link"><i class='fa fa-sign-out'></i> Exit</a></li>
+                </ul>
             </div>
-            <!-- /.container-fluid -->
-        </nav>
-    </header>
+        </div>
+    </nav>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-
+    <main class="app-main content-wrapper">
 
         <!-- Main content -->
-        <section id='content_section' class="content">
+        <div id='content_section' class="app-content content pt-3">
+          <div class="container">
             <!-- Your Page Content Here -->
             @yield('content')
-        </section><!-- /.content -->
-    </div><!-- /.content-wrapper -->
+          </div>
+        </div><!-- /.content -->
+    </main><!-- /.content-wrapper -->
 
     <!-- The Right Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
+    <aside class="control-sidebar control-sidebar-dark" data-bs-theme="dark">
         <!-- Content of the sidebar goes here -->
         <ul>
             <li class='connectedSortable' title='Drag To Main Area'>
@@ -154,14 +155,10 @@
             </li>
         </ul>
     </aside>
-    <!-- The sidebar's background -->
-    <!-- This div must placed right after the sidebar for it to work-->
-    <div class="control-sidebar-bg"></div>
-
     <!-- Footer -->
-    <footer class="main-footer">
+    <footer class="app-footer main-footer">
         <!-- To the right -->
-        <div class="pull-right hidden-xs">
+        <div class="float-end d-none d-sm-inline">
             Powered By {{Session::get('appname')}}
         </div>
         <!-- Default to the left -->
@@ -170,11 +167,16 @@
 
 </div><!-- ./wrapper -->
 
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-      Both of these plugins are recommended to enhance the
-      user experience -->
-<!-- SlimScroll 1.3.0 -->
-<script src="{{ asset('vendor/crudbooster/assets/adminlte/plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
+<script type="text/javascript">
+    // Open and close the widget panel ("Add Widget").
+    // Bound on the button itself: the builder stops this click from reaching the document.
+    $(function () {
+        $('[data-toggle="control-sidebar"]').on('click', function (e) {
+            e.preventDefault();
+            $('.control-sidebar').toggleClass('control-sidebar-open');
+        });
+    });
+</script>
 
 @stack('bottom')
 </body>

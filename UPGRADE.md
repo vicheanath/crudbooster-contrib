@@ -73,6 +73,22 @@ PHP 8 made undefined array keys and properties warnings, and Laravel throws thos
 generated modules rely on the PHP 7 behaviour, so these warnings are ignored inside CRUDBooster's code, compiled views
 and `app/Http/Controllers`. Disable with `CB_LEGACY_NOTICE_COMPAT=false` to surface them.
 
+### Admin theme: AdminLTE 4
+The admin UI is built on AdminLTE 4 and Bootstrap 5.3 instead of AdminLTE 2 and Bootstrap 3. Run
+`php artisan crudbooster:update` (or `php artisan vendor:publish --tag=cb_asset --force`) so the new assets are in
+`public/vendor/crudbooster`. Views that extend `crudbooster::admin_template` keep working: a compatibility layer
+styles Bootstrap 3 / AdminLTE 2 markup (`box`, `panel`, `col-xs-*`, `btn-default`, ...) and maps `data-toggle`
+attributes and `$(el).modal()` calls onto Bootstrap 5. Check these if you customized the theme:
+- **Overridden layout views** (`header`, `sidebar`, `footer`, `admin_template` copied into
+  `resources/views/vendor/crudbooster`): they still render the AdminLTE 2 layout, which the new CSS does not style.
+  Re-copy them from the package and re-apply your changes.
+- **CSS written for AdminLTE 2's layout** (`.main-header .logo`, `.sidebar-menu > li > a`, `.skin-blue .main-header`):
+  target `.app-header`, `.app-sidebar .sidebar-brand` and `.sidebar-menu .nav-link` instead.
+- **Your own pages that do not extend `admin_template`** and load `assets/adminlte/bootstrap` directly still
+  work, since the AdminLTE 2 files stay in `assets/adminlte`. Include `crudbooster::partials.theme_styles` and
+  `crudbooster::partials.theme_scripts` to move them to the new theme.
+- **New markup** can use Bootstrap 5 classes and `data-bs-*` attributes directly.
+
 ### Other behaviour changes
 - **API tokens:** these now really last 2880 minutes (48h). They used to expire after 2880 seconds.
 - **Seeder:** `CBSeeder` is namespaced `crocodicstudio\crudbooster\database\seeds\CBSeeder`.

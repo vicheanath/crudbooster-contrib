@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', App::getLocale()) }}" dir="{{ in_array(App::getLocale(), ['ar', 'fa']) ? 'rtl' : 'ltr' }}" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <title>{{ ($page_title)?get_setting('appname').': '.strip_tags($page_title):"Admin Area" }}</title>
@@ -9,19 +9,21 @@
     <link rel="shortcut icon"
           href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <!-- Bootstrap 3.4.1 -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
-    <!-- Font Awesome Icons -->
+    <!-- AdminLTE 4.10 (bundles Bootstrap 5.3) -->
+    @if (in_array(App::getLocale(), ['ar', 'fa']))
+        <link href="{{ asset("vendor/crudbooster/assets/adminlte4/css/adminlte.rtl.min.css") }}" rel="stylesheet" type="text/css"/>
+    @else
+        <link href="{{ asset("vendor/crudbooster/assets/adminlte4/css/adminlte.min.css") }}" rel="stylesheet" type="text/css"/>
+    @endif
+    <!-- Font Awesome 4.7 Icons: module and menu icons are stored as "fa fa-*" -->
     <link href="{{asset("vendor/crudbooster/assets/adminlte/font-awesome/css")}}/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <!-- Ionicons -->
     <link href="{{asset("vendor/crudbooster/ionic/css/ionicons.min.css")}}" rel="stylesheet" type="text/css"/>
-    <!-- Theme style -->
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset("vendor/crudbooster/assets/adminlte/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap 3 / AdminLTE 2 markup support for existing views -->
+    <link href="{{ asset("vendor/crudbooster/assets/css/bs3-compat.css") }}" rel="stylesheet" type="text/css"/>
 
     <!-- support rtl-->
     @if (in_array(App::getLocale(), ['ar', 'fa']))
-        <link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/v3.3.4/dist/css/bootstrap-rtl.min.css">
         <link href="{{ asset("vendor/crudbooster/assets/rtl.css")}}" rel="stylesheet" type="text/css"/>
     @endif
 
@@ -62,11 +64,9 @@
             box-shadow: 0px -5px 10px #cccccc
         }
 
-        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
-            border: none;
-        }
-
-        .nav-tabs > li > a {
+        .sub-module-tab > li > a,
+        .sub-module-tab > li.active > a,
+        .sub-module-tab > li > a:hover {
             border: none;
         }
 
@@ -86,8 +86,13 @@
 
     @stack('head')
 </head>
-<body class="@php echo (Session::get('theme_color'))?:'skin-blue'; echo ' '; echo config('crudbooster.ADMIN_LAYOUT'); @endphp {{($sidebar_mode)?:''}}">
-<div id='app' class="wrapper">
+@php
+    // The AdminLTE 2 skin chosen per privilege (skin-blue, skin-red-light, ...) still picks the
+    // header colour; a "-light" skin gets AdminLTE 4's light sidebar, the others the dark one.
+    $cbSkin = Session::get('theme_color') ?: 'skin-blue';
+@endphp
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary {{ $cbSkin }} {{ config('crudbooster.ADMIN_LAYOUT') }} {{($sidebar_mode)?:''}}">
+<div id='app' class="app-wrapper wrapper">
 
     <!-- Header -->
 @include('crudbooster::header')
@@ -96,14 +101,17 @@
 @include('crudbooster::sidebar')
 
 <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <main class="app-main content-wrapper">
 
-        <section class="content-header">
+        <div class="app-content-header content-header">
+          <div class="container-fluid">
             <?php
             $module = CRUDBooster::getCurrentModule();
             ?>
             @if($module)
-                <h1>
+              <div class="row align-items-center g-2">
+                <div class="col-md">
+                <h1 class="cb-page-title">
                     <!--Now you can define $page_icon alongside $page_tite for custom forms to follow CRUDBooster theme style -->
                     <i class='{!! ($page_icon)?:$module->icon !!}'></i> {!! ucwords(($page_title)?:$module->name) !!} &nbsp;&nbsp;
 
@@ -157,22 +165,27 @@
                 @endif
                 <!-- END BUTTON -->
                 </h1>
+                </div>
 
-
-                <ol class="breadcrumb">
-                    <li><a href="{{CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> {{ cbLang('home') }}</a></li>
-                    <li class="active">{{$module->name}}</li>
+                <div class="col-md-auto">
+                <ol class="breadcrumb float-md-end">
+                    <li class="breadcrumb-item"><a href="{{CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> {{ cbLang('home') }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{$module->name}}</li>
                 </ol>
+                </div>
+              </div>
             @else
-                <h1>{{Session::get('appname')}}
-                    <small> {{ cbLang('text_dashboard') }} </small>
+                <h1 class="cb-page-title">{{Session::get('appname')}}
+                    <small class="text-body-secondary"> {{ cbLang('text_dashboard') }} </small>
                 </h1>
             @endif
-        </section>
+          </div>
+        </div>
 
 
         <!-- Main content -->
-        <section id='content_section' class="content">
+        <div id='content_section' class="app-content content">
+          <div class="container-fluid">
 
             @if(@$alerts)
                 @foreach(@$alerts as $alert)
@@ -184,8 +197,8 @@
 
 
             @if (Session::get('message')!='')
-                <div class='alert alert-{{ Session::get("message_type") }}'>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <div class='alert alert-{{ Session::get("message_type") }} alert-dismissible fade show' role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     <h4><i class="icon fa fa-info"></i> {{ cbLang("alert_".Session::get("message_type")) }}</h4>
                     {!!Session::get('message')!!}
                 </div>
@@ -195,8 +208,9 @@
 
         <!-- Your Page Content Here -->
             @yield('content')
-        </section><!-- /.content -->
-    </div><!-- /.content-wrapper -->
+          </div>
+        </div><!-- /.content -->
+    </main><!-- /.content-wrapper -->
 
     <!-- Footer -->
     @include('crudbooster::footer')

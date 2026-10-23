@@ -59,6 +59,12 @@
 				}
 			});
 			
+			// Open the sidebar group holding the current page.
+			$('.app-sidebar .nav-treeview').each(function() {
+				if($(this).find('.nav-link.active').length) {
+					$(this).closest('.nav-item').addClass('menu-open').children('.nav-link').addClass('active');
+				}
+			})
 			$('.treeview').each(function() {
 				var active = $(this).find('.active').length;
 				if(active) {
@@ -123,7 +129,7 @@
 		  $('.notifications-menu .header').text(NOTIFICATION_YOU_HAVE +' '+resp.total+' '+ NOTIFICATION_NOTIFICATIONS);
           var htm = '';
           $.each(resp.items,function(i,obj) {
-              htm += '<li><a href="'+ADMIN_PATH+'/notifications/read/'+obj.id+'?m=0"><i class="'+obj.icon+'"></i> '+obj.content+'</a></li>';
+              htm += '<a class="dropdown-item text-truncate" href="'+ADMIN_PATH+'/notifications/read/'+obj.id+'?m=0"><i class="'+obj.icon+' me-2"></i> '+obj.content+'</a>';
           })  
           $('.notifications-menu #list_notifications .menu').html(htm);
          

@@ -28,6 +28,30 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
 - Playground: a **Field Showcase** module with every form field type and lookup variant on one form, and a
   seeded record with every field filled in.
 
+### AdminLTE 4 admin theme
+The admin UI moves from AdminLTE 2.3.8 (Bootstrap 3.4) to **AdminLTE 4.10 (Bootstrap 5.3)**. Run
+`php artisan crudbooster:update` to publish the new assets. Modules, hooks and custom views keep working:
+- New layout (`app-wrapper`, `app-header`, `app-sidebar`, `app-main`, `app-footer`) in `admin_template`, `header`,
+  `sidebar` and `footer`. Element ids and the old hook classes (`content-wrapper`, `content-header`,
+  `#content_section`, `main-header`, `main-sidebar`, `notifications-menu`) stay on the new elements.
+- Each privilege's skin (`skin-blue`, `skin-red-light`, ...) still colours the header and sidebar brand; `-light`
+  skins get the light sidebar. The theme preview on the privilege form no longer wipes the layout classes.
+- Bootstrap 3 / AdminLTE 2 compatibility layer for views written against the old markup:
+  `assets/css/bs3-compat.css` (`box`, `panel`, `col-xs-*`, offsets, `form-horizontal`, `btn-default`, `btn-flat`,
+  `btn-xs`, `btn-block`, `label-*`, `input-group-addon`/`-btn`, `pull-*`, `hidden-*`, `help-block`, `has-error`,
+  `dropdown-menu > li > a`, `nav-tabs > li.active`, `well`, `media`, glyphicons, AdminLTE 2 `bg-*`/`text-*` colours)
+  and `assets/js/bs3-compat.js` (`data-toggle`/`data-target`/`data-dismiss` mirrored to `data-bs-*`, `.in` to
+  `.show`, `$(el).modal()` and the other jQuery plugin calls available from page load, `.box` collapse/remove).
+- Login, forgot password, lock screen and 404 pages, the statistic builder, the datamodal browser and the public
+  API documentation use AdminLTE 4 too, through the new `partials.theme_styles` and `partials.theme_scripts`.
+  The public API page and the login pages no longer load Bootstrap or Font Awesome from CDNs.
+- The WYSIWYG field and the API generator use Summernote Lite (same editor and API, no Bootstrap 3 dependency).
+- Grid and datamodal pagination render with Laravel's Bootstrap pagination view, whatever the app's default.
+- The admin stays in light mode: AdminLTE 4 would otherwise follow the OS dark-mode setting.
+- jQuery 2.2.3, Font Awesome 4.7, Ionicons and the date, time, select2, DataTables and lightbox plugins are
+  unchanged, so stored `fa fa-*` module and menu icons and custom scripts keep working. The AdminLTE 2 files stay
+  in `assets/adminlte` for custom views that load its plugins.
+
 ### Changed
 - A `header` field's `'collapsed' => true` now starts its section folded and `false` keeps it open; both were
   inverted. Sections without the option still start open.
