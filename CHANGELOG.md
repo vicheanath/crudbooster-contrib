@@ -13,6 +13,17 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
 - Optional fluent module API: `modern\CrudController` with `CrudDefinition`, `Column` and `Field`.
 - New guide: How To Extend CRUDBooster (`docs/en/how-to-extend.md`).
 - About 30 new tests, including characterization tests that pin down classic module behaviour.
+- Settings, sidebar menus, template email, notifications and the module/API code generators are services too
+  (`SettingsRepositoryInterface`, `MenuRepositoryInterface`, `TemplateMailerInterface`,
+  `NotificationSenderInterface`, `ModuleGeneratorInterface`, `ApiGeneratorInterface`). The generators render from
+  stubs, and a golden-file test pins the generated source byte for byte.
+
+### Changed
+- Header and sidebar typography: one font stack, a light header shadow, uppercase section labels, tighter menu items
+  and ellipsis for long names. Colours still come from each privilege's skin. Run `php artisan crudbooster:update`
+  to republish the CSS.
+- The navbar, user menu and sidebar panel show the admin's initials instead of the profile photo, in AdminLTE
+  2.3.8's avatar slots and sizes.
 
 ### Fixed
 - A `child` form field submitted without rows inserted an empty child row (failed on NOT NULL columns).
@@ -25,6 +36,13 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
 - A bare `unique` validation rule now checks the module's table.
 - A string `$orderby` with a qualified column (`"table.column,desc"`) and the `where[...]` index parameter built
   wrong column names.
+- The forgot-password email showed a literal `[password]` instead of the new password.
+- Generating a module for a table with an `is_*` column crashed with "Array to string conversion".
+- A third module on the same table overwrote `Admin{Name}1Controller`; a module generated without a name became
+  `Admin1Controller`.
+- Sending email with an unknown template slug now throws a clear `InvalidArgumentException`.
+- Security: queued email attachments are unserialized with objects disallowed, and the sidebar menu queries bind
+  the privilege id instead of interpolating it into SQL.
 
 - Documentation site built with VitePress and deployed to GitHub Pages: https://vicheanath.github.io/crudbooster-contrib/
 
