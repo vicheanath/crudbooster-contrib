@@ -12,7 +12,7 @@
             <a href="[link]" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
 
-        <div class='action pull-right'>
+        <div class='action float-end'>
             <a href='javascript:void(0)' data-componentid='{{$componentID}}' data-name='Small Box' class='btn-edit-component'><i class='fa fa-pencil'></i></a>
             &nbsp;
             <a href='javascript:void(0)' data-componentid='{{$componentID}}' class='btn-delete-component'><i class='fa fa-trash'></i></a>
@@ -51,7 +51,7 @@
         <div class="form-group">
             <label>Count (SQL QUERY)</label>
             <textarea name='config[sql]' rows="5" class='form-control'>{{@$config->sql}}</textarea>
-            <div class="help-block">Make sure the sql query are correct unless the widget will be broken. Mak sure give the alias name each column. You may use
+            <div class="form-text">Make sure the sql query are correct unless the widget will be broken. Mak sure give the alias name each column. You may use
                 alias [SESSION_NAME] to get the session
             </div>
         </div>

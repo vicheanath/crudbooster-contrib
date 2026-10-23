@@ -3,8 +3,8 @@
 
 
     @if($button_show_data || $button_reload_data || $button_new_data || $button_delete_data || $index_button || $columns)
-        <div id='box-actionmenu' class='box'>
-            <div class='box-body'>
+        <div id='box-actionmenu' class='card'>
+            <div class='card-body'>
                 @include("crudbooster::default.actionmenu")
             </div>
         </div>
@@ -14,22 +14,22 @@
     @if(Request::get('file') && Request::get('import'))
 
         <ul class='nav nav-tabs'>
-            <li style="background:#eeeeee"><a style="color:#111"
+            <li class="nav-item"><a class="nav-link"
                                               onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
                                               href='javascript:;'><i class='fa fa-download'></i> Upload a File &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cogs'></i> Adjustment &raquo;</a></li>
-            <li style="background:#ffffff" class='active'><a style="color:#111" href='#'><i class='fa fa-cloud-download'></i> Importing &raquo;</a></li>
+            <li class="nav-item"><a class="nav-link" href='#'><i class='fa fa-cogs'></i> Adjustment &raquo;</a></li>
+            <li class="nav-item"><a class="nav-link active" href='#' aria-current="page"><i class='fa fa-cloud-download'></i> Importing &raquo;</a></li>
         </ul>
 
         <!-- Box -->
-        <div id='box_main' class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Importing</h3>
-                <div class="box-tools">
+        <div id='box_main' class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Importing</h3>
+                <div class="card-tools">
                 </div>
             </div>
 
-            <div class="box-body">
+            <div class="card-body">
 
                 <p style='font-weight: bold' id='status-import'><i class='fa fa-spin fa-spinner'></i> Please wait importing...</p>
                 <div class="progress">
@@ -78,8 +78,8 @@
 
             </div><!-- /.box-body -->
 
-            <div class="box-footer" id='upload-footer' style="display:none">
-                <div class='pull-right'>
+            <div class="card-footer" id='upload-footer' style="display:none">
+                <div class='float-end'>
                     <a href='{{ CRUDBooster::mainpath("import-data") }}' class='btn btn-default'><i class='fa fa-upload'></i> Upload Other File</a>
                     <a href='{{CRUDBooster::mainpath()}}' class='btn btn-success'>Finish</a>
                 </div>
@@ -91,18 +91,18 @@
     @if(Request::get('file') && !Request::get('import'))
 
         <ul class='nav nav-tabs'>
-            <li style="background:#eeeeee"><a style="color:#111"
+            <li class="nav-item"><a class="nav-link"
                                               onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
                                               href='javascript:;'><i class='fa fa-download'></i> Upload a File &raquo;</a></li>
-            <li style="background:#ffffff" class='active'><a style="color:#111" href='#'><i class='fa fa-cogs'></i> Adjustment &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cloud-download'></i> Importing &raquo;</a></li>
+            <li class="nav-item"><a class="nav-link active" href='#' aria-current="page"><i class='fa fa-cogs'></i> Adjustment &raquo;</a></li>
+            <li class="nav-item"><a class="nav-link" href='#'><i class='fa fa-cloud-download'></i> Importing &raquo;</a></li>
         </ul>
 
         <!-- Box -->
-        <div id='box_main' class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Adjustment</h3>
-                <div class="box-tools">
+        <div id='box_main' class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Adjustment</h3>
+                <div class="card-tools">
 
                 </div>
             </div>
@@ -119,7 +119,7 @@
 
             <form method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div class="box-body table-responsive no-padding">
+                <div class="card-body table-responsive p-0">
                     <div class='callout callout-info'>
                         * Just ignoring the column where you are not sure the data is suit with the column or not.<br/>
                         * Warning !, Unfortunately at this time, the system can't import column that contains image or photo url.
@@ -133,7 +133,7 @@
                     @endpush
                     <table class='table table-bordered' style="width:130%">
                         <thead>
-                        <tr class='success'>
+                        <tr class='table-success'>
                             @foreach($table_columns as $k=>$column)
                                 <?php
                                 $help = '';
@@ -197,8 +197,8 @@
                     </script>
                 @endpush
 
-                <div class="box-footer">
-                    <div class='pull-right'>
+                <div class="card-footer">
+                    <div class='float-end'>
                         <a onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'" href='javascript:;'
                            class='btn btn-default'>Cancel</a>
                         <input type='submit' class='btn btn-primary' name='submit' onclick='return check_selected_column()' value='Import Data'/>
@@ -212,18 +212,18 @@
 
     @if(!Request::get('file'))
         <ul class='nav nav-tabs'>
-            <li style="background:#ffffff" class='active'><a style="color:#111"
+            <li class="nav-item"><a class="nav-link active"
                                                              onclick="if(confirm('Are you sure want to leave ?')) location.href='{{ CRUDBooster::mainpath("import-data") }}'"
-                                                             href='javascript:;'><i class='fa fa-download'></i> Upload a File &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cogs'></i> Adjustment &raquo;</a></li>
-            <li style="background:#eeeeee"><a style="color:#111" href='#'><i class='fa fa-cloud-download'></i> Importing &raquo;</a></li>
+                                                             href='javascript:;' aria-current="page"><i class='fa fa-download'></i> Upload a File &raquo;</a></li>
+            <li class="nav-item"><a class="nav-link" href='#'><i class='fa fa-cogs'></i> Adjustment &raquo;</a></li>
+            <li class="nav-item"><a class="nav-link" href='#'><i class='fa fa-cloud-download'></i> Importing &raquo;</a></li>
         </ul>
 
         <!-- Box -->
-        <div id='box_main' class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Upload a File</h3>
-                <div class="box-tools">
+        <div id='box_main' class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Upload a File</h3>
+                <div class="card-tools">
 
                 </div>
             </div>
@@ -240,7 +240,7 @@
 
             <form method='post' id="form" enctype="multipart/form-data" action='{{$action}}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div class="box-body">
+                <div class="card-body">
 
                     <div class='callout callout-success'>
                         <h4>Welcome to Data Importer Tool</h4>
@@ -255,12 +255,12 @@
                     <div class='form-group'>
                         <label>File XLS / CSV</label>
                         <input type='file' name='userfile' class='form-control' required/>
-                        <div class='help-block'>File type supported only : XLS, XLSX, CSV</div>
+                        <div class='form-text'>File type supported only : XLS, XLSX, CSV</div>
                     </div>
                 </div><!-- /.box-body -->
 
-                <div class="box-footer">
-                    <div class='pull-right'>
+                <div class="card-footer">
+                    <div class='float-end'>
                         <a href='{{ CRUDBooster::mainpath() }}' class='btn btn-default'>Cancel</a>
                         <input type='submit' class='btn btn-primary' name='submit' value='Upload'/>
                     </div>

@@ -1,11 +1,11 @@
 <tr>
     <td colspan='2'>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <i class='fa fa-bars'></i> {{$form['label']}}
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <table id='table-{{$name}}' class='table table-striped table-bordered'>
                     <thead>
                     <tr>

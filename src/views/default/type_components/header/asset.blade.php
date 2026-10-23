@@ -19,7 +19,7 @@
                 $(document).on("click", ".header-title", function () {
                     var index = $(this).attr('id').replace("header", "");
                     var handel = $(this);
-                    var parent = $(this).parent('.box-body');
+                    var parent = $(this).parent('.card-body, .box-body');
                     var first_group = parent.find(".header-group-" + index + ":first").is(":hidden");
                     if (first_group) {
                         parent.find(".header-group-" + index).slideDown(function () {

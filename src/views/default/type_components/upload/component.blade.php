@@ -31,7 +31,7 @@
         @endif
         @if(!$value)
             <input type='file' id="{{$name}}" title="{{$form['label']}}" {{$required}} {{$readonly}} {{$disabled}} class='form-control' name="{{$name}}"/>
-            <p class='help-block'>{{ @$form['help'] }}</p>
+            <p class='form-text'>{{ @$form['help'] }}</p>
         @else
             <p class='text-muted'><em>{{cbLang("notice_delete_file_upload")}}</em></p>
         @endif

@@ -15,14 +15,14 @@
     @endpush
 
     <ul class="nav nav-tabs">
-        <li><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
-        <li class='active'><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ CRUDBooster::mainpath('generator') }}" aria-current="page"><i class='fa fa-cog'></i> API Generator</a></li>
     </ul>
 
-    <div class='box'>
+    <div class='card'>
 
-        <div class='box-body'>
+        <div class='card-body'>
             @push('bottom')
                 <script>
                     $(function () {
@@ -116,11 +116,11 @@
                         $('#table-response tbody').append("<tr><td>" + no_params + "</td><td>api_message</td><td>string</td><td>-</td><td><select class='form-control' disabled><option>YES</option></select></td><td>-</td></tr>");
 
                         if (tipe_action == 'list') {
-                            $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");
+                            $('#table-response tbody').append("<tr class='table-info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");
                         }
 
                         if (tipe_action == 'detail') {
-                            $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");
+                            $('#table-response tbody').append("<tr class='table-info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");
                         }
 
                         no_params = 0;
@@ -164,7 +164,7 @@
                                 }
 
                                 no_params += 1;
-                                $('#table-response tbody').append("<tr class='success tr-response'><td>" + no_params + "</td><td>&nbsp;&nbsp;- " + obj.name + "<input type='hidden' name='responses_name[]' value='" + obj.name + "'/></td><td>" + obj_type + "<input type='hidden' name='responses_type[]' value='" + obj_type + "'/></td><td>-<input type='hidden' name='responses_subquery[]' value=''/></td><td><select class='form-control responses_used' name='responses_used[]'><option value='1'>YES</option><option value='0'>NO</option></select></td><td><a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a></td></tr>");
+                                $('#table-response tbody').append("<tr class='table-success tr-response'><td>" + no_params + "</td><td>&nbsp;&nbsp;- " + obj.name + "<input type='hidden' name='responses_name[]' value='" + obj.name + "'/></td><td>" + obj_type + "<input type='hidden' name='responses_type[]' value='" + obj_type + "'/></td><td>-<input type='hidden' name='responses_subquery[]' value=''/></td><td><select class='form-control responses_used' name='responses_used[]'><option value='1'>YES</option><option value='0'>NO</option></select></td><td><a class='btn btn-danger' href='javascript:void(0)' onclick='deleteResponse(this)'><i class='fa fa-ban'></i></a></td></tr>");
                             })
                         })
 
@@ -371,7 +371,7 @@
                         $('#table-response tbody').append("<tr><td>" + no_params + "</td><td>api_message</td><td>string</td><td>-</td><td><select class='form-control' disabled><option>YES</option></select></td><td>-</td></tr>");
 
                         if (tipe_action == 'list') {
-                            $('#table-response tbody').append("<tr class='info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");
+                            $('#table-response tbody').append("<tr class='table-info' style='font-weight'><td>#</td><td>data</td><td>&nbsp;</td><td>-</td><td>-</td><td>-</td></tr>");
                         }
 
                         no_params = 0;
@@ -617,7 +617,7 @@
                         <div class='form-group'>
                             <label>API Slug</label>
                             <div class='input-group'>
-                                <span class="input-group-addon" id="basic-addon1" style="background:#eeeeee">{{url("api")}}/</span>
+                                <span class="input-group-text" id="basic-addon1" style="background:#eeeeee">{{url("api")}}/</span>
                                 <input type='text' class='form-control' value='{{$row->permalink}}' required name='permalink' id='input-permalink'/>
                             </div>
                         </div>
@@ -655,7 +655,7 @@
                 <div class='form-group'>
                     <div class="clearfix">
                         <label><i class='fa fa-cog'></i> Parameters</label>
-                        <a class='pull-right btn btn-xs btn-primary' href='javascript:void(0)' onclick="load_parameters()"><i class='fa fa-refresh'></i>
+                        <a class='float-end btn btn-xs btn-primary' href='javascript:void(0)' onclick="load_parameters()"><i class='fa fa-refresh'></i>
                             Reset</a>
                     </div>
 
@@ -732,7 +732,7 @@
                         </tfoot>
                     </table>
 
-                    <div class="help-block">
+                    <div class="form-text">
                         To set as comment at description. Add prefix * (asterisk) before description. Unless will be set as default value.
                     </div>
                 </div>
@@ -741,7 +741,7 @@
                     <div class='form-group'>
                         <div class='clearfix'>
                             <label><i class='fa fa-cog'></i> Response</label>
-                            <a class='pull-right btn btn-xs btn-primary' href='javascript:void(0)' onclick='load_response()'><i class='fa fa-refresh'></i> Reset</a>
+                            <a class='float-end btn btn-xs btn-primary' href='javascript:void(0)' onclick='load_response()'><i class='fa fa-refresh'></i> Reset</a>
                         </div>
                         <div id='response'>
                             <table id='table-response' class='table table-striped table-bordered'>

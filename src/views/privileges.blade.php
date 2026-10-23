@@ -12,16 +12,16 @@
 
 
     <!-- Box -->
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">{{ $page_title }}</h3>
-                <div class="box-tools">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">{{ $page_title }}</h3>
+                <div class="card-tools">
 
                 </div>
             </div>
             <form method='post' action='{{ (@$row->id)?route("PrivilegesControllerPostEditSave")."/$row->id":route("PrivilegesControllerPostAddSave") }}'>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div class="box-body">
+                <div class="card-body">
                     <div class="alert alert-info">
                         <strong>Note:</strong> To show the menu you have to create a menu at Menu Management
                     </div>
@@ -134,7 +134,7 @@
                         @endpush
                         <table class='table table-striped table-hover table-bordered'>
                             <thead>
-                            <tr class='active'>
+                            <tr class='table-active'>
                                 <th width='3%'>{{cbLang('privileges_module_list_no')}}</th>
                                 <th width='60%'>{{cbLang('privileges_module_list_mod_names')}}</th>
                                 <th>&nbsp;</th>
@@ -144,7 +144,7 @@
                                 <th>{{cbLang('privileges_module_list_update')}}</th>
                                 <th>{{cbLang('privileges_module_list_delete')}}</th>
                             </tr>
-                            <tr class='info'>
+                            <tr class='table-info'>
                                 <th>&nbsp;</th>
                                 <th>&nbsp;</th>
                                 <th>&nbsp;</th>
@@ -164,18 +164,18 @@
                                 <tr>
                                     <td><?php echo $no++;?></td>
                                     <td>{{$modul->name}}</td>
-                                    <td class='info' align="center"><input type='checkbox' title='Check All Horizontal'
+                                    <td class='table-info' align="center"><input type='checkbox' title='Check All Horizontal'
                                                                            <?=($roles?->is_create && $roles?->is_read && $roles?->is_edit && $roles?->is_delete) ? "checked" : ""?> class='select_horizontal'/>
                                     </td>
-                                    <td class='active' align="center"><input type='checkbox' class='is_visible' name='privileges[<?=$modul->id?>][is_visible]'
+                                    <td class='table-active' align="center"><input type='checkbox' class='is_visible' name='privileges[<?=$modul->id?>][is_visible]'
                                                                              <?=$roles?->is_visible ? "checked" : ""?> value='1'/></td>
-                                    <td class='warning' align="center"><input type='checkbox' class='is_create' name='privileges[<?=$modul->id?>][is_create]'
+                                    <td class='table-warning' align="center"><input type='checkbox' class='is_create' name='privileges[<?=$modul->id?>][is_create]'
                                                                               <?=$roles?->is_create ? "checked" : ""?> value='1'/></td>
-                                    <td class='info' align="center"><input type='checkbox' class='is_read' name='privileges[<?=$modul->id?>][is_read]'
+                                    <td class='table-info' align="center"><input type='checkbox' class='is_read' name='privileges[<?=$modul->id?>][is_read]'
                                                                            <?=$roles?->is_read ? "checked" : ""?> value='1'/></td>
-                                    <td class='success' align="center"><input type='checkbox' class='is_edit' name='privileges[<?=$modul->id?>][is_edit]'
+                                    <td class='table-success' align="center"><input type='checkbox' class='is_edit' name='privileges[<?=$modul->id?>][is_edit]'
                                                                               <?=$roles?->is_edit ? "checked" : ""?> value='1'/></td>
-                                    <td class='danger' align="center"><input type='checkbox' class='is_delete' name='privileges[<?=$modul->id?>][is_delete]'
+                                    <td class='table-danger' align="center"><input type='checkbox' class='is_delete' name='privileges[<?=$modul->id?>][is_delete]'
                                                                              <?=$roles?->is_delete ? "checked" : ""?> value='1'/></td>
                                 </tr>
                             @endforeach
@@ -185,7 +185,7 @@
                     </div>
 
                 </div><!-- /.box-body -->
-                <div class="box-footer" align="right">
+                <div class="card-footer" align="right">
                     <button type='button' onclick="location.href='{{CRUDBooster::mainpath()}}'"
                             class='btn btn-default'>{{cbLang("button_cancel")}}</button>
                     <button type='submit' class='btn btn-primary'><i class='fa fa-save'></i> {{cbLang("button_save")}}</button>

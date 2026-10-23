@@ -2,20 +2,20 @@
 @section("content")
 
     <ul class="nav nav-tabs">
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep1')."/".$id}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep2')."/".$id}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
-        <li role="presentation"><a href="{{Route('ModulsControllerGetStep3')."/".$id}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
-        <li role="presentation" class="active"><a href="{{Route('ModulsControllerGetStep4')."/".$id}}"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="{{Route('ModulsControllerGetStep1')."/".$id}}"><i class='fa fa-info'></i> Step 1 - Module Information</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="{{Route('ModulsControllerGetStep2')."/".$id}}"><i class='fa fa-table'></i> Step 2 - Table Display</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link" href="{{Route('ModulsControllerGetStep3')."/".$id}}"><i class='fa fa-plus-square-o'></i> Step 3 - Form Display</a></li>
+        <li class="nav-item" role="presentation"><a class="nav-link active" href="{{Route('ModulsControllerGetStep4')."/".$id}}" aria-current="page"><i class='fa fa-wrench'></i> Step 4 - Configuration</a></li>
     </ul>
 
-    <div class="box box-default">
-        <div class="box-header">
-            <h1 class="box-title">Configuration</h1>
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Configuration</h1>
         </div>
         <form method='post' action='{{Route('ModulsControllerPostStepFinish')}}'>
             {{csrf_field()}}
             <input type="hidden" name="id" value='{{$id}}'>
-            <div class="box-body">
+            <div class="card-body">
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -47,7 +47,7 @@
                             }
                             ?>
                             <input type="text" name="orderby" value="{{$orderby}}" class='form-control'>
-                            <div class="help-block">E.g : column_name,desc</div>
+                            <div class="form-text">E.g : column_name,desc</div>
                         </div>
                     </div>
                 </div>
@@ -232,7 +232,7 @@
                 </div>
 
             </div>
-            <div class="box-footer">
+            <div class="card-footer">
                 <div align="right">
                     <button type="button" onclick="location.href='{{CRUDBooster::mainpath('step3').'/'.$id}}'" class="btn btn-default">&laquo; Back</button>
                     <input type="submit" name="submit" class='btn btn-primary' value='Save Module'>

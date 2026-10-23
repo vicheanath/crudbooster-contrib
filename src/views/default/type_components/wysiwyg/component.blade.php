@@ -39,6 +39,6 @@
         <textarea id='textarea_{{$name}}' id="{{$name}}" {{$required}} {{$readonly}} {{$disabled}} name="{{$form['name']}}" class='form-control'
                   rows='5'>{{ $value }}</textarea>
         <div class="text-danger">{{ $errors->first($name) }}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        <p class='form-text'>{{ @$form['help'] }}</p>
     </div>
 </div>

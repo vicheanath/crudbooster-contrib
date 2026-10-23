@@ -1,16 +1,16 @@
 @if($command=='layout')
     <div id='{{$componentID}}' class='border-box'>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 [name]
             </div>
-            <div class="panel-body table-responsive no-padding">
+            <div class="card-body table-responsive p-0">
                 [sql]
             </div>
         </div>
 
-        <div class='action pull-right'>
+        <div class='action float-end'>
             <a href='javascript:void(0)' data-componentid='{{$componentID}}' data-name='Small Box' class='btn-edit-component'><i class='fa fa-pencil'></i></a>
             &nbsp;
             <a href='javascript:void(0)' data-componentid='{{$componentID}}' class='btn-delete-component'><i class='fa fa-trash'></i></a>
@@ -29,7 +29,7 @@
             <label>SQL Query</label>
             <textarea name='config[sql]' rows="5" placeholder="E.g : select column_id,column_name from view_table_name"
                       class='form-control'>{{@$config->sql}}</textarea>
-            <div class='help-block'>
+            <div class='form-text'>
                 Make sure the sql query are correct unless the widget will be broken. Mak sure give the alias name each column. You may use alias [SESSION_NAME]
                 to get the session. We strongly recommend that you use a <a href='http://www.w3schools.com/sql/sql_view.asp' target='_blank'>view table</a>
             </div>

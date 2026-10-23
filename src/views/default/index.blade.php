@@ -127,7 +127,7 @@
                     <span class="text-body-secondary small cb-selected-text d-none"></span>
                 @endif
 
-                <div class="box-tools ms-auto d-flex flex-wrap align-items-center gap-2">
+                <div class="card-tools ms-auto d-flex flex-wrap align-items-center gap-2">
 
                     <form method='get' class="cb-grid-search" action='{{Request::url()}}' role="search">
                         <div class="input-group input-group-sm">

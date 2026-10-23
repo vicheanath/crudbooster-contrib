@@ -1,16 +1,16 @@
 @if($command=='layout')
     <div id='{{$componentID}}' class='border-box'>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 [name]
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 [sql]
             </div>
         </div>
 
-        <div class='action pull-right'>
+        <div class='action float-end'>
             <a href='javascript:void(0)' data-componentid='{{$componentID}}' data-name='Panel Area' class='btn-edit-component'><i class='fa fa-pencil'></i></a>
             &nbsp;
             <a href='javascript:void(0)' data-componentid='{{$componentID}}' class='btn-delete-component'><i class='fa fa-trash'></i></a>

@@ -15,9 +15,9 @@
         <h1>API Documentation {{ get_setting("appname") }}</h1>
     </div>
 
-    <div class='box'>
+    <div class='card'>
 
-        <div class='box-body'>
+        <div class='card-body'>
 
             <style>
                 .table-api tbody tr td a {
@@ -48,10 +48,10 @@
             </div>
             <table class='table table-striped table-api table-bordered'>
                 <thead>
-                <tr class='info'>
+                <tr class='table-info'>
                     <th width='2%'>No</th>
                     <th>API Name
-                        <span class='pull-right'>
+                        <span class='float-end'>
                       <a class='btn btn-xs btn-warning' target="_blank" href='{{url("download-documentation-postman")}}'>Export For POSTMAN <sup>Beta</sup></a>
                     </span>
                     </th>
@@ -80,7 +80,7 @@
                                     <td>
                                         <table class='table table-bordered table-hover'>
                                             <thead>
-                                            <tr class='active'>
+                                            <tr class='table-active'>
                                                 <th width="3%">No</th>
                                                 <th width="5%">Type</th>
                                                 <th>Parameter Names</th>
@@ -105,7 +105,7 @@
                                     <td>
                                         <table class='table table-bordered table-hover'>
                                             <thead>
-                                            <tr class='active'>
+                                            <tr class='table-active'>
                                                 <th width="3%">No</th>
                                                 <th width="5%">Type</th>
                                                 <th>Response Names</th>
@@ -173,7 +173,7 @@
                                         <td>
                                             <table class="table table-bordered table-hover">
                                                 <thead>
-                                                <tr class="active">
+                                                <tr class="table-active">
                                                     <th>Name</th>
                                                     <th>Value</th>
                                                 </tr>
@@ -192,7 +192,7 @@
                                         <td>
                                             <table class='table table-bordered table-hover'>
                                                 <thead>
-                                                <tr class='active'>
+                                                <tr class='table-active'>
                                                     <th width="3%">No</th>
                                                     <th width="5%">Type</th>
                                                     <th>Parameter Names</th>
@@ -220,7 +220,7 @@
                                                                 @endif
 
                                                             </td>
-                                                            <td>{!! ($param['required'])?"<span class='label label-primary'>REQUIRED</span>":"<span class='label label-default'>OPTIONAL</span>"!!}</td>
+                                                            <td>{!! ($param['required'])?"<span class='badge text-bg-primary'>REQUIRED</span>":"<span class='badge text-bg-secondary'>OPTIONAL</span>"!!}</td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
@@ -238,7 +238,7 @@
                                         <td>
                                             <table class='table table-bordered table-hover'>
                                                 <thead>
-                                                <tr class='active'>
+                                                <tr class='table-active'>
                                                     <th width="3%">No</th>
                                                     <th width="5%">Type</th>
                                                     <th>Response Names</th>
@@ -258,7 +258,7 @@
                                                 </tr>
 
                                                 @if($api->aksi == 'list')
-                                                    <tr class='active'>
+                                                    <tr class='table-active'>
                                                         <td>{{ ++$i }}</td>
                                                         <td>Array</td>
                                                         <td><strong>data</strong></td>
@@ -266,7 +266,7 @@
                                                 @endif
 
                                                 @if($api->aksi == 'detail')
-                                                    <tr class='active'>
+                                                    <tr class='table-active'>
                                                         <td>{{ ++$i }}</td>
                                                         <td>Object</td>
                                                         <td><strong>data</strong></td>

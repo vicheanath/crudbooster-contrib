@@ -146,7 +146,7 @@
             display: block;
         }
 
-        .panel-heading, .inner-box, .box-header, .btn-add-widget {
+        .card-header, .panel-heading, .inner-box, .box-header, .btn-add-widget {
             cursor: move;
         }
 
@@ -193,7 +193,7 @@
                 $(".connectedSortable").sortable({
                     placeholder: "sort-highlight",
                     connectWith: ".connectedSortable",
-                    handle: ".panel-heading, .inner-box, .box-header, .btn-add-widget",
+                    handle: ".card-header, .panel-heading, .inner-box, .box-header, .btn-add-widget",
                     forcePlaceholderSize: true,
                     zIndex: 999999,
                     stop: function (event, ui) {
@@ -344,14 +344,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <h4 class="modal-title">Modal title</h4>
             </div>
             <div class="modal-body">
                 <p>One fine body&hellip;</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn-submit btn btn-primary" data-loading-text="Saving..." autocomplete="off">Save changes</button>
             </div>
         </div><!-- /.modal-content -->

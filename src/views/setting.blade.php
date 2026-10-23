@@ -56,14 +56,14 @@
         <p align="right"><a title='Add Field Setting' class='btn btn-sm btn-primary' href='{{route("SettingsControllerGetAdd")."?group_setting=".$page_title}}'><i
                         class='fa fa-plus'></i> Add Field Setting</a></p>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <i class='fa fa-cog'></i> {{$page_title}}
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <form method='post' id="form" enctype="multipart/form-data" action='{{CRUDBooster::mainpath("save-setting?group_setting=$page_title")}}'>
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <div class="box-body">
+                    <div class="card-body">
                         <?php
                         foreach($settings as $s):
 
@@ -80,7 +80,7 @@
                             <label class='label-setting' title="{{$s->name}}">{{$s->label}}
                                 <a style="visibility:hidden" href='{{CRUDBooster::mainpath("edit/$s->id")}}' title='Edit This Meta Setting'
                                    class='btn btn-box-tool'><i class='fa fa-pencil'></i></a>
-                                <a style="visibility:hidden" href='javascript:;' title='Delete this Setting' class='btn btn-box-tool'
+                                <a style="visibility:hidden" href='javascript:;' title='Delete this Setting' class='btn btn-tool'
                                    onClick='swal({   title: "Are you sure?",   text: "You will not be able to recover {{$s->label}} and may be can cause some errors on your system !",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete it!",   closeOnConfirm: false }, function(){  location.href="{{CRUDBooster::mainpath("delete/$s->id")}}" });'
                                 ><i class='fa fa-trash'></i></a>
                             </label>
@@ -106,21 +106,21 @@
                                     if ($value) {
                                         echo "<p><a href='".asset($value)."' target='_blank' title='Download the file of $s->label'><i class='fa fa-download'></i> Download the File  of $s->label</a></p>";
                                         echo "<input type='hidden' name='$s->name' value='$value'/>";
-                                        echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".CRUDBooster::mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'><i class='fa fa-trash'></i></a></div>";
+                                        echo "<div class='float-end'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".CRUDBooster::mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'><i class='fa fa-trash'></i></a></div>";
                                     } else {
                                         echo "<input type='file' name='$s->name' class='form-control'/>";
                                     }
-                                    echo "<div class='help-block'>File support only jpg,png,gif, Max 10 MB</div>";
+                                    echo "<div class='form-text'>File support only jpg,png,gif, Max 10 MB</div>";
                                     break;
                                 case 'upload_file':
                                     if ($value) {
                                         echo "<p><a href='".asset($value)."' target='_blank' title='Download the file of $s->label'><i class='fa fa-download'></i> Download the File  of $s->label</a></p>";
                                         echo "<input type='hidden' name='$s->name' value='$value'/>";
-                                        echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".CRUDBooster::mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'><i class='fa fa-trash'></i></a></div>";
+                                        echo "<div class='float-end'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".CRUDBooster::mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'><i class='fa fa-trash'></i></a></div>";
                                     } else {
                                         echo "<input type='file' name='$s->name' class='form-control'/>";
                                     }
-                                    echo "<div class='help-block'>File support only doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar, Max 20 MB</div>";
+                                    echo "<div class='form-text'>File support only doc,docx,xls,xlsx,ppt,pptx,pdf,zip,rar, Max 20 MB</div>";
                                     break;
                                 case 'datepicker':
                                     echo "<input type='text' class='datepicker form-control' name='$s->name' value='$value'/>";
@@ -149,12 +149,12 @@
                             }
                             ?>
 
-                            <div class='help-block'>{{$s->helper}}</div>
+                            <div class='form-text'>{{$s->helper}}</div>
                         </div>
                         <?php endforeach;?>
                     </div><!-- /.box-body -->
-                    <div class="box-footer">
-                        <div class='pull-right'>
+                    <div class="card-footer">
+                        <div class='float-end'>
                             <input type='submit' name='submit' value='Save' class='btn btn-success'/>
                         </div>
                     </div><!-- /.box-footer-->

@@ -10,6 +10,6 @@
                {{$required}} {!!$placeholder!!} {{$readonly}} {{$disabled}} {{$validation['max']?"maxlength=".$validation['max']:""}} class='form-control'
                name="{{$name}}"/>
         <div class="text-danger">{!! $errors->first($name)?"<i class='fa fa-info-circle'></i> ".$errors->first($name):"" !!}</div>
-        <p class='help-block'>{{ @$form['help'] }}</p>
+        <p class='form-text'>{{ @$form['help'] }}</p>
     </div>
 </div>

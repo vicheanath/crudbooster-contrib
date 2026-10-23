@@ -3,14 +3,14 @@
 @section('content')
 
     <ul class="nav nav-tabs">
-        <li class="active"><a href="{{ CRUDBooster::mainpath() }}"><i class='fa fa-file'></i> API Documentation</a></li>
-        <li><a href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
-        <li><a href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ CRUDBooster::mainpath() }}" aria-current="page"><i class='fa fa-file'></i> API Documentation</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ CRUDBooster::mainpath('screet-key') }}"><i class='fa fa-key'></i> API Secret Key</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ CRUDBooster::mainpath('generator') }}"><i class='fa fa-cog'></i> API Generator</a></li>
     </ul>
 
-    <div class='box'>
+    <div class='card'>
 
-        <div class='box-body'>
+        <div class='card-body'>
 
             @push('head')
                 <style>
@@ -66,10 +66,10 @@
 
             <table class='table table-striped table-api table-bordered'>
                 <thead>
-                <tr class='info'>
+                <tr class='table-info'>
                     <th width='2%'>No</th>
                     <th>API Name
-                        <span class='pull-right'>
+                        <span class='float-end'>
                             <a class="btn btn-xs btn-primary" target="_blank" href="{{ url('api-documentation') }}"><i class="fa fa-globe"></i> Public Documentation</a>
                       <a class='btn btn-xs btn-warning' target="_blank" href='{{CRUDBooster::mainpath("download-postman")}}'>Export For POSTMAN <sup>Beta</sup></a>
                     </span>
@@ -100,7 +100,7 @@
                                     <td>
                                         <table class='table table-bordered table-hover'>
                                             <thead>
-                                            <tr class='active'>
+                                            <tr class='table-active'>
                                                 <th width="3%">No</th>
                                                 <th width="5%">Type</th>
                                                 <th>Parameter Names</th>
@@ -125,7 +125,7 @@
                                     <td>
                                         <table class='table table-bordered table-hover'>
                                             <thead>
-                                            <tr class='active'>
+                                            <tr class='table-active'>
                                                 <th width="3%">No</th>
                                                 <th width="5%">Type</th>
                                                 <th>Response Names</th>
@@ -199,7 +199,7 @@
                                         <td>
                                             <table class="table table-bordered table-hover">
                                                 <thead>
-                                                    <tr class="active">
+                                                    <tr class="table-active">
                                                         <th>Name</th>
                                                         <th>Value</th>
                                                     </tr>
@@ -218,7 +218,7 @@
                                         <td>
                                             <table class='table table-bordered table-hover'>
                                                 <thead>
-                                                <tr class='active'>
+                                                <tr class='table-active'>
                                                     <th width="3%">No</th>
                                                     <th width="5%">Type</th>
                                                     <th>Parameter Names</th>
@@ -246,7 +246,7 @@
                                                                 @endif
 
                                                             </td>
-                                                            <td>{!! ($param['required'])?"<span class='label label-primary'>REQUIRED</span>":"<span class='label label-default'>OPTIONAL</span>"!!}</td>
+                                                            <td>{!! ($param['required'])?"<span class='badge text-bg-primary'>REQUIRED</span>":"<span class='badge text-bg-secondary'>OPTIONAL</span>"!!}</td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
@@ -264,7 +264,7 @@
                                         <td>
                                             <table class='table table-bordered table-hover'>
                                                 <thead>
-                                                <tr class='active'>
+                                                <tr class='table-active'>
                                                     <th width="3%">No</th>
                                                     <th width="5%">Type</th>
                                                     <th>Response Names</th>
@@ -284,7 +284,7 @@
                                                 </tr>
 
                                                 @if($api->aksi == 'list')
-                                                    <tr class='active'>
+                                                    <tr class='table-active'>
                                                         <td>{{ ++$i }}</td>
                                                         <td>Array</td>
                                                         <td><strong>data</strong></td>
@@ -292,7 +292,7 @@
                                                 @endif
 
                                                 @if($api->aksi == 'detail')
-                                                    <tr class='active'>
+                                                    <tr class='table-active'>
                                                         <td>{{ ++$i }}</td>
                                                         <td>Object</td>
                                                         <td><strong>data</strong></td>

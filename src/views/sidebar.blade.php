@@ -8,6 +8,12 @@
     <!-- Logo -->
     <div class="sidebar-brand logo">
         <a href="{{url($cbAdminPath)}}" title='{{Session::get('appname')}}' class="brand-link">
+            {{-- The favicon setting, or the app name's first letter, stays visible when the sidebar collapses to icons. --}}
+            @if(CRUDBooster::getSetting('favicon'))
+                <img src="{{ asset(CRUDBooster::getSetting('favicon')) }}" alt="" class="brand-image rounded-circle shadow-sm">
+            @else
+                <span class="brand-image cb-brand-mark" aria-hidden="true">{{ mb_strtoupper(mb_substr(trim((string) CRUDBooster::getSetting('appname')) ?: 'C', 0, 1)) }}</span>
+            @endif
             <span class="brand-text">{{CRUDBooster::getSetting('appname')}}</span>
         </a>
     </div>

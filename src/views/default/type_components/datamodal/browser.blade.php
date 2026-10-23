@@ -18,7 +18,7 @@ if (count($coloms_alias) < 2 && isset($columns)) {
            value="{{Request::get('q')}}" class="form-control">
 </form>
 
-<table id='table_dashboard' class='table table-striped table-bordered table-condensed' style="margin-bottom: 0px">
+<table id='table_dashboard' class='table table-striped table-bordered table-sm' style="margin-bottom: 0px">
     <thead>
     @foreach($coloms_alias as $col)
         <th>{{ $col }}</th>
