@@ -1,5 +1,9 @@
 name: tests
 
+permissions:
+  contents: read
+  actions: read
+
 on:
   push:
     branches: [main]
@@ -74,6 +78,9 @@ jobs:
           DB_PASSWORD: ''
 
   coverage:
+    permissions:
+      contents: read
+      actions: write
     runs-on: ubuntu-latest
     name: Coverage
 
