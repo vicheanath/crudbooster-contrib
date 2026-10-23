@@ -143,6 +143,21 @@ class SmokeTest extends TestCase
         $this->assertStringContainsString('Alice', $raw);
     }
 
+    public function test_delete_confirm_supports_sweetalert2_and_legacy_sweetalert()
+    {
+        config(['crudbooster.SWEETALERT2_DELETE_OPTIONS' => ['width' => '500px', 'customClass' => 'my-swal']]);
+
+        ob_start();
+        CRUDBooster::deleteConfirm("http://localhost/admin/bank/delete/5?q=it's");
+        $js = ob_get_clean();
+
+        $this->assertStringContainsString('if (window.Swal && Swal.fire) { Swal.fire({', $js);
+        $this->assertStringContainsString('"width":"500px"', $js);
+        $this->assertStringContainsString('"customClass":"my-swal"', $js);
+        $this->assertStringContainsString('location.href = "http://localhost/admin/bank/delete/5?q=it\\u0027s"', $js);
+        $this->assertStringContainsString('} else { swal({', $js);
+    }
+
     public function test_legacy_notice_compat_only_covers_crudbooster_code()
     {
         $handler = new \crocodicstudio\crudbooster\helpers\LegacyNoticeHandler([__DIR__.'/../src'], function () {

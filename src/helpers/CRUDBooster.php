@@ -511,7 +511,7 @@ class CRUDBooster
 
     public static function deleteConfirm($redirectTo)
     {
-        echo "swal({   
+        $legacy = "swal({   
 				title: \"".cbLang('delete_title_confirm')."\",   
 				text: \"".cbLang('delete_description_confirm')."\",   
 				type: \"warning\",   
@@ -521,6 +521,21 @@ class CRUDBooster
 				cancelButtonText: \"".cbLang('confirmation_no')."\",  
 				closeOnConfirm: false }, 
 				function(){  location.href=\"$redirectTo\" });";
+
+        // Pages that load SweetAlert2 (window.Swal) get its API; the bundled sweetalert 1.x keeps the legacy call.
+        $json = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_APOS | JSON_HEX_TAG | JSON_HEX_AMP;
+        $options = json_encode(array_merge([
+            'title' => cbLang('delete_title_confirm'),
+            'text' => cbLang('delete_description_confirm'),
+            'icon' => 'warning',
+            'showCancelButton' => true,
+            'confirmButtonColor' => '#ff0000',
+            'confirmButtonText' => cbLang('confirmation_yes'),
+            'cancelButtonText' => cbLang('confirmation_no'),
+        ], (array) config('crudbooster.SWEETALERT2_DELETE_OPTIONS', [])), $json);
+        $url = json_encode((string) $redirectTo, $json);
+
+        echo "if (window.Swal && Swal.fire) { Swal.fire($options).then(function (result) { if (result.isConfirmed) { location.href = $url; } }); } else { $legacy }";
     }
 
     public static function getModulePath()
