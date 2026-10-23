@@ -41,6 +41,8 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
 - A third module on the same table overwrote `Admin{Name}1Controller`; a module generated without a name became
   `Admin1Controller`.
 - Sending email with an unknown template slug now throws a clear `InvalidArgumentException`.
+- On MySQL, table columns were read in no guaranteed order, so the Module Generator could shuffle grid columns
+  and form fields.
 - Security: queued email attachments are unserialized with objects disallowed, and the sidebar menu queries bind
   the privilege id instead of interpolating it into SQL.
 
