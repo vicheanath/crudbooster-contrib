@@ -86,6 +86,20 @@ Don't commit the result.
 Push your branch and open a PR against `main`. The template asks what changed, how you tested it, and
 whether existing projects need to do anything. CI must be green before review.
 
+## Working on the docs
+
+The documentation site (https://vicheanath.github.io/crudbooster-contrib/) is built with
+[VitePress](https://vitepress.dev) from the Markdown in `docs/`. It needs Node 18+.
+
+```bash
+npm install
+npm run docs:dev      # live preview at http://localhost:5173/crudbooster-contrib/
+npm run docs:build    # what CI runs; fails on dead links
+```
+
+- Pages live in `docs/en/*.md`. The sidebar is generated from the table of contents in `docs/en/index.md`, so add new pages there.
+- Pushes to `main` deploy the site through `.github/workflows/docs.yml`. Pull requests only build it.
+
 ## Reporting bugs
 
 Use the **Bug report** issue template, and include the PHP, Laravel and CRUDBooster versions, the database,
