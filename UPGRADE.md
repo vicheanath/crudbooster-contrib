@@ -88,6 +88,12 @@ attributes and `$(el).modal()` calls onto Bootstrap 5. Check these if you custom
   work, since the AdminLTE 2 files stay in `assets/adminlte`. Include `crudbooster::partials.theme_styles` and
   `crudbooster::partials.theme_scripts` to move them to the new theme.
 - **New markup** can use Bootstrap 5 classes and `data-bs-*` attributes directly.
+- **jQuery 3.7.1** replaces 2.2.3, with jQuery Migrate loaded to keep older calls working. To see which of your
+  scripts still use deprecated jQuery APIs, run `jQuery.migrateMute = false` in the browser console and reload.
+  Pages that load `assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js` themselves should switch to
+  `assets/jquery/jquery-3.7.1.min.js`.
+- **DataTables 2** replaces 1.10. `$(el).DataTable({...})` is unchanged; pages that load
+  `assets/adminlte/plugins/datatables/` themselves should switch to `assets/datatables/`.
 
 ### Other behaviour changes
 - **API tokens:** these now really last 2880 minutes (48h). They used to expire after 2880 seconds.

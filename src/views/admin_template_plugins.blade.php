@@ -1,7 +1,11 @@
 <!-- REQUIRED JS SCRIPTS -->
 
-<!-- jQuery 2.2.3: the bundled date, select, upload and editor plugins are jQuery plugins -->
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js') }}"></script>
+<!-- jQuery 3.7.1: the bundled date, select, upload and editor plugins are jQuery plugins -->
+<script src="{{ asset ('vendor/crudbooster/assets/jquery/jquery-3.7.1.min.js') }}"></script>
+<!-- jQuery Migrate restores the jQuery 1/2 APIs older plugins and custom scripts still call.
+     Set jQuery.migrateMute = false in the console to see what still needs them. -->
+<script>jQuery.migrateMute = true;</script>
+<script src="{{ asset ('vendor/crudbooster/assets/jquery/jquery-migrate-3.6.0.min.js') }}"></script>
 
 <!-- Bootstrap 5.3 JS (with Popper) -->
 <script src="{{ asset ('vendor/crudbooster/assets/bootstrap5/js/bootstrap.bundle.min.js') }}" type="text/javascript"></script>
@@ -38,12 +42,12 @@
 <!--MONEY FORMAT-->
 <script src="{{asset('vendor/crudbooster/jquery.price_format.2.0.min.js')}}"></script>
 
-<!--DATATABLE-->
-<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
+<!--DATATABLE 2-->
+<link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/datatables/dataTables.bootstrap5.min.css')}}">
 <!-- Select2 drawn like Bootstrap 5 form controls; after select2.css, which the select2 fields load -->
 <link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte4/css/adminlte-select2.min.css')}}">
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{ asset ('vendor/crudbooster/assets/datatables/dataTables.min.js')}}"></script>
+<script src="{{ asset ('vendor/crudbooster/assets/datatables/dataTables.bootstrap5.min.js')}}"></script>
 
 <script>
     var ASSET_URL = "{{asset('/')}}";

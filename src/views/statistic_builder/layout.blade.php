@@ -39,6 +39,14 @@
             transition: transform .3s ease-in-out;
         }
 
+        /* After a drop the builder puts a fresh copy of the panel inside the panel; lay that copy out in place. */
+        .control-sidebar .control-sidebar {
+            position: static;
+            width: auto;
+            transform: none;
+            box-shadow: none;
+        }
+
         .control-sidebar.control-sidebar-open {
             transform: none;
             box-shadow: -2px 0 8px rgba(0, 0, 0, .25);

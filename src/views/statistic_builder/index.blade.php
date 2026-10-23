@@ -1,7 +1,7 @@
 @push('bottom')
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="{{ asset('vendor/crudbooster/assets/raphael/raphael.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 
 
     <script type="text/javascript">
@@ -84,9 +84,9 @@
 
     </script>
     <!--DATATABLE-->
-    <link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.css')}}">
-    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{ asset ('vendor/crudbooster/assets/adminlte/plugins/datatables/dataTables.bootstrap.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ asset ('vendor/crudbooster/assets/datatables/dataTables.bootstrap5.min.css')}}">
+    <script src="{{ asset ('vendor/crudbooster/assets/datatables/dataTables.min.js')}}"></script>
+    <script src="{{ asset ('vendor/crudbooster/assets/datatables/dataTables.bootstrap5.min.js')}}"></script>
     <!--END HERE-->
 @endpush
 
@@ -174,11 +174,11 @@
             transform: translate(-50%, -50%);
         }
     </style>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('vendor/crudbooster/assets/jquery-ui/base/jquery-ui.min.css') }}">
 @endpush
 
 @push('bottom')
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="{{ asset('vendor/crudbooster/assets/jquery-ui/jquery-ui.min.js') }}"></script>
     <script type="text/javascript">
         $(function () {
 
