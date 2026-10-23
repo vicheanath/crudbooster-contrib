@@ -20,6 +20,8 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
 - The `str_limit` grid column option crashed (`str_limit()` was removed in Laravel 6; the helper is back).
 - Security: the `hide_form` input is unserialized with objects disallowed, and the select2 lookup's search term is
   bound instead of interpolated into SQL.
+- XLS and CSV export failed when a cell contained `&` or `<`, including the "no image" placeholder of every empty
+  image column. Values are now exported as escaped text.
 - A bare `unique` validation rule now checks the module's table.
 - A string `$orderby` with a qualified column (`"table.column,desc"`) and the `where[...]` index parameter built
   wrong column names.

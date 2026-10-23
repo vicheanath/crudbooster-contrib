@@ -410,4 +410,6 @@ Found by the characterization tests or while moving code:
 - `getIndex()` no longer turns a string `$orderby` into an array, which broke a second call on the same instance.
 - The `where[column]=value` index parameter used the table of the last listed column instead of the
   module's table.
+- XLS/CSV export failed on any cell containing `&` or `<` (found in the playground: the empty-image placeholder
+  URL has a bare `&`). The export view escapes cell values for these formats.
 - Import no longer calls `exit()` when creating a related row fails; the error surfaces as an exception.
