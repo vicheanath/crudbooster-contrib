@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v7.0.2
+
 - Fields submitted empty skip validation again, as in 5.x. 7.0.0 validated required-but-empty fields, which broke the common pattern of a hidden `required` field (e.g. `site_id`) filled by `hook_before_add/edit`, so those forms could not be saved.
 - The edit form now requires update permission. Read-only roles could open it before (saving was already refused).
 
