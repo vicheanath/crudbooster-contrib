@@ -42,10 +42,6 @@
     @endif
 
     <style type="text/css">
-        .dropdown-menu-action {
-            left: -130%;
-        }
-
         .btn-group-action .btn-action {
             cursor: default
         }

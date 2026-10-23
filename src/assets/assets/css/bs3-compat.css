@@ -465,8 +465,9 @@ textarea.form-control {
     border-color: var(--bs-warning);
 }
 
-.radio,
-.checkbox {
+/* Bootstrap 3's .checkbox / .radio are wrapper elements; a checkbox input that carries the class is left alone. */
+.radio:not(input),
+.checkbox:not(input) {
     position: relative;
     display: block;
     margin-top: .5rem;
@@ -1038,6 +1039,10 @@ textarea.form-control {
     order: 2;
     margin: -.5rem -.5rem -.5rem auto;
     padding: .5rem;
+}
+
+.modal-header > .btn-close {
+    order: 2;
 }
 
 .modal-header > .modal-title {

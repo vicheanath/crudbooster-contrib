@@ -31,22 +31,22 @@
     @endif
 
     @if($parent_table)
-        <div class="box box-default">
-            <div class="box-body table-responsive no-padding">
-                <table class='table table-bordered'>
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3 class="card-title fs-6 mb-0"><i class='fa fa-bars'></i> {{ ucwords(urldecode(g('label'))) }}</h3>
+            </div>
+            <div class="card-body p-0 table-responsive">
+                <table class='table table-sm mb-0'>
                     <tbody>
-                    <tr class='active'>
-                        <td colspan="2"><strong><i class='fa fa-bars'></i> {{ ucwords(urldecode(g('label'))) }}</strong></td>
-                    </tr>
                     @foreach(explode(',',urldecode(g('parent_columns'))) as $c)
                         <tr>
-                            <td width="25%"><strong>
-                                    @if(urldecode(g('parent_columns_alias')))
-                                        {{explode(',',urldecode(g('parent_columns_alias')))[$loop->index]}}
-                                    @else
-                                        {{  ucwords(str_replace('_',' ',$c)) }}
-                                    @endif
-                                </strong></td>
+                            <th class="ps-3" style="width: 25%">
+                                @if(urldecode(g('parent_columns_alias')))
+                                    {{explode(',',urldecode(g('parent_columns_alias')))[$loop->index]}}
+                                @else
+                                    {{  ucwords(str_replace('_',' ',$c)) }}
+                                @endif
+                            </th>
                             <td> {{ $parent_table->$c }}</td>
                         </tr>
                     @endforeach
@@ -56,86 +56,136 @@
         </div>
     @endif
 
-    <div class="box">
-        <div class="box-header">
-            @if($button_bulk_action && ( ($button_delete && CRUDBooster::isDelete()) || $button_selected) )
-                <div class="pull-{{ cbLang('left') }}">
-                    <div class="selected-action" style="display:inline-block;position:relative;">
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
-                                    class='fa fa-check-square-o'></i> {{cbLang("button_selected_action")}}
-                            <span class="fa fa-caret-down"></span></button>
+    @php
+        // Active search, filters and sorting, shown as chips that each remove one of them.
+        $cbQuery = Request::query();
+        $cbChipUrl = function (callable $change) use ($cbQuery) {
+            $params = $cbQuery;
+            $change($params);
+            unset($params['page'], $params['lasturl']);
+            $query = http_build_query($params);
+            return Request::url().($query ? '?'.$query : '');
+        };
+        $cbOperators = [
+            'like' => cbLang('filter_like'), 'not like' => cbLang('filter_not_like'), '=' => '=', '!=' => '≠',
+            '>=' => '≥', '<=' => '≤', '>' => '>', '<' => '<', 'in' => cbLang('filter_in'), 'not in' => cbLang('filter_not_in'),
+            'between' => cbLang('filter_between'), 'empty' => cbLang('filter_empty_or_null'),
+        ];
+        $cbLabels = collect($columns)->pluck('label', 'field_with');
+        $cbChips = [];
+        if (Request::get('q')) {
+            $cbChips[] = ['label' => cbLang('filter_search').': '.Request::get('q'), 'url' => $cbChipUrl(function (&$p) { unset($p['q']); })];
+        }
+        foreach ((array) Request::get('filter_column') as $field => $filter) {
+            $label = $cbLabels[$field] ?? $field;
+            $type = $filter['type'] ?? '';
+            $value = $filter['value'] ?? '';
+            if ($type && ($type == 'empty' || (is_array($value) ? array_filter($value, 'strlen') : strlen($value)))) {
+                $shown = is_array($value) ? implode(' – ', $value) : $value;
+                $cbChips[] = [
+                    'label' => trim($label.' '.($cbOperators[$type] ?? $type).' '.($type == 'empty' ? '' : $shown)),
+                    'url' => $cbChipUrl(function (&$p) use ($field) { unset($p['filter_column'][$field]['type'], $p['filter_column'][$field]['value']); }),
+                ];
+            }
+            if (! empty($filter['sorting'])) {
+                $cbChips[] = [
+                    'label' => cbLang('grid_sorted_by').' '.$label.' '.($filter['sorting'] == 'desc' ? '↓' : '↑'),
+                    'url' => $cbChipUrl(function (&$p) use ($field) { unset($p['filter_column'][$field]['sorting']); }),
+                ];
+            }
+        }
+        $cbActiveFilters = collect((array) Request::get('filter_column'))->filter(fn ($f) => ! empty($f['type']) || ! empty($f['sorting']))->count();
+        $cbClearAllUrl = $cbChipUrl(function (&$p) { unset($p['q'], $p['filter_column']); });
+        $cbHasBulk = $button_bulk_action && (($button_delete && CRUDBooster::isDelete()) || $button_selected);
+    @endphp
+
+    <div class="card cb-grid-card">
+        <div class="card-header cb-grid-toolbar">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                @if($cbHasBulk)
+                    <div class="selected-action dropdown">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                                id="btn_bulk_action" disabled>
+                            <i class='fa fa-check-square-o'></i> {{cbLang("button_selected_action")}}
+                            <span class="badge text-bg-primary ms-1 cb-selected-count d-none">0</span>
+                        </button>
                         <ul class="dropdown-menu">
                             @if($button_delete && CRUDBooster::isDelete())
-                                <li><a href="javascript:void(0)" data-name='delete' title='{{cbLang('action_delete_selected')}}'><i
-                                                class="fa fa-trash"></i> {{cbLang('action_delete_selected')}}</a></li>
+                                <li><a class="dropdown-item text-danger" href="javascript:void(0)" data-name='delete' title='{{cbLang('action_delete_selected')}}'><i
+                                                class="fa fa-trash fa-fw"></i> {{cbLang('action_delete_selected')}}</a></li>
                             @endif
 
                             @if($button_selected)
                                 @foreach($button_selected as $button)
-                                    <li><a href="javascript:void(0)" data-name='{{$button["name"]}}' title='{{$button["label"]}}'><i
-                                                    class="fa fa-{{$button['icon']}}"></i> {{$button['label']}}</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0)" data-name='{{$button["name"]}}' title='{{$button["label"]}}'><i
+                                                    class="fa fa-{{$button['icon']}} fa-fw"></i> {{$button['label']}}</a></li>
                                 @endforeach
                             @endif
 
                         </ul><!--end-dropdown-menu-->
                     </div><!--end-selected-action-->
-                </div><!--end-pull-left-->
-            @endif
-            <div class="box-tools pull-{{ cbLang('right') }}" style="position: relative;margin-top: -5px;margin-right: -10px">
-
-                @if($button_filter)
-                    <a style="margin-top:-23px" href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}'
-                       title='{{cbLang('filter_dialog_title')}}' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">
-                        <i class="fa fa-filter"></i> {{cbLang("button_filter")}}
-                    </a>
+                    <span class="text-body-secondary small cb-selected-text d-none"></span>
                 @endif
 
-                <form method='get' style="display:inline-block;width: 260px;" action='{{Request::url()}}'>
-                    <div class="input-group">
-                        <input type="text" name="q" value="{{ Request::get('q') }}" class="form-control input-sm pull-{{ cbLang('right') }}"
-                               placeholder="{{cbLang('filter_search')}}"/>
-                        {!! CRUDBooster::getUrlParameters(['q']) !!}
-                        <div class="input-group-btn">
+                <div class="box-tools ms-auto d-flex flex-wrap align-items-center gap-2">
+
+                    <form method='get' class="cb-grid-search" action='{{Request::url()}}' role="search">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-transparent"><i class="fa fa-search"></i></span>
+                            <input type="search" name="q" value="{{ Request::get('q') }}" class="form-control"
+                                   placeholder="{{cbLang('filter_search')}}" aria-label="{{cbLang('filter_search')}}" title="{{cbLang('filter_search')}} ( / )"/>
+                            {!! CRUDBooster::getUrlParameters(['q']) !!}
                             @if(Request::get('q'))
                                 <?php
                                 $parameters = Request::all();
                                 unset($parameters['q']);
-                                $build_query = urldecode(http_build_query($parameters));
-                                $build_query = ($build_query) ? "?".$build_query : "";
-                                $build_query = (Request::all()) ? $build_query : "";
+                                $cbResetQuery = urldecode(http_build_query($parameters));
+                                $cbResetQuery = ($cbResetQuery) ? "?".$cbResetQuery : "";
                                 ?>
-                                <button type='button' onclick='location.href="{{ CRUDBooster::mainpath().$build_query}}"'
-                                        title="{{cbLang('button_reset')}}" class='btn btn-sm btn-warning'><i class='fa fa-ban'></i></button>
+                                <button type='button' onclick='location.href="{{ CRUDBooster::mainpath().$cbResetQuery}}"'
+                                        title="{{cbLang('button_reset')}}" aria-label="{{cbLang('button_reset')}}" class='btn btn-default'><i class='fa fa-times'></i></button>
                             @endif
-                            <button type='submit' class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
                         </div>
-                    </div>
-                </form>
+                    </form>
 
+                    @if($button_filter)
+                        <a href="javascript:void(0)" id='btn_advanced_filter' data-url-parameter='{{$build_query}}'
+                           title='{{cbLang('filter_dialog_title')}}' class="btn btn-sm btn-default {{(Request::get('filter_column'))?'active':''}}">
+                            <i class="fa fa-filter"></i> {{cbLang("button_filter")}}
+                            @if($cbActiveFilters)
+                                <span class="badge text-bg-primary ms-1">{{ $cbActiveFilters }}</span>
+                            @endif
+                        </a>
+                    @endif
 
-                <form method='get' id='form-limit-paging' style="display:inline-block" action='{{Request::url()}}'>
-                    {!! CRUDBooster::getUrlParameters(['limit']) !!}
-                    <div class="input-group">
-                        <select onchange="$('#form-limit-paging').submit()" name='limit' style="width: 56px;" class='form-control input-sm'>
-                            <option {{($limit==5)?'selected':''}} value='5'>5</option>
-                            <option {{($limit==10)?'selected':''}} value='10'>10</option>
-                            <option {{($limit==20)?'selected':''}} value='20'>20</option>
-                            <option {{($limit==25)?'selected':''}} value='25'>25</option>
-                            <option {{($limit==50)?'selected':''}} value='50'>50</option>
-                            <option {{($limit==100)?'selected':''}} value='100'>100</option>
-                            <option {{($limit==200)?'selected':''}} value='200'>200</option>
+                    <form method='get' id='form-limit-paging' class="d-flex align-items-center gap-1" action='{{Request::url()}}'>
+                        {!! CRUDBooster::getUrlParameters(['limit']) !!}
+                        <label for="cb-grid-limit" class="small text-body-secondary fw-normal mb-0 text-nowrap">{{ cbLang('grid_show') }}</label>
+                        <select onchange="$('#form-limit-paging').submit()" name='limit' id="cb-grid-limit" class='form-select form-select-sm'>
+                            @foreach([5, 10, 20, 25, 50, 100, 200] as $cbLimit)
+                                <option {{($limit==$cbLimit)?'selected':''}} value='{{ $cbLimit }}'>{{ $cbLimit }}</option>
+                            @endforeach
                         </select>
-                    </div>
-                </form>
+                    </form>
 
+                </div>
             </div>
 
-            <br style="clear:both"/>
-
+            @if($cbChips)
+                <div class="cb-grid-chips d-flex flex-wrap align-items-center gap-2 mt-2">
+                    @foreach($cbChips as $chip)
+                        <a href="{{ $chip['url'] }}" class="badge rounded-pill text-bg-light border text-decoration-none fw-normal cb-chip"
+                           title="{{ cbLang('button_reset') }}">
+                            {{ $chip['label'] }} <i class="fa fa-times ms-1"></i>
+                        </a>
+                    @endforeach
+                    @if(count($cbChips) > 1)
+                        <a href="{{ $cbClearAllUrl }}" class="small">{{ cbLang('grid_clear_filters') }}</a>
+                    @endif
+                </div>
+            @endif
         </div>
-        <div class="box-body table-responsive no-padding">
-            @include("crudbooster::default.table")
-        </div>
+        @include("crudbooster::default.table", ['cbClearAllUrl' => $cbChips ? $cbClearAllUrl : null])
     </div>
 
     @if(!is_null($post_index_html) && !empty($post_index_html))

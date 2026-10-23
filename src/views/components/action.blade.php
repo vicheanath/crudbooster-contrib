@@ -52,10 +52,10 @@
         }
 
         @eval("if($query) {
-          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>&nbsp;\";
+          echo \"<a class='btn btn-xs btn-\$color' title='\$title' onclick='\$confirm_box' href='\$url' target='\$target'><i class='\$icon'></i> $label</a>\";
       }");
     } else {
-        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>&nbsp;";
+        echo "<a class='btn btn-xs btn-$color' title='$title' onclick='$confirm_box' href='$url' target='$target'><i class='$icon'></i> $label</a>";
     }
     ?>
 @endforeach
@@ -102,11 +102,11 @@
 
     <div class='btn-group btn-group-action'>
         <button type='button' class='btn btn-xs btn-primary btn-action'>{{cbLang("action_label")}}</button>
-        <button type='button' class='btn btn-xs btn-primary dropdown-toggle' data-toggle='dropdown'>
-            <span class='caret'></span>
-            <span class='sr-only'>Toggle Dropdown</span>
+        <button type='button' class='btn btn-xs btn-primary dropdown-toggle dropdown-toggle-split' data-bs-toggle='dropdown' aria-expanded='false'
+                data-bs-popper-config='{"strategy":"fixed"}'>
+            <span class='visually-hidden'>Toggle Dropdown</span>
         </button>
-        <ul class='dropdown-menu dropdown-menu-action' role='menu'>
+        <ul class='dropdown-menu dropdown-menu-end dropdown-menu-action' role='menu'>
             @foreach($addaction as $a)
                 <?php
                 foreach ($row as $key => $val) {
@@ -127,29 +127,29 @@
                     }
 
                     @eval("if($query) {
-                        echo \"<li><a title='\$label' href='\$url'><i class='\$icon'></i> \$label</a></li>\";
+                        echo \"<li><a class='dropdown-item' title='\$label' href='\$url'><i class='\$icon'></i> \$label</a></li>\";
                     }");
                 } else {
-                    echo "<li><a title='$label' href='$url'><i class='$icon'></i> $label</a></li>";
+                    echo "<li><a class='dropdown-item' title='$label' href='$url'><i class='$icon'></i> $label</a></li>";
                 }
                 ?>
             @endforeach
 
             @if(CRUDBooster::isRead() && $button_detail)
-                <li><a class='btn-detail' title='{{cbLang("action_detail_data")}}'
+                <li><a class='dropdown-item btn-detail' title='{{cbLang("action_detail_data")}}'
                        href='{{CRUDBooster::mainpath("detail/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())}}'><i
                                 class='fa fa-eye'></i> {{cbLang("action_detail_data")}}</a></li>
             @endif
 
             @if(CRUDBooster::isUpdate() && $button_edit)
-                <li><a class='btn-edit' title='{{cbLang("action_edit_data")}}'
+                <li><a class='dropdown-item btn-edit' title='{{cbLang("action_edit_data")}}'
                        href='{{CRUDBooster::mainpath("edit/".$row->$pk)."?return_url=".urlencode(Request::fullUrl())."&parent_id=".g("parent_id")."&parent_field=".$parent_field}}'><i
                                 class='fa fa-pencil'></i> {{cbLang("action_edit_data")}}</a></li>
             @endif
 
             @if(CRUDBooster::isDelete() && $button_delete)
                 <?php $url = CRUDBooster::mainpath("delete/".$row->$pk);?>
-                <li><a class='btn-delete' title='{{cbLang("action_delete_data")}}' href='javascript:;'
+                <li><a class='dropdown-item btn-delete' title='{{cbLang("action_delete_data")}}' href='javascript:;'
                        onclick='{{CRUDBooster::deleteConfirm($url)}}'><i class='fa fa-trash'></i> {{cbLang("action_delete_data")}}</a></li>
             @endif
         </ul>

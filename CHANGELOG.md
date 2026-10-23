@@ -52,6 +52,26 @@ The admin UI moves from AdminLTE 2.3.8 (Bootstrap 3.4) to **AdminLTE 4.10 (Boots
   unchanged, so stored `fa fa-*` module and menu icons and custom scripts keep working. The AdminLTE 2 files stay
   in `assets/adminlte` for custom views that load its plugins.
 
+### Data grid
+The module index page (`default/index`, `default/table`) is rebuilt on Bootstrap 5 / AdminLTE 4 markup:
+- One toolbar: bulk actions, search (press `/` to focus it), the filter button with a count of active filters, and a
+  "Show" page-size picker. It wraps on small screens.
+- Active search, filters and sorting appear as chips; each one removes itself, and "Clear all" removes them all.
+- Selecting rows: click anywhere on a row, shift-click for a range, a live "N selected" count, an indeterminate
+  "select all" box, and highlighted selected rows. Bulk actions stay disabled until a row is selected, and the
+  confirmation says how many rows it applies to.
+- Sort headers show the current direction (and set `aria-sort`); the duplicate header row under the table is gone.
+- An empty grid says why and offers "Clear all" (when filtered) or "Add Data".
+- Row counts and pagination sit in the card footer. The filter and export dialogs use Bootstrap 5 forms; the export
+  dialog can tick or clear every column at once.
+- Row action dropdowns (`button_action_style = 'dropdown'`) are no longer cut off by the scrolling table.
+- Every id, class, field name and hook the grid had is kept (`#table_dashboard`, `#form-table`, `.checkbox`,
+  `.selected-action`, `#btn_advanced_filter`, `#advanced_filter_modal`, `#export-data`, `table_row_color`,
+  `hook_row_index`, ...).
+- Fixed: a column's `style` was printed as the text "1" on the wrong cell (removed Blade `or` syntax, and the bulk
+  and numbering cells were not counted); the filter dialog offered no comparison operators for SQLite/PostgreSQL
+  `INTEGER`/`numeric` columns; the export dialog's script was bound twice.
+
 ### Security: front-end libraries updated
 Libraries with published advisories are updated to the newest release that works with the bundled plugins:
 - jQuery 2.2.3 → **3.7.1**, with jQuery Migrate 3.6.0 (muted) for jQuery 1/2 APIs that older plugins and custom

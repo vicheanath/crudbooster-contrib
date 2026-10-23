@@ -23,7 +23,7 @@ class GridRowRenderer
             $cells = [];
 
             if ($controller->button_bulk_action) {
-                $cells[] = "<input type='checkbox' class='checkbox' name='checkbox[]' value='".$row->{$tablePK}."'/>";
+                $cells[] = "<input type='checkbox' class='checkbox form-check-input' name='checkbox[]' value='".$row->{$tablePK}."' aria-label='Select row'/>";
             }
 
             if ($controller->show_numbering) {
@@ -41,7 +41,7 @@ class GridRowRenderer
             if ($controller->button_table_action) {
                 $button_action_style = $controller->button_action_style;
                 // parent_field reaches the view through the data cbLoader() shares.
-                $cells[] = "<div class='button_action' style='text-align:right'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style'))->render().'</div>';
+                $cells[] = "<div class='button_action d-inline-flex flex-nowrap justify-content-end gap-1'>".view('crudbooster::components.action', compact('addaction', 'row', 'button_action_style'))->render().'</div>';
             }
 
             foreach ($cells as $i => $value) {
