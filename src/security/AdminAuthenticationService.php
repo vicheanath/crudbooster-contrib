@@ -5,8 +5,8 @@ namespace crocodicstudio\crudbooster\security;
 use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
 use crocodicstudio\crudbooster\contracts\Mail\TemplateMailerInterface;
 use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
+use crocodicstudio\crudbooster\contracts\Security\PrivilegeRolesInterface;
 use crocodicstudio\crudbooster\models\CmsPrivilege;
-use crocodicstudio\crudbooster\models\CmsPrivilegeRole;
 use crocodicstudio\crudbooster\models\CmsUser;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Session\Session as SessionContract;
@@ -17,7 +17,7 @@ class AdminAuthenticationService implements AuthenticationServiceInterface
     public function __construct(
         private readonly CmsUser $users,
         private readonly CmsPrivilege $privileges,
-        private readonly CmsPrivilegeRole $privilegeRoles,
+        private readonly PrivilegeRolesInterface $privilegeRoles,
         private readonly Hasher $hasher,
         private readonly SessionContract $session,
         private readonly Request $request,
@@ -128,19 +128,7 @@ class AdminAuthenticationService implements AuthenticationServiceInterface
             ->where('id', $user->id_cms_privileges)
             ->firstOrFail();
 
-        $roles = $this->privilegeRoles
-            ->where('id_cms_privileges', $user->id_cms_privileges)
-            ->join('cms_moduls', 'cms_moduls.id', '=', 'cms_privileges_roles.id_cms_moduls')
-            ->select(
-                'cms_moduls.name',
-                'cms_moduls.path',
-                'is_visible',
-                'is_create',
-                'is_read',
-                'is_edit',
-                'is_delete'
-            )
-            ->get();
+        $roles = $this->privilegeRoles->forPrivilege($user->id_cms_privileges);
 
         return new AdminAuthenticationContext($user, $privilege, $roles);
     }

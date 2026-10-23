@@ -1,6 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use CRUDBooster;
+use crocodicstudio\crudbooster\models\CmsApicustom;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
@@ -63,10 +64,10 @@ class ApiController extends Controller
         $posts_keys = array_keys($posts);
         $posts_values = array_values($posts);
 
-        $row_api = DB::table('cms_apicustom')->where('permalink', $this->permalink)->first();
+        $row_api = CmsApicustom::query()->forPermalink($this->permalink)->first();
 
-        $action_type = $row_api->aksi;
-        $table = $row_api->tabel;
+        $action_type = $row_api?->aksi;
+        $table = $row_api?->tabel;
         $pk = CRUDBooster::pk($table);
 
         /*
@@ -76,7 +77,7 @@ class ApiController extends Controller
         |
         */
 
-        if ($row_api->method_type) {
+        if ($row_api?->method_type) {
             $method_type = $row_api->method_type;
             if ($method_type) {
                 if (! Request::isMethod($method_type)) {
@@ -100,8 +101,8 @@ class ApiController extends Controller
             goto show;
         }
 
-        @$parameters = unserialize($row_api->parameters);
-        @$responses = unserialize($row_api->responses);
+        $parameters = $row_api->parameterList();
+        $responses = $row_api->responseList();
 
         /*
         | ----------------------------------------------

@@ -2,12 +2,13 @@
 
 use CRUDBooster;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use crocodicstudio\crudbooster\fonts\Fontawesome;
+use crocodicstudio\crudbooster\models\CmsMenu;
+use crocodicstudio\crudbooster\models\CmsPrivilege;
 
 class MenusController extends CBController
 {
@@ -245,28 +246,13 @@ class MenusController extends CBController
             CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
         }
 
-        $privileges = DB::table('cms_privileges')->get();
+        $privileges = CmsPrivilege::query()->get();
 
         $id_cms_privileges = Request::get('id_cms_privileges');
         $id_cms_privileges = ($id_cms_privileges) ?: CRUDBooster::myPrivilegeId();
 
-        $menu_active = DB::table('cms_menus')->where('parent_id', 0)->where('is_active', 1)->orderby('sorting', 'asc')->get();
-
-        foreach ($menu_active as &$menu) {
-            $child = DB::table('cms_menus')->where('is_active', 1)->where('parent_id', $menu->id)->orderby('sorting', 'asc')->get();
-            if (count($child)) {
-                $menu->children = $child;
-            }
-        }
-
-        $menu_inactive = DB::table('cms_menus')->where('parent_id', 0)->where('is_active', 0)->orderby('sorting', 'asc')->get();
-
-        foreach ($menu_inactive as &$menu) {
-            $child = DB::table('cms_menus')->where('is_active', 1)->where('parent_id', $menu->id)->orderby('sorting', 'asc')->get();
-            if (count($child)) {
-                $menu->children = $child;
-            }
-        }
+        $menu_active = $this->menuTree(true);
+        $menu_inactive = $this->menuTree(false);
 
         $return_url = Request::fullUrl();
 
@@ -295,7 +281,6 @@ class MenusController extends CBController
 
         if ($postdata['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            //DB::table('cms_menus')->where('id_cms_privileges', $postdata['id_cms_privileges'])->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
     }
@@ -305,7 +290,6 @@ class MenusController extends CBController
 
         if ($postdata['is_dashboard'] == 1) {
             //If set dashboard, so unset for first all dashboard
-            //DB::table('cms_menus')->where('id_cms_privileges', $postdata['id_cms_privileges'])->where('is_dashboard', 1)->update(['is_dashboard' => 0]);
             Cache::forget('sidebarDashboard'.CRUDBooster::myPrivilegeId());
         }
 
@@ -323,7 +307,7 @@ class MenusController extends CBController
 
     public function hook_after_delete($id)
     {
-        DB::table('cms_menus')->where('parent_id', $id)->delete();
+        CmsMenu::query()->where('parent_id', $id)->delete();
     }
 
     public function postSaveMenu()
@@ -339,14 +323,24 @@ class MenusController extends CBController
                 $ci = 1;
                 foreach ($ro['children'][0] as $c) {
                     $id = $c['id'];
-                    DB::table('cms_menus')->where('id', $id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
+                    CmsMenu::query()->whereKey($id)->update(['sorting' => $ci, 'parent_id' => $pid, 'is_active' => $isActive]);
                     $ci++;
                 }
             }
-            DB::table('cms_menus')->where('id', $pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
+            CmsMenu::query()->whereKey($pid)->update(['sorting' => $i, 'parent_id' => 0, 'is_active' => $isActive]);
             $i++;
         }
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Top-level menus that are (in)active, each with its active children and the privileges that see it.
+     */
+    private function menuTree(bool $active)
+    {
+        return CmsMenu::query()->topLevel()->active($active)->sorted()
+            ->with(['privileges', 'children' => fn ($children) => $children->active()->sorted()->with('privileges')])
+            ->get();
     }
 }

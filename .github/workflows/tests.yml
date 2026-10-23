@@ -72,3 +72,28 @@ jobs:
           DB_DATABASE: crudbooster_test
           DB_USERNAME: root
           DB_PASSWORD: ''
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Coverage
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, gd, zip, pdo_sqlite, fileinfo
+          coverage: pcov
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run tests with coverage
+        run: vendor/bin/phpunit --coverage-text --only-summary-for-coverage-text --coverage-clover build/clover.xml
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-clover
+          path: build/clover.xml

@@ -8,8 +8,14 @@
          displayDetailsOnTestsThatTriggerWarnings="true"
          failOnWarning="true">
     <testsuites>
-        <testsuite name="CRUDBooster">
+        <!-- One class at a time: models, services and their contracts. -->
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <!-- Whole requests through the admin panel, API and artisan commands. -->
+        <testsuite name="Feature">
             <directory>tests</directory>
+            <exclude>tests/Unit</exclude>
         </testsuite>
     </testsuites>
     <source>

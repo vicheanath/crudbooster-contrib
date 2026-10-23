@@ -28,8 +28,22 @@ class DomainServicesTest extends TestCase
                 return 'from-'.$name;
             }
 
+            public function set(string $name, mixed $content): void
+            {
+            }
+
             public function forget(string $name): void
             {
+            }
+
+            public function inGroup(string $group): \Illuminate\Support\Collection
+            {
+                return collect();
+            }
+
+            public function groups(): \Illuminate\Support\Collection
+            {
+                return collect();
             }
         });
 

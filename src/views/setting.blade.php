@@ -65,16 +65,10 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="box-body">
                         <?php
-                        $set = DB::table('cms_settings')->where('group_setting', $page_title)->get();
-                        foreach($set as $s):
+                        foreach($settings as $s):
 
                         $value = $s->content;
-
-                        if (! $s->label) {
-                            $label = ucwords(str_replace('_', ' ', $s->name));
-                            DB::table('cms_settings')->where('id', $s->id)->update(['label' => $label]);
-                            $s->label = $label;
-                        }
+                        $s->label = $s->displayLabel();
 
                         $dataenum = explode(',', $s->dataenum);
                         if ($dataenum) {

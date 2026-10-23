@@ -59,6 +59,8 @@
     },
     "scripts": {
         "test": "phpunit",
+        "test:unit": "phpunit --testsuite Unit",
+        "test:coverage": "phpunit --coverage-text --coverage-html build/coverage",
         "test:mysql": [
             "@putenv CB_TEST_DB=mysql",
             "@putenv DB_HOST=127.0.0.1",
@@ -79,6 +81,8 @@
     },
     "scripts-descriptions": {
         "test": "Run the test suite on SQLite",
+        "test:unit": "Run only the unit tests (models and services)",
+        "test:coverage": "Run the tests with a coverage report (needs pcov or Xdebug), HTML in build/coverage",
         "test:mysql": "Run the test suite on the docker-compose MySQL service"
     }
 }

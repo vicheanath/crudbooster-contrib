@@ -2,7 +2,8 @@
 
 use CRUDBooster;
 use crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface;
-use Illuminate\Support\Facades\DB;
+use crocodicstudio\crudbooster\controllers\concerns\RequiresSuperadmin;
+use crocodicstudio\crudbooster\models\CmsSetting;
 use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Request;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends CBController
 {
+    use RequiresSuperadmin;
+
     public function cbInit()
     {
         $this->module_name = "Settings";
@@ -68,12 +71,10 @@ class SettingsController extends CBController
     {
         $this->cbLoader();
 
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(cbLang("log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
-        }
+        $this->denyUnlessSuperadmin('Setting', 'Setting');
 
         $data['page_title'] = urldecode(Request::get('group'));
+        $data['settings'] = app(SettingsRepositoryInterface::class)->inGroup($data['page_title']);
 
         return view('crudbooster::setting', $data);
     }
@@ -85,26 +86,26 @@ class SettingsController extends CBController
 
     function getDeleteFileSetting()
     {
-        $id = g('id');
-        $row = CRUDBooster::first('cms_settings', $id);
-        app(SettingsRepositoryInterface::class)->forget($row->name);
-        if (Storage::exists($row->content)) {
-            Storage::delete($row->content);
+        $this->denyUnlessSuperadmin('Setting', 'Setting');
+
+        $row = CmsSetting::query()->find(g('id'));
+        if ($row) {
+            if ($row->content && Storage::exists($row->content)) {
+                Storage::delete($row->content);
+            }
+            app(SettingsRepositoryInterface::class)->set($row->name, null);
         }
-        DB::table('cms_settings')->where('id', $id)->update(['content' => null]);
         CRUDBooster::redirect(Request::server('HTTP_REFERER'), cbLang('alert_delete_data_success'), 'success');
     }
 
     function postSaveSetting()
     {
 
-        if (! CRUDBooster::isSuperadmin()) {
-            CRUDBooster::insertLog(cbLang("log_try_view", ['name' => 'Setting', 'module' => 'Setting']));
-            CRUDBooster::redirect(CRUDBooster::adminPath(), cbLang('denied_access'));
-        }
+        $this->denyUnlessSuperadmin('Setting', 'Setting');
 
         $group = Request::get('group_setting');
-        $setting = DB::table('cms_settings')->where('group_setting', $group)->get();
+        $settings = app(SettingsRepositoryInterface::class);
+        $setting = $settings->inGroup((string) $group);
         foreach ($setting as $set) {
 
             $name = $set->name;
@@ -134,9 +135,7 @@ class SettingsController extends CBController
                 }
             }
 
-            DB::table('cms_settings')->where('name', $set->name)->update(['content' => $content]);
-
-            app(SettingsRepositoryInterface::class)->forget($set->name);
+            $settings->set($set->name, $content);
         }
 
         return redirect()->back()->with(['message' => 'Your setting has been saved !', 'message_type' => 'success']);
@@ -150,9 +149,9 @@ class SettingsController extends CBController
 
     function hook_after_edit($id)
     {
-        $row = DB::table($this->table)->where($this->primary_key, $id)->first();
-
-        /* REMOVE CACHE */
-        app(SettingsRepositoryInterface::class)->forget($row->name);
+        $row = CmsSetting::query()->find($id);
+        if ($row) {
+            app(SettingsRepositoryInterface::class)->forget($row->name);
+        }
     }
 }

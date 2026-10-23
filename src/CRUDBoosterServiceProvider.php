@@ -14,11 +14,13 @@ use crocodicstudio\crudbooster\contracts\Forms\FormValidatorInterface;
 use crocodicstudio\crudbooster\contracts\Grid\GridFilterParserInterface;
 use crocodicstudio\crudbooster\contracts\Grid\GridQueryBuilderInterface;
 use crocodicstudio\crudbooster\contracts\Mail\TemplateMailerInterface;
+use crocodicstudio\crudbooster\contracts\Modules\ModuleRegistrarInterface;
 use crocodicstudio\crudbooster\contracts\Navigation\MenuRepositoryInterface;
 use crocodicstudio\crudbooster\contracts\Notifications\NotificationSenderInterface;
 use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
 use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
 use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
+use crocodicstudio\crudbooster\contracts\Security\PrivilegeRolesInterface;
 use crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface;
 use crocodicstudio\crudbooster\export\ExporterRegistry;
 use crocodicstudio\crudbooster\files\FileUploader;
@@ -30,10 +32,12 @@ use crocodicstudio\crudbooster\generator\ModuleGenerator;
 use crocodicstudio\crudbooster\grid\GridFilterParser;
 use crocodicstudio\crudbooster\grid\GridQueryBuilder;
 use crocodicstudio\crudbooster\mail\TemplateMailer;
+use crocodicstudio\crudbooster\modules\ModuleRegistrar;
 use crocodicstudio\crudbooster\navigation\MenuRepository;
 use crocodicstudio\crudbooster\notifications\NotificationSender;
 use crocodicstudio\crudbooster\schema\SchemaInspector;
 use crocodicstudio\crudbooster\security\PermissionManager;
+use crocodicstudio\crudbooster\security\PrivilegeRoles;
 use crocodicstudio\crudbooster\security\SessionAuthenticationService;
 use crocodicstudio\crudbooster\settings\SettingsRepository;
 use Illuminate\Support\Facades\Artisan;
@@ -139,6 +143,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
     {
         $this->app->bind(AuthenticationServiceInterface::class, SessionAuthenticationService::class);
         $this->app->bind(PermissionCheckerInterface::class, PermissionManager::class);
+        $this->app->bind(PrivilegeRolesInterface::class, PrivilegeRoles::class);
         $this->app->bind(AuditLoggerInterface::class, AuditLogger::class);
         $this->app->bind(SchemaInspectorInterface::class, SchemaInspector::class);
         $this->app->bind(GridFilterParserInterface::class, GridFilterParser::class);
@@ -152,6 +157,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->bind(MenuRepositoryInterface::class, MenuRepository::class);
         $this->app->bind(TemplateMailerInterface::class, TemplateMailer::class);
         $this->app->bind(NotificationSenderInterface::class, NotificationSender::class);
+        $this->app->bind(ModuleRegistrarInterface::class, ModuleRegistrar::class);
 
         // Registries are shared so types and formats registered at boot reach every request.
         $this->app->singleton(FieldHandlerRegistry::class);

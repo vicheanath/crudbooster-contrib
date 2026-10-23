@@ -5,6 +5,7 @@ namespace crocodicstudio\crudbooster\controllers;
 
 
 use crocodicstudio\crudbooster\helpers\CB;
+use crocodicstudio\crudbooster\models\CmsApikey;
 use Illuminate\Support\Facades\Cache;
 
 class ApiAuthorizationController extends Controller
@@ -15,10 +16,7 @@ class ApiAuthorizationController extends Controller
     public function postGetToken() {
         CB::valid(['secret'=>'required'],'json');
 
-        $exists = db("cms_apikey")
-            ->where("screetkey", g("secret"))
-            ->where("status","active")
-            ->count();
+        $exists = CmsApikey::query()->withSecret(g('secret'))->active()->exists();
         if($exists) {
             $accessToken = str_random($this->token_length);;
             // $ttl is in minutes; Cache::put() takes seconds since Laravel 5.8.

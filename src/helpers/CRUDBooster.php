@@ -21,6 +21,8 @@ use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface
 use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
 use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
 use crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface;
+use crocodicstudio\crudbooster\models\CmsModul;
+use crocodicstudio\crudbooster\models\CmsUser;
 
 class CRUDBooster
 {
@@ -104,7 +106,8 @@ class CRUDBooster
 
     public static function me()
     {
-        return DB::table(config('crudbooster.USER_TABLE'))->where('id', Session::get('admin_id'))->first();
+        // A plain row, as in 5.x: callers may cast or iterate it.
+        return CmsUser::query()->toBase()->find(Session::get('admin_id'));
     }
 
     public static function myId()
@@ -229,7 +232,7 @@ class CRUDBooster
             return Cache::get('moduls_'.$modulepath);
         } else {
 
-            $module = DB::table('cms_moduls')->where('path', self::getModulePath())->first();
+            $module = CmsModul::query()->forPath(self::getModulePath())->toBase()->first();
 
             //supply modulpath instead of $module incase where user decides to create form and custom url that does not exist in cms_moduls table.
             return ($module)?:$modulepath;

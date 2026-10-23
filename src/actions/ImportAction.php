@@ -7,6 +7,7 @@ use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
 use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\export\DefaultImportRows;
+use crocodicstudio\crudbooster\models\CmsModul;
 use CRUDBooster;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -146,7 +147,7 @@ class ImportAction extends CrudAction
     protected function relatedId(string $column, $title)
     {
         $relationTable = CRUDBooster::getTableForeignKey($column);
-        $module = DB::table('cms_moduls')->where('table_name', $relationTable)->first();
+        $module = CmsModul::query()->forTable($relationTable)->first();
 
         $class = 'crocodicstudio\\crudbooster\\controllers\\'.$module->controller;
         if (! class_exists($class)) {

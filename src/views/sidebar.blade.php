@@ -94,7 +94,7 @@
                                         href='{{route("SettingsControllerGetAdd")}}'><i class='fa fa-plus'></i>
                                     <span>{{ cbLang('Add_New_Setting') }}</span></a></li>
                             <?php
-                            $groupSetting = DB::table('cms_settings')->groupby('group_setting')->pluck('group_setting');
+                            $groupSetting = app(\crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface::class)->groups();
                             foreach($groupSetting as $gs):
                             ?>
                             <li class="<?=($gs == Request::get('group')) ? 'active' : ''?>"><a

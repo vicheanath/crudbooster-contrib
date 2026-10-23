@@ -6,7 +6,7 @@ use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
 use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
 use crocodicstudio\crudbooster\controllers\CBController;
 use crocodicstudio\crudbooster\export\ExporterRegistry;
-use Illuminate\Support\Facades\DB;
+use crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface;
 use Illuminate\Support\Facades\Request;
 
 /**
@@ -33,7 +33,8 @@ class ExportAction extends CrudAction
         $data = $controller->getIndex();
 
         if (Request::input('default_paper_size')) {
-            DB::table('cms_settings')->where('name', 'default_paper_size')->update(['content' => Request::input('page_size')]);
+            // Resolved here rather than injected, so subclasses keep their constructor signature.
+            app(SettingsRepositoryInterface::class)->set('default_paper_size', Request::input('page_size'));
         }
 
         $exporter = $this->exporters->get((string) Request::input('fileformat'));

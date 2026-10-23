@@ -139,9 +139,7 @@
                     <ul class='draggable-menu draggable-menu-active'>
                         @foreach($menu_active as $menu)
                             @php
-                                $privileges = DB::table('cms_menus_privileges')
-                                ->join('cms_privileges','cms_privileges.id','=','cms_menus_privileges.id_cms_privileges')
-                                ->where('id_cms_menus',$menu->id)->pluck('cms_privileges.name')->toArray();
+                                $privileges = $menu->privileges->pluck('name')->all();
                             @endphp
                             <li data-id='{{$menu->id}}' data-name='{{$menu->name}}'>
                                 <div class='{{$menu->is_dashboard?"is-dashboard":""}}' title="{{$menu->is_dashboard?'This is setted as Dashboard':''}}">
@@ -159,9 +157,7 @@
                                     @if($menu->children)
                                         @foreach($menu->children as $child)
                                             @php
-                                                $privileges = DB::table('cms_menus_privileges')
-                                                ->join('cms_privileges','cms_privileges.id','=','cms_menus_privileges.id_cms_privileges')
-                                                ->where('id_cms_menus',$child->id)->pluck('cms_privileges.name')->toArray();
+                                                $privileges = $child->privileges->pluck('name')->all();
                                             @endphp
                                             <li data-id='{{$child->id}}' data-name='{{$child->name}}'>
                                                 <div class='{{$child->is_dashboard?"is-dashboard":""}}'
