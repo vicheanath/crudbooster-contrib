@@ -4,6 +4,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 
 use CB;
+use crocodicstudio\crudbooster\contracts\Grid\GridFilterParserInterface;
 use crocodicstudio\crudbooster\export\DefaultExportXls;
 use crocodicstudio\crudbooster\export\DefaultImportRows;
 use CRUDBooster;
@@ -397,73 +398,8 @@ class CBController extends Controller
 
         $filter_is_orderby = false;
         if (request('filter_column')) {
-
-            $filter_column = request('filter_column');
-            $result->where(function ($w) use ($filter_column) {
-                foreach ($filter_column as $key => $fc) {
-
-                    $value = @$fc['value'];
-                    $type = @$fc['type'];
-
-                    if ($type == 'empty') {
-                        $w->whereNull($key)->orWhere($key, '');
-                        continue;
-                    }
-
-                    if ($value == '' || $type == '') {
-                        continue;
-                    }
-
-                    if ($type == 'between') {
-                        continue;
-                    }
-
-                    switch ($type) {
-                        default:
-                            if ($key && $type && $value) {
-                                $w->where($key, $type, $value);
-                            }
-                            break;
-                        case 'like':
-                        case 'not like':
-                            $value = '%'.$value.'%';
-                            if ($key && $type && $value) {
-                                $w->where($key, $type, $value);
-                            }
-                            break;
-                        case 'in':
-                        case 'not in':
-                            if ($value) {
-                                $value = explode(',', $value);
-                                if ($key && $value) {
-                                    $w->whereIn($key, $value);
-                                }
-                            }
-                            break;
-                    }
-                }
-            });
-
-            foreach ($filter_column as $key => $fc) {
-                $value = @$fc['value'];
-                $type = @$fc['type'];
-                $sorting = @$fc['sorting'];
-
-                if ($sorting != '') {
-                    if ($key) {
-                        $result->orderby($key, $sorting);
-                        $filter_is_orderby = true;
-                    }
-                }
-
-                if ($type == 'between') {
-                    if ($key && $value) {
-                        $result->whereBetween($key, $value);
-                    }
-                } else {
-                    continue;
-                }
-            }
+            $filter_is_orderby = app(GridFilterParserInterface::class)
+                ->apply($result, (array) request('filter_column'));
         }
 
         if ($filter_is_orderby == true) {

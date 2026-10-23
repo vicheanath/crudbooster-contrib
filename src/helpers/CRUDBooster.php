@@ -11,6 +11,10 @@ use Schema;
 use Session;
 use Storage;
 use Validator;
+use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
+use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
+use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
+use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
 
 class CRUDBooster
 {
@@ -201,7 +205,7 @@ class CRUDBooster
 
     public static function myId()
     {
-        return Session::get('admin_id');
+        return app(AuthenticationServiceInterface::class)->currentUserId();
     }
 
     public static function isSuperadmin()
@@ -272,72 +276,27 @@ class CRUDBooster
 
     public static function isView()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_visible;
-            }
-        }
+        return app(PermissionCheckerInterface::class)->canView();
     }
 
     public static function isUpdate()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_edit;
-            }
-        }
+        return app(PermissionCheckerInterface::class)->canUpdate();
     }
 
     public static function isCreate()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_create;
-            }
-        }
+        return app(PermissionCheckerInterface::class)->canCreate();
     }
 
     public static function isRead()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_read;
-            }
-        }
+        return app(PermissionCheckerInterface::class)->canRead();
     }
 
     public static function isDelete()
     {
-        if (self::isSuperadmin()) {
-            return true;
-        }
-
-        $session = Session::get('admin_privileges_roles');
-        foreach ($session as $v) {
-            if ($v->path == self::getModulePath()) {
-                return (bool) $v->is_delete;
-            }
-        }
+        return app(PermissionCheckerInterface::class)->canDelete();
     }
 
     public static function isCRUD()
@@ -977,16 +936,7 @@ class CRUDBooster
 
     public static function findPrimaryKey($table)
     {
-        if(!$table)
-        {
-            return 'id';
-        }
-
-        $pk = collect(Schema::getIndexes($table))->firstWhere('primary', true);
-        if(!$pk) {
-            return null;
-        }
-        return $pk['columns'][0];
+        return app(SchemaInspectorInterface::class)->primaryKey((string) $table);
     }
 
     public static function newId($table)
@@ -1013,7 +963,7 @@ class CRUDBooster
         // 	return self::getCache('table_'.$table,'column_'.$field);
         // }
 
-        if (Schema::hasColumn($table['table'], $field)) {
+        if (app(SchemaInspectorInterface::class)->hasColumn($table['table'], $field)) {
             // self::putCache('table_'.$table,'column_'.$field,1);
             return true;
         } else {
@@ -1100,15 +1050,7 @@ class CRUDBooster
     public static function insertLog($description, $details = '')
     {
         if (CRUDBooster::getSetting('api_debug_mode')) {
-            $a = [];
-            $a['created_at'] = date('Y-m-d H:i:s');
-            $a['ipaddress'] = $_SERVER['REMOTE_ADDR'];
-            $a['useragent'] = $_SERVER['HTTP_USER_AGENT'];
-            $a['url'] = Request::url();
-            $a['description'] = $description;
-            $a['details'] = $details;
-            $a['id_cms_users'] = self::myId();
-            DB::table('cms_logs')->insert($a);
+            app(AuditLoggerInterface::class)->log($description, $details);
         }
     }
 
@@ -1240,27 +1182,8 @@ class CRUDBooster
 
     public static function getTableColumns($table)
     {
-        //$cols = DB::getSchemaBuilder()->getColumnListing($table);
         $table = CRUDBooster::parseSqlTable($table);
-        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'])) {
-            return Schema::getColumnListing($table['table']);
-        }
-        $cols = collect(DB::select('SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table', [
-            'database' => $table['database'],
-            'table' => $table['table'],
-        ]))->map(function ($x) {
-            return (array) $x;
-        })->toArray();
-
-        $result = [];
-        $result = $cols;
-
-        $new_result = [];
-        foreach ($result as $ro) {
-            $new_result[] = $ro['COLUMN_NAME'];
-        }
-
-        return $new_result;
+        return app(SchemaInspectorInterface::class)->columns($table['database'].'.'.$table['table']);
     }
 
     public static function getNameTable($columns)

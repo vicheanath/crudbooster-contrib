@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\services;
 
 use CRUDBooster;
+use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
 use crocodicstudio\crudbooster\models\CmsPrivilege;
 use crocodicstudio\crudbooster\models\CmsPrivilegeRole;
 use crocodicstudio\crudbooster\models\CmsUser;
@@ -10,7 +11,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Session\Session as SessionContract;
 use Illuminate\Http\Request;
 
-class AdminAuthenticationService
+class AdminAuthenticationService implements AuthenticationServiceInterface
 {
     public function __construct(
         private readonly CmsUser $users,
@@ -25,6 +26,11 @@ class AdminAuthenticationService
     public function lockScreen(): void
     {
         $this->session->put('admin_lock', 1);
+    }
+
+    public function currentUserId(): mixed
+    {
+        return $this->session->get('admin_id');
     }
 
     public function unlock(?string $password): bool
@@ -99,7 +105,7 @@ class AdminAuthenticationService
 
     private function currentUser(): ?CmsUser
     {
-        $id = CRUDBooster::myId();
+        $id = $this->currentUserId();
 
         if (! $id) {
             return null;
