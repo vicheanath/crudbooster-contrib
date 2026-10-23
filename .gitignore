@@ -2,8 +2,6 @@
 /vendor
 composer.lock
 
-# Local Laravel app created by `php bin/playground setup`
-/playground
 
 # Test and tool caches
 .phpunit.cache

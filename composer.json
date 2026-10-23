@@ -67,8 +67,7 @@
             "@putenv DB_USERNAME=crudbooster",
             "@putenv DB_PASSWORD=secret",
             "phpunit"
-        ],
-        "playground": "@php bin/playground"
+        ]
     },
     "config": {
         "sort-packages": true,
@@ -80,7 +79,6 @@
     },
     "scripts-descriptions": {
         "test": "Run the test suite on SQLite",
-        "test:mysql": "Run the test suite on the docker-compose MySQL service",
-        "playground": "Manage the local Laravel playground app (composer playground -- help)"
+        "test:mysql": "Run the test suite on the docker-compose MySQL service"
     }
 }
