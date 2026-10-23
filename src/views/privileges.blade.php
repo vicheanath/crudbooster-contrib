@@ -72,7 +72,12 @@
                                 $(function () {
                                     $("select[name=theme_color]").change(function () {
                                         var n = $(this).val();
-                                        $("body").attr("class", n);
+                                        if (!n) return;
+                                        // Swap only the skin class: the body also carries AdminLTE's layout classes.
+                                        $("body").removeClass(function (i, cls) {
+                                            return (cls.match(/(^|\s)skin-\S+/g) || []).join(' ');
+                                        }).addClass(n);
+                                        $(".app-sidebar").attr("data-bs-theme", /-light$/.test(n) ? "light" : "dark");
                                     })
 
                                     $('#set_as_superadmin input').click(function () {

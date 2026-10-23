@@ -19,9 +19,6 @@
 
 	.datepicker{z-index:1151 !important;}
 
-	.sidebar-menu .treeview-menu>li>a {
-		padding:5px 5px 5px 25px;
-	}
 	.form-tab li a:hover {
 		background: #eeeeee !important;
 	}
@@ -54,109 +51,133 @@
 
 	/*
 	| ----------------------------------------------------------------------
-	| Header and sidebar typography
+	| AdminLTE 2 skins on the AdminLTE 4 layout
 	| ----------------------------------------------------------------------
-	| Spacing, weight and depth only: colours stay with the AdminLTE skin
-	| chosen per privilege, and the collapsed (mini) sidebar keeps working.
+	| Each privilege picks a skin (skin-blue, skin-red-light, ...). The skin
+	| colours the header and the sidebar brand; "-light" skins get the light
+	| sidebar (data-bs-theme set in sidebar.blade.php).
 	*/
-	.main-header .logo,
-	.main-sidebar,
-	.main-header .navbar {
-		font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	}
+	body { --cb-skin: #3c8dbc; --cb-skin-dark: #367fa9; --cb-skin-text: #fff; }
+	body.skin-blue, body.skin-blue-light { --cb-skin: #3c8dbc; --cb-skin-dark: #367fa9; }
+	body.skin-yellow, body.skin-yellow-light { --cb-skin: #f39c12; --cb-skin-dark: #e08e0b; }
+	body.skin-green, body.skin-green-light { --cb-skin: #00a65a; --cb-skin-dark: #008d4c; }
+	body.skin-purple, body.skin-purple-light { --cb-skin: #605ca8; --cb-skin-dark: #555299; }
+	body.skin-red, body.skin-red-light { --cb-skin: #dd4b39; --cb-skin-dark: #d73925; }
+	body.skin-black, body.skin-black-light { --cb-skin: #ffffff; --cb-skin-dark: #f4f4f4; --cb-skin-text: #333; }
 
-	/* Header */
-	.main-header {
+	.app-header.navbar {
+		background-color: var(--cb-skin) !important;
+		border-bottom: 0;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 	}
-	.main-header .logo {
-		font-size: 19px;
+	.app-header .navbar-nav > .nav-item > .nav-link {
+		color: var(--cb-skin-text);
 		font-weight: 600;
+	}
+	.app-header .navbar-nav > .nav-item > .nav-link:hover,
+	.app-header .navbar-nav > .nav-item > .nav-link:focus,
+	.app-header .navbar-nav > .nav-item.show > .nav-link {
+		color: var(--cb-skin-text);
+		background-color: rgba(0, 0, 0, 0.1);
+	}
+	.app-header .navbar-badge {
+		font-size: 0.6rem;
+		font-weight: 600;
+	}
+
+	.app-sidebar .sidebar-brand {
+		background-color: var(--cb-skin-dark);
+		border-bottom-color: rgba(0, 0, 0, 0.1);
+	}
+	.app-sidebar .sidebar-brand .brand-link,
+	.app-sidebar .sidebar-brand .brand-link:hover {
+		color: var(--cb-skin-text);
+	}
+	.app-sidebar .sidebar-brand .brand-text {
+		font-size: 1.15rem;
+		font-weight: 600 !important;
 		letter-spacing: 0.02em;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	.main-header .navbar .sidebar-toggle {
-		transition: background-color 0.15s ease;
+	/* The dark sidebar of AdminLTE 2's skins. */
+	.app-sidebar[data-bs-theme="dark"] {
+		--bs-secondary-bg: #222d32;
+		--bs-secondary-bg-rgb: 34, 45, 50;
 	}
-	.main-header .navbar-custom-menu > .navbar-nav > li > a {
-		font-size: 14px;
-		font-weight: 600;
+	.app-sidebar[data-bs-theme="dark"] .sidebar-menu .nav-link.active {
+		box-shadow: inset 3px 0 0 var(--cb-skin);
+	}
+	body.skin-black .app-sidebar[data-bs-theme="dark"] .sidebar-menu .nav-link.active {
+		box-shadow: inset 3px 0 0 #fff;
 	}
 
 	/* Sidebar user panel */
+	.user-panel {
+		gap: 0.75rem;
+		padding: 0.85rem 1rem;
+		border-bottom: 1px solid var(--bs-border-color);
+		white-space: nowrap;
+		overflow: hidden;
+	}
 	.user-panel > .info > p {
 		font-size: 14px;
 		font-weight: 600;
-		margin-bottom: 4px;
+		margin-bottom: 2px;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	.user-panel > .info > a {
 		font-size: 11px;
 		opacity: 0.85;
+		color: var(--bs-body-color);
+	}
+	.sidebar-mini.sidebar-collapse .app-sidebar:not(:hover) .user-panel > .info {
+		display: none;
 	}
 
 	/* Section labels: "Navigation", "Superadmin" */
-	.sidebar-menu > li.header {
+	.sidebar-menu > .nav-header {
 		font-size: 11px;
 		font-weight: 600;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		padding: 14px 15px 6px 15px;
 	}
-
-	/* Menu items */
-	.sidebar-menu > li > a {
-		font-size: 14px;
-		font-weight: 500;
-		line-height: 20px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-		transition: background-color 0.15s ease, color 0.15s ease;
+	.sidebar-menu .nav-link .nav-icon.fa {
+		width: 1.25rem;
+		text-align: center;
+		font-size: 1rem;
 	}
-	.sidebar-menu > li.active > a,
-	.sidebar-menu > li.menu-open > a {
-		font-weight: 600;
-	}
-	.sidebar-menu > li > a > span {
-		display: inline-block;
-		max-width: 150px;
+	.sidebar-menu .nav-link p {
 		overflow: hidden;
 		text-overflow: ellipsis;
-		white-space: nowrap;
-		vertical-align: top;
-	}
-	.sidebar-menu > li > a > .fa,
-	.sidebar-menu .treeview-menu > li > a > .fa {
-		text-align: center;
-	}
-	.sidebar-menu .treeview-menu > li > a {
-		font-size: 13.5px;
-		line-height: 20px;
-		padding-top: 6px;
-		padding-bottom: 6px;
-		transition: color 0.15s ease;
-	}
-	.sidebar-menu .treeview-menu > li.active > a {
-		font-weight: 600;
 	}
 
-	/* The collapsed sidebar shows the label in a flyout, where the full name fits. */
-	.sidebar-mini.sidebar-collapse .sidebar-menu > li > a > span {
-		max-width: none;
+	/* Page title row */
+	.app-content-header .cb-page-title {
+		margin: 0;
+		font-size: 1.5rem;
+		line-height: 1.6;
+	}
+	.app-content-header .cb-page-title > .btn {
+		vertical-align: middle;
+		margin-bottom: 2px;
+	}
+	.app-content-header .breadcrumb {
+		font-size: 0.875rem;
 	}
 
 	/*
 	| ----------------------------------------------------------------------
 	| User initials in place of the photo
 	| ----------------------------------------------------------------------
-	| Same slots and sizes as AdminLTE 2.3.8's avatar images: 25px in the
-	| navbar (.user-image), 90px in the user menu, 45px in the sidebar panel.
+	| 2.1rem in the navbar (.user-image), 90px in the user menu, 40px in the
+	| sidebar panel.
 	*/
 	.cb-initials {
 		display: inline-block;
+		flex-shrink: 0;
 		border-radius: 50%;
 		text-align: center;
 		font-weight: 600;
@@ -165,11 +186,26 @@
 		background: rgba(255, 255, 255, 0.25);
 		user-select: none;
 	}
-	.navbar-nav > .user-menu .user-image.cb-initials {
-		font-size: 11px;
-		line-height: 25px;
+	.user-menu .user-image.cb-initials {
+		width: 2.1rem;
+		height: 2.1rem;
+		margin-top: -0.5rem;
+		margin-bottom: -0.5rem;
+		margin-right: 0.35rem;
+		font-size: 12px;
+		line-height: 2.1rem;
+		vertical-align: middle;
 	}
-	.navbar-nav > .user-menu > .dropdown-menu > li.user-header > .cb-initials {
+	body.skin-black .user-menu .user-image.cb-initials,
+	body.skin-black-light .user-menu .user-image.cb-initials {
+		color: #444;
+		background: rgba(0, 0, 0, 0.08);
+	}
+	.user-menu .user-header {
+		background-color: var(--cb-skin);
+		color: var(--cb-skin-text);
+	}
+	.user-menu .user-header > .cb-initials {
 		position: relative;
 		z-index: 5;
 		width: 90px;
@@ -179,20 +215,20 @@
 		border: 3px solid rgba(255, 255, 255, 0.2);
 	}
 	.user-panel > .image > .cb-initials {
-		width: 45px;
-		height: 45px;
-		line-height: 45px;
-		font-size: 16px;
+		width: 40px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 15px;
 		background: rgba(255, 255, 255, 0.12);
 	}
 	/* Light skins have a light sidebar, so the panel badge needs dark text. */
-	body[class*="-light"] .user-panel > .image > .cb-initials {
+	.app-sidebar[data-bs-theme="light"] .user-panel > .image > .cb-initials {
 		color: #444;
 		background: rgba(0, 0, 0, 0.08);
 	}
-	@media (max-width: 767px) {
-		.navbar-nav > .user-menu .user-image.cb-initials {
-			margin-top: -2px;
-			line-height: 25px;
-		}
+
+	/* Notifications menu */
+	#list_notifications .menu {
+		max-height: 220px;
+		overflow-y: auto;
 	}

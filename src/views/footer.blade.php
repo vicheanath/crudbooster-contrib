@@ -1,6 +1,6 @@
-<footer class="main-footer">
+<footer class="app-footer main-footer">
     <!-- To the right -->
-    <div class="pull-{{ cbLang('right') }} hidden-xs">
+    <div class="float-end d-none d-sm-inline">
         {{ cbLang('powered_by') }} {{Session::get('appname')}}
     </div>
     <!-- Default to the left -->

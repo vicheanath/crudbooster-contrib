@@ -179,7 +179,7 @@
 
 </form><!--END FORM TABLE-->
 
-<div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render())) !!}</div>
+<div class="col-md-8">{!! urldecode(str_replace("/?","?",$result->appends(Request::all())->render('pagination::bootstrap-4'))) !!}</div>
 <?php
 $from = $result->count() ? ($result->perPage() * $result->currentPage() - $result->perPage() + 1) : 0;
 $to = $result->perPage() * $result->currentPage() - $result->perPage() + $result->count();
