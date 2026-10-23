@@ -1,7 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\commands;
 
 use Cache;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use crocodicstudio\crudbooster\contracts\Mail\TemplateMailerInterface;
 use DB;
 use Illuminate\Console\Command;
 use Request;
@@ -27,7 +27,7 @@ class Mailqueues extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(TemplateMailerInterface $mailer)
     {
 
 
@@ -44,7 +44,7 @@ class Mailqueues extends Command
 
         foreach ($queues as $q) {
             if (filter_var($q->email_recipient, FILTER_VALIDATE_EMAIL) !== false) {
-                CRUDBooster::sendEmailQueue($q);
+                $mailer->sendQueued($q);
                 $this->comment('Email send -> '.$q->email_subject);
             }
             DB::table('cms_email_queues')->where('id', $q->id)->delete();

@@ -4,8 +4,8 @@ namespace crocodicstudio\crudbooster\audit;
 
 use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
 use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
+use crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface;
 use crocodicstudio\crudbooster\models\CmsLog;
-use CRUDBooster;
 use Illuminate\Http\Request;
 
 /**
@@ -17,12 +17,13 @@ final class AuditLogger implements AuditLoggerInterface
         private readonly CmsLog $logs,
         private readonly AuthenticationServiceInterface $auth,
         private readonly Request $request,
+        private readonly SettingsRepositoryInterface $settings,
     ) {
     }
 
     public function log(string $description, string $details = ''): void
     {
-        if (! CRUDBooster::getSetting('api_debug_mode')) {
+        if (! $this->settings->get('api_debug_mode')) {
             return;
         }
 

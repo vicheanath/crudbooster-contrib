@@ -176,6 +176,12 @@ class ActionsTest extends FeatureTestCase
         $this->assertCount(1, $messages);
         $this->assertSame('admin@crudbooster.com', $messages[0]->getOriginalMessage()->getTo()[0]->getAddress());
         $this->assertFalse(Hash::check('123456', DB::table('cms_users')->where('email', 'admin@crudbooster.com')->value('password')));
+
+        // The email carries the new password, and it is the one now stored.
+        $body = $messages[0]->getOriginalMessage()->getHtmlBody();
+        $this->assertStringNotContainsString('[password]', $body);
+        $this->assertSame(1, preg_match('#<p>(\w+)</p><p><br></p>#', $body, $match));
+        $this->assertTrue(Hash::check($match[1], DB::table('cms_users')->where('email', 'admin@crudbooster.com')->value('password')));
     }
 
     public function test_send_email_now_and_through_the_queue_command()
