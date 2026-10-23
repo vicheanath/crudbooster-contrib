@@ -2,7 +2,8 @@
 
 namespace crocodicstudio\crudbooster\security;
 
-use CRUDBooster;
+use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
+use crocodicstudio\crudbooster\contracts\Mail\TemplateMailerInterface;
 use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
 use crocodicstudio\crudbooster\models\CmsPrivilege;
 use crocodicstudio\crudbooster\models\CmsPrivilegeRole;
@@ -20,6 +21,8 @@ class AdminAuthenticationService implements AuthenticationServiceInterface
         private readonly Hasher $hasher,
         private readonly SessionContract $session,
         private readonly Request $request,
+        private readonly AuditLoggerInterface $audit,
+        private readonly TemplateMailerInterface $mailer,
     ) {
     }
 
@@ -64,7 +67,7 @@ class AdminAuthenticationService implements AuthenticationServiceInterface
         $context = $this->createContext($user);
         $this->session->put($context->sessionPayload());
 
-        CRUDBooster::insertLog(cbLang('log_login', [
+        $this->audit->log(cbLang('log_login', [
             'email' => $user->email,
             'ip' => $this->request->server('REMOTE_ADDR'),
         ]));
@@ -79,7 +82,7 @@ class AdminAuthenticationService implements AuthenticationServiceInterface
         $user = $this->currentUser();
 
         if ($user) {
-            CRUDBooster::insertLog(cbLang('log_logout', ['email' => $user->email]));
+            $this->audit->log(cbLang('log_logout', ['email' => $user->email]));
         }
 
         $this->session->flush();
@@ -96,13 +99,13 @@ class AdminAuthenticationService implements AuthenticationServiceInterface
         $user->password = $this->hasher->make($randomPassword);
         $user->save();
         $user->password = $randomPassword;
-        CRUDBooster::sendEmail([
+        $this->mailer->send([
             'to' => $user->email,
             'data' => $user,
             'template' => 'forgot_password_backend',
         ]);
 
-        CRUDBooster::insertLog(cbLang('log_forgot', [
+        $this->audit->log(cbLang('log_forgot', [
             'email' => $email,
             'ip' => $this->request->server('REMOTE_ADDR'),
         ]));

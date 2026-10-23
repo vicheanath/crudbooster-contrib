@@ -67,6 +67,11 @@ $this->app->bind(
 );
 ```
 
+The static `CRUDBooster::` helpers delegate to the same contracts, so a binding also changes them. For example,
+`TemplateMailerInterface` handles `CRUDBooster::sendEmail()` and the forgot-password email,
+`SettingsRepositoryInterface` handles `CRUDBooster::getSetting()`, and `ModuleGeneratorInterface` handles the
+controllers the Module Generator writes. All contracts are in `src/contracts`.
+
 Every `CBController` endpoint runs an action class from `src/actions`, such as `IndexAction`, `SaveAction`, `DeleteAction` and `ExportAction`. These actions call the module's hooks. To change one endpoint for every module, bind a subclass:
 
 ```php
