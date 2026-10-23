@@ -18,7 +18,8 @@ final class SchemaInspector implements SchemaInspectorInterface
         }
 
         return collect(DB::select(
-            'SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table',
+            // Without ORDER BY, MySQL returns information_schema rows in no particular order.
+            'SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table ORDER BY ORDINAL_POSITION',
             ['database' => $parsed['database'], 'table' => $parsed['table']]
         ))->map(static fn (object $column): string => $column->COLUMN_NAME)->values()->all();
     }
