@@ -39,6 +39,8 @@ through `composer.json` → `autoload.files`. That copy replaces the package cla
 7.0 fixes, and every module page fails with `getDoctrineSchemaManager does not exist`. Remove the copy from
 `autoload.files`, delete it, and run `composer dump-autoload`. Then re-apply real customizations another way.
 For example, a SweetAlert2 delete dialog now only needs the `SWEETALERT2_DELETE_OPTIONS` config key.
+Permissions, logging, uploads, form field types, export formats and each controller endpoint are services you can
+replace from your own service provider. See [How To Extend CRUDBooster](docs/en/how-to-extend.md).
 
 ### Uploads and the storage disk
 CRUDBooster now resolves every upload through `Storage::path()` on the `local` disk instead of a hard-coded

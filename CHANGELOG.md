@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### SOLID architecture (no changes needed in existing modules)
+Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md). `CBController` and the
+`CRUDBooster` helper keep their public API but delegate to services bound in the container:
+- Contracts in `src/contracts` for authentication, permissions, audit log, schema, grid query, filters, forms,
+  validation, uploads, exporters and actions. Bind your own implementation to replace any of them.
+- `CBController` endpoints run action classes (`src/actions`). `CBController.php` went from 1,790 to about 440 lines.
+- Form field types are handlers in a `FieldHandlerRegistry`: register new types or replace built-in ones.
+- Export formats come from an `ExporterRegistry`. Registered formats appear in the export dialog.
+- Optional fluent module API: `modern\CrudController` with `CrudDefinition`, `Column` and `Field`.
+- New guide: How To Extend CRUDBooster (`docs/en/how-to-extend.md`).
+- About 30 new tests, including characterization tests that pin down classic module behaviour.
+
+### Fixed
+- A `child` form field submitted without rows inserted an empty child row (failed on NOT NULL columns).
+- The `googlemaps` form component crashed with "Array to string conversion".
+- The `str_limit` grid column option crashed (`str_limit()` was removed in Laravel 6; the helper is back).
+- Security: the `hide_form` input is unserialized with objects disallowed, and the select2 lookup's search term is
+  bound instead of interpolated into SQL.
+- A bare `unique` validation rule now checks the module's table.
+- A string `$orderby` with a qualified column (`"table.column,desc"`) and the `where[...]` index parameter built
+  wrong column names.
+
 - Documentation site built with VitePress and deployed to GitHub Pages: https://vicheanath.github.io/crudbooster-contrib/
 
 ## v7.0.2
