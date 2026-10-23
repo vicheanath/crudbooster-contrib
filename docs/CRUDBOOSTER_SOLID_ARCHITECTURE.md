@@ -132,9 +132,14 @@ src/
 │   ├── Export/ExporterInterface.php
 │   ├── Files/FileUploaderInterface.php
 │   ├── Forms/FieldHandlerInterface.php, FormProcessorInterface.php, FormValidatorInterface.php
+│   ├── Generator/ModuleGeneratorInterface.php, ApiGeneratorInterface.php
 │   ├── Grid/GridQueryBuilderInterface.php, GridFilterParserInterface.php
+│   ├── Mail/TemplateMailerInterface.php
+│   ├── Navigation/MenuRepositoryInterface.php
+│   ├── Notifications/NotificationSenderInterface.php
 │   ├── Schema/SchemaInspectorInterface.php
-│   └── Security/AuthenticationServiceInterface.php, PermissionCheckerInterface.php
+│   ├── Security/AuthenticationServiceInterface.php, PermissionCheckerInterface.php
+│   └── Settings/SettingsRepositoryInterface.php
 │
 ├── security/                           <-- Auth & RBAC
 │   ├── AdminAuthenticationService.php  (login, logout, lock screen, password reset)
@@ -168,6 +173,14 @@ src/
 ├── export/                             <-- Strategy-based exporters (OCP)
 │   ├── ExporterRegistry.php, PdfExporter.php, ExcelExporter.php, CsvExporter.php
 │   └── DefaultExportXls.php, DefaultImportRows.php (unchanged)
+│
+├── settings/SettingsRepository.php     (cms_settings, cached under the 5.x "setting_{name}" keys)
+├── navigation/MenuRepository.php       (sidebar and dashboard menus for the current privilege)
+├── mail/TemplateMailer.php             (email templates, the queue, the SMTP mailer)
+├── notifications/NotificationSender.php (cms_notifications)
+├── generator/                          <-- Module and API code generators
+│   ├── ModuleGenerator.php, ApiGenerator.php
+│   └── stubs/module_controller.stub, api_controller.stub
 │
 ├── compatibility/CrudConfig.php        <-- Immutable module configuration (props <-> fluent API)
 ├── modern/                             <-- Phase 6 fluent API
@@ -367,6 +380,27 @@ the security and audit contracts.
 `compatibility\CrudConfig`, which is applied to the classic properties, so everything downstream is shared.
 See [docs/en/how-to-extend.md](en/how-to-extend.md).
 
+### Phase 7: Remaining helper domains — **Implemented.**
+The helper still held whole domains after Phase 5. Each now has a contract, and the static method delegates to it:
+
+| Static helper | Contract | Implementation |
+| :--- | :--- | :--- |
+| `getSetting()` | `SettingsRepositoryInterface` | `settings\SettingsRepository` |
+| `sidebarMenu()`, `sidebarDashboard()` | `MenuRepositoryInterface` | `navigation\MenuRepository` |
+| `sendEmail()`, `sendEmailQueue()`, `mailer()` | `TemplateMailerInterface` | `mail\TemplateMailer` |
+| `sendNotification()` | `NotificationSenderInterface` | `notifications\NotificationSender` |
+| `generateController()`, `getNameTable()` | `ModuleGeneratorInterface` | `generator\ModuleGenerator` |
+| `generateAPI()` | `ApiGeneratorInterface` | `generator\ApiGenerator` |
+
+- `tests/Feature/CodeGeneratorTest.php` pins the exact generated source against `tests/fixtures/generated/`,
+  because users keep and edit those files. The fixtures were recorded from the pre-refactor generator, and the
+  stubs reproduce them byte for byte. Set `CB_UPDATE_GOLDEN=1` to re-record them after an intended change.
+- `AuditLogger`, `AdminAuthenticationService` and the `mailqueues` command take these contracts by injection
+  instead of calling the static helper.
+- `CRUDBooster.php` went from 1,735 to about 900 lines. What is left is mostly request context (`mainpath()`,
+  `getCurrentModule()`, `redirect()`), the small query shortcuts (`first()`, `get()`, `insert()`) and
+  `routeController()`.
+
 ---
 
 ## 8. Summary of Benefits
@@ -413,3 +447,13 @@ Found by the characterization tests or while moving code:
 - XLS/CSV export failed on any cell containing `&` or `<` (found in the playground: the empty-image placeholder
   URL has a bare `&`). The export view escapes cell values for these formats.
 - Import no longer calls `exit()` when creating a related row fails; the error surfaces as an exception.
+- The forgot-password email showed a literal `[password]`. The user model was passed as template data, and
+  iterating a model yields its public properties, not its attributes. Models now contribute their attributes.
+- Generating a module for a table with an `is_*` column crashed with "Array to string conversion" (before PHP 8
+  it wrote `"dataenum"=>"Array"`). The options are now written as `"1|Paid;0|Un-Paid"`.
+- A third module on the same table overwrote `Admin{Name}1Controller`, and a module generated without a name
+  became `Admin1Controller`. The generator now picks the first free number after the table or module name.
+- Queued email attachments were passed to `unserialize()` with objects allowed. Only plain values are revived now.
+- Sending an email with a template slug that does not exist failed with "Attempt to assign property on null". It
+  now throws an `InvalidArgumentException` that names the slug.
+- The sidebar menu queries interpolated the session's privilege id into SQL. It is now a bound parameter.

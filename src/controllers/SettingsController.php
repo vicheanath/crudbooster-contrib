@@ -1,7 +1,7 @@
 <?php namespace crocodicstudio\crudbooster\controllers;
 
 use CRUDBooster;
-use Illuminate\Support\Facades\Cache;
+use crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
@@ -87,7 +87,7 @@ class SettingsController extends CBController
     {
         $id = g('id');
         $row = CRUDBooster::first('cms_settings', $id);
-        Cache::forget('setting_'.$row->name);
+        app(SettingsRepositoryInterface::class)->forget($row->name);
         if (Storage::exists($row->content)) {
             Storage::delete($row->content);
         }
@@ -136,7 +136,7 @@ class SettingsController extends CBController
 
             DB::table('cms_settings')->where('name', $set->name)->update(['content' => $content]);
 
-            Cache::forget('setting_'.$set->name);
+            app(SettingsRepositoryInterface::class)->forget($set->name);
         }
 
         return redirect()->back()->with(['message' => 'Your setting has been saved !', 'message_type' => 'success']);
@@ -153,6 +153,6 @@ class SettingsController extends CBController
         $row = DB::table($this->table)->where($this->primary_key, $id)->first();
 
         /* REMOVE CACHE */
-        Cache::forget('setting_'.$row->name);
+        app(SettingsRepositoryInterface::class)->forget($row->name);
     }
 }
