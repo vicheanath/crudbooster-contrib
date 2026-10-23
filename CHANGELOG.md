@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v7.1.0
+
 ### SOLID architecture (no changes needed in existing modules)
 Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md). `CBController` and the
 `CRUDBooster` helper keep their public API but delegate to services bound in the container:
