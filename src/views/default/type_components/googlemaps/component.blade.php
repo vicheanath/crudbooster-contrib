@@ -11,8 +11,8 @@
         <div class="input-group">
             <input type="text" class="form-control" id="{{$name}}" {{ ($readonly)?"readonly":"" }} {{ ($required)?"required":""}} value="{{$value}}"
                    name="{{$name}}">
-            <input type="hidden" name="input-latitude-{{$name}}" id="input-latitude-{{$name}}" value="{{ ($form['latitude'])?$row->$form['latitude']:0 }}">
-            <input type="hidden" name="input-longitude-{{$name}}" id="input-longitude-{{$name}}" value="{{ ($form['longitude'])?$row->$form['longitude']:0 }}">
+            <input type="hidden" name="input-latitude-{{$name}}" id="input-latitude-{{$name}}" value="{{ ($form['latitude'] && $row) ? $row->{$form['latitude']} : 0 }}">
+            <input type="hidden" name="input-longitude-{{$name}}" id="input-longitude-{{$name}}" value="{{ ($form['longitude'] && $row) ? $row->{$form['longitude']} : 0 }}">
             <span class="input-group-btn">
 						        <button class="btn btn-primary" onclick="showMapModal{{$name}}()" type="button"><i
                                             class='fa fa-map-marker'></i> Browse Map</button>
@@ -126,7 +126,7 @@
 
             // Try HTML5 geolocation.
 
-            @if(!$row->$form['latitude'] && !$row->$form['longitude'])
+            @if(!$row->{$form['latitude']} && !$row->{$form['longitude']})
 
                 latitude_temp_{{$name}} = 0;
             longitude_temp_{{$name}} = 0;
@@ -139,12 +139,12 @@
 
                     @else
             var pos = {
-                    lat: {{ $row->$form['latitude']?:0 }},
-                    lng: {{ $row->$form['longitude']?:0 }}
+                    lat: {{ $row->{$form['latitude']}?:0 }},
+                    lng: {{ $row->{$form['longitude']}?:0 }}
                 };
 
-            latitude_temp_{{$name}} = {{ $row->$form['latitude']?:0 }};
-            longitude_temp_{{$name}} = {{ $row->$form['longitude']?:0 }};
+            latitude_temp_{{$name}} = {{ $row->{$form['latitude']}?:0 }};
+            longitude_temp_{{$name}} = {{ $row->{$form['longitude']}?:0 }};
 
             address_temp_{{$name}} = "{{$value}}";
 
