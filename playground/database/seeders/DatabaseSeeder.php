@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             \crocodicstudio\crudbooster\database\seeds\CBSeeder::class,
             EcommerceSeeder::class,
+            FieldShowcaseSeeder::class,
         ]);
     }
 }

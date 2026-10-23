@@ -7,6 +7,7 @@ use crocodicstudio\crudbooster\forms\handlers\CheckboxFieldHandler;
 use crocodicstudio\crudbooster\forms\handlers\ChildFieldHandler;
 use crocodicstudio\crudbooster\forms\handlers\FileManagerFieldHandler;
 use crocodicstudio\crudbooster\forms\handlers\GoogleMapsFieldHandler;
+use crocodicstudio\crudbooster\forms\handlers\HeaderFieldHandler;
 use crocodicstudio\crudbooster\forms\handlers\MoneyFieldHandler;
 use crocodicstudio\crudbooster\forms\handlers\MultitextFieldHandler;
 use crocodicstudio\crudbooster\forms\handlers\Select2FieldHandler;
@@ -27,6 +28,7 @@ class FieldHandlerRegistry
         'child' => ChildFieldHandler::class,
         'filemanager' => FileManagerFieldHandler::class,
         'googlemaps' => GoogleMapsFieldHandler::class,
+        'header' => HeaderFieldHandler::class,
         'money' => MoneyFieldHandler::class,
         'multitext' => MultitextFieldHandler::class,
         'select' => SelectFieldHandler::class,

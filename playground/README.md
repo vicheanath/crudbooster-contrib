@@ -38,6 +38,14 @@ with these modules:
 - Product reviews
 - Coupons
 
+The **Field Showcase** module (`field_showcases`) puts every form field type on one form, each labelled
+with its type: text, email, password, number, money (with cents), multitext, hidden, date, datetime,
+time, textarea, wysiwyg, json, radio, select, select2 (including AJAX), datamodal, checkbox, uploads,
+googlemaps, custom HTML, header sections and a child table. Lookups come from an enum, a table, a SQL
+query and many-to-many pivot tables. One seeded record has every field filled in, so the grid, detail,
+edit and export views can be checked at once. The `filemanager` type is left out: it has no view
+component yet. The map needs the "Google API Key" setting.
+
 The generated modules exercise common CRUDBooster features including joined
 fields, validation, select/select2/radio/checkbox controls, money and numeric
 fields, date and datetime controls, uploads, image previews, textareas,

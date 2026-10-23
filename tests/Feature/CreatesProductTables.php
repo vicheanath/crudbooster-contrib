@@ -3,6 +3,7 @@
 namespace crocodicstudio\crudbooster\tests\Feature;
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Testing\RefreshDatabaseState;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -50,6 +51,16 @@ trait CreatesProductTables
             $table->string('sku');
             $table->integer('qty')->nullable();
         });
+
+        // MySQL commits the open test transaction on DDL. Begin it again so the test still runs inside one
+        // (rolled back afterwards) and DB::transaction() in the code under test gets a real savepoint. The
+        // tables themselves stay committed, so the next test rebuilds the database, as Laravel does when it
+        // finds the transaction gone.
+        if (in_array(DB::getDriverName(), ['mysql', 'mariadb'], true) && DB::transactionLevel() > 0) {
+            DB::rollBack();
+            DB::beginTransaction();
+            RefreshDatabaseState::$migrated = false;
+        }
     }
 
     protected function registerModule(string $name, string $path, string $controller): void

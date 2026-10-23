@@ -25,7 +25,14 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
 - Tests are split into `Unit` and `Feature` suites (`composer test:unit`), and CI reports coverage
   (`composer test:coverage` locally).
 
+- Playground: a **Field Showcase** module with every form field type and lookup variant on one form, and a
+  seeded record with every field filled in.
+
 ### Changed
+- A `header` field's `'collapsed' => true` now starts its section folded and `false` keeps it open; both were
+  inverted. Sections without the option still start open.
+- Saving a record, its child rows and its many-to-many links is one database transaction: when one fails,
+  nothing is kept. `hook_after_add`/`hook_after_edit` run after the commit.
 - Header and sidebar typography: one font stack, a light header shadow, uppercase section labels, tighter menu items
   and ellipsis for long names. Colours still come from each privilege's skin. Run `php artisan crudbooster:update`
   to republish the CSS.
@@ -33,6 +40,19 @@ Implements [docs/CRUDBOOSTER_SOLID_ARCHITECTURE.md](docs/CRUDBOOSTER_SOLID_ARCHI
   2.3.8's avatar slots and sizes.
 
 ### Fixed
+- Found with the playground's Field Showcase module:
+  - A `money` field with cents (`decimals` or `priceformat_parameters.centsLimit`) saved "$ 2,345.67" as 234567,
+    and its detail view rounded to whole units. The field's own format is now used for both.
+  - Child rows were read with inner joins on their select and datamodal lookups, so a row with an empty lookup
+    was hidden on the edit form and deleted on the next save. Unqualified columns also failed with "ambiguous
+    column" when a lookup table shared a column name.
+  - A child row with an empty optional column failed the whole save ("all VALUES must have the same number of
+    terms").
+  - In a child field, `select` accepted `dataenum` only as an array and `radio` only as a `"a;b"` string; both
+    accept either now, like the top-level fields.
+  - A `header` without a `name` was rendered as a hidden input, and one with a `name` was saved as a column.
+  - The `json` field's editor never started (its script ran before jQuery loaded), and its detail view was empty.
+    The detail view now prints the formatted JSON.
 - A `child` form field submitted without rows inserted an empty child row (failed on NOT NULL columns).
 - The `googlemaps` form component crashed with "Array to string conversion".
 - The `str_limit` grid column option crashed (`str_limit()` was removed in Laravel 6; the helper is back).
