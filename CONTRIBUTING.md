@@ -20,36 +20,31 @@ composer test
 
 ## 2. Start the playground
 
-CRUDBooster is a package, so it needs a Laravel app to run in. The playground script creates one in
-`playground/` (git-ignored) and installs this repository into it through a Composer **path repository with a
-symlink**. Edits under `src/` show up on the next page load.
+CRUDBooster is a package, so it needs a Laravel app to run in. The committed
+`playground/` is a Laravel e-commerce application that installs this repository
+through a Composer **path repository with a symlink**. Edits under `src/` show
+up on the next page load.
 
 ```bash
-php bin/playground setup      # Laravel 13 + SQLite, publishes config/assets, migrates, seeds the admin
-php bin/playground serve      # http://127.0.0.1:8000/admin/login
+cd playground && composer install
+cd playground && php artisan migrate --seed --force
+cd playground && php artisan serve      # http://127.0.0.1:8000/admin/login
 ```
 
 Log in with `admin@crudbooster.com` / `123456`.
 
 | Command | What it does |
 |---|---|
-| `php bin/playground setup --laravel=12` | Build the playground on Laravel 12 instead |
-| `php bin/playground setup --mysql --mailpit` | Use the Docker MySQL and Mailpit services (run `docker compose up -d` first) |
-| `php bin/playground setup --force` | Throw the playground away and rebuild it |
-| `php bin/playground fresh` | Drop all tables, migrate and re-seed the admin |
-| `php bin/playground publish` | Re-copy `src/assets` into `playground/public/vendor/crudbooster` |
-| `php bin/playground artisan -- route:list` | Run any artisan command inside the playground |
-| `php bin/playground destroy` | Delete `playground/` |
-
-`composer playground -- <command>` does the same thing.
+| `cd playground && composer install` | Install playground dependencies |
+| `cd playground && php artisan migrate --seed --force` | Migrate and seed all demo data |
+| `cd playground && php artisan serve` | Start the playground |
+| `cd playground && php artisan route:list` | Inspect all registered routes |
 
 ### What updates live, and what doesn't
 - **Live:** PHP in `src/` (controllers, helpers, middleware) and Blade views in `src/views`.
-- **Re-publish:** `src/assets` (CSS/JS/images) are copied into the app. Run `php bin/playground publish`.
-- **Copied once at setup:** `src/configs/crudbooster.php` → `playground/config/crudbooster.php`, and
-  `src/userfiles/*` → `playground/app/Http/Controllers`. Edit the playground copies to experiment, or
-  `setup --force` to start over.
-- **Database changes:** after editing `src/database/migrations` or `CBSeeder`, run `php bin/playground fresh`.
+- **Assets:** package assets are published into `playground/public/vendor/crudbooster`.
+- **Database changes:** after editing migrations or seeders, run
+  `cd playground && php artisan migrate --seed --force`.
 
 Modules you create with the Module Generator are written into `playground/app/Http/Controllers`. They never
 reach this repository, so try things freely.

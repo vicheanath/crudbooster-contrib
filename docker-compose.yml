@@ -1,6 +1,6 @@
 # Optional services for local development. SQLite works without any of this.
 #   docker compose up -d                       start MySQL + Mailpit
-#   php bin/playground setup --mysql --mailpit use them in the playground app
+#   cd playground && php artisan migrate --seed --force
 #   composer test:mysql                        run the test suite against MySQL
 services:
   mysql:

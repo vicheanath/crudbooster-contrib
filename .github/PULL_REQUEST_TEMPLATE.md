@@ -6,7 +6,7 @@
 
 - [ ] `composer test` passes
 - [ ] Added or updated a test that fails without this change
-- [ ] Tried it in the playground (`php bin/playground serve`)
+- [ ] Tried it in the playground (`cd playground && php artisan serve`)
 - [ ] Checked on MySQL (`composer test:mysql`) if it touches SQL or schema
 
 ## Impact on existing projects

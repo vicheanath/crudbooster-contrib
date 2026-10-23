@@ -41,7 +41,9 @@ All ways to contribute are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers th
 
 ```bash
 composer install
-php bin/playground setup && php bin/playground serve   # http://127.0.0.1:8000/admin/login
+cd playground && composer install
+cd playground && php artisan migrate --seed --force
+cd playground && php artisan serve   # http://127.0.0.1:8000/admin/login
 composer test
 ```
 
