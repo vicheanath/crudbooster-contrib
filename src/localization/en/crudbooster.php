@@ -221,6 +221,13 @@ return [
     'filter_rows_total' => 'Total rows',
     'filter_rows_to' => 'to',
     'filter_rows_of' => 'of',
+    'grid_show' => 'Show',
+    'grid_selected' => ':count selected',
+    'grid_sorted_by' => 'Sorted by',
+    'grid_clear_filters' => 'Clear all',
+    'grid_no_results_hint' => 'Try another search, or clear the filters.',
+    'export_select_all' => 'All',
+    'export_select_none' => 'None',
 
     // confirmation
     'confirmation_yes' => 'Yes!',
