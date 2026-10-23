@@ -78,7 +78,7 @@ class FormValidator implements FormValidatorInterface
         foreach ($fields as $field) {
             $name = $field['name'] ?? null;
             if ($name && ($field['type'] ?? null) == 'money' && isset($input[$name])) {
-                $input[$name] = MoneyFieldHandler::clean($input[$name]);
+                $input[$name] = MoneyFieldHandler::clean($input[$name], $field);
             }
         }
 

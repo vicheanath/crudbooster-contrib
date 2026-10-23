@@ -84,6 +84,41 @@ class CrudBehaviourTest extends FeatureTestCase
         $this->assertSame(0, DB::table('cb_variants')->count());
     }
 
+    public function test_child_rows_with_an_empty_optional_column_are_saved()
+    {
+        $this->loginAsAdmin();
+
+        // Empty inputs arrive as null; the row used to lose that key and the bulk insert failed.
+        $this->post($this->admin('cb_products/add-save'), [
+            'name' => 'Drill',
+            'variants-sku' => ['D-1', 'D-2'],
+            'variants-qty' => ['3', ''],
+        ])->assertRedirect()->assertSessionHas('message_type', 'success');
+
+        $id = DB::table('cb_products')->where('name', 'Drill')->value('id');
+        $this->assertSame(['D-1' => 3, 'D-2' => null], DB::table('cb_variants')->where('cb_products_id', $id)->orderBy('sku')->pluck('qty', 'sku')->map(fn ($qty) => $qty === null ? null : (int) $qty)->all());
+    }
+
+    public function test_a_failing_child_row_leaves_no_parent_row()
+    {
+        $this->loginAsAdmin();
+        $this->withoutExceptionHandling();
+
+        try {
+            // cb_variants.sku is NOT NULL, so the child insert fails after the product row was written.
+            $this->post($this->admin('cb_products/add-save'), [
+                'name' => 'Broken',
+                'variants-sku' => [''],
+                'variants-qty' => ['5'],
+            ]);
+            $this->fail('The child insert should have failed');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Expected.
+        }
+
+        $this->assertDatabaseMissing('cb_products', ['name' => 'Broken']);
+    }
+
     public function test_edit_save_keeps_empty_password_and_existing_upload_and_replaces_children()
     {
         [$categories, $tags] = $this->seedLookups();

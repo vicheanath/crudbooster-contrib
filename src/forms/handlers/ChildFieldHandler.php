@@ -62,11 +62,12 @@ class ChildFieldHandler extends BaseFieldHandler
             $row = [];
             foreach ($columns as $column) {
                 $values = request($prefix.'-'.$column['name']);
-                if (is_array($values) && isset($values[$i])) {
+                // Empty inputs arrive as null; the column stays in the row so every row inserts the same columns.
+                if (is_array($values) && array_key_exists($i, $values)) {
                     $row[$column['name']] = $values[$i];
                 }
             }
-            if ($row) {
+            if (array_filter($row, static fn ($value) => $value !== null && $value !== '')) {
                 $rows[] = $row;
             }
         }

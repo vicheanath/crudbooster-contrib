@@ -70,7 +70,8 @@ $disabled = (@$form['disabled']) ? "disabled" : "";
 $placeholder = (@$form['placeholder']) ? "placeholder='".$form['placeholder']."'" : "";
 $col_width = @$form['width'] ?: "col-sm-9";
 
-if ($parent_field == $name) {
+// Only when this is a sub module's form; otherwise a nameless field (a header) compared null == null.
+if ($parent_field && $parent_field == $name) {
     $type = 'hidden';
     $value = $parent_id;
 }

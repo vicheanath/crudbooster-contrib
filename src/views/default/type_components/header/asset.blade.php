@@ -17,7 +17,6 @@
             if (typeof event_header_click === 'undefined') {
                 event_header_click = true;
                 $(document).on("click", ".header-title", function () {
-                    console.log("header title click");
                     var index = $(this).attr('id').replace("header", "");
                     var handel = $(this);
                     var parent = $(this).parent('.box-body');
@@ -34,14 +33,8 @@
                         });
                     }
                 })
-                $(".header-title").each(function () {
-                    var data_collapsed = $(this).attr('data-collapsed');
-                    console.log("header title " + data_collapsed);
-                    if (data_collapsed == 'false') {
-                        console.log("collapsed false");
-                        $(this).click();
-                    }
-                })
+                // Sections start open; 'collapsed' => true starts one folded (a click toggles it).
+                $(".header-title[data-collapsed='true']").click();
             }
 
 

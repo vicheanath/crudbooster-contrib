@@ -19,21 +19,23 @@
 
                     <?php
                     $columns_tbody = [];
-                    $data_child = DB::table($form['table'])->where($form['foreign_key'], $id);
+                    // Columns are qualified and lookups left-joined: an inner join hid rows with an empty lookup, and the
+                    // child field deletes and re-inserts rows on save, so hidden rows were lost.
+                    $data_child = DB::table($form['table'])->where($form['table'].'.'.$form['foreign_key'], $id);
                     foreach ($form['columns'] as $i => $c) {
                         $data_child->addselect($form['table'].'.'.$c['name']);
 
                         if ($c['type'] == 'datamodal') {
                             $datamodal_title = explode(',', $c['datamodal_columns'])[0];
                             $datamodal_table = $c['datamodal_table'];
-                            $data_child->join($c['datamodal_table'], $c['datamodal_table'].'.id', '=', $c['name']);
-                            $data_child->addselect($c['datamodal_table'].'.'.$datamodal_title.' as '.$datamodal_table.'_'.$datamodal_title);
+                            $data_child->leftJoin($c['datamodal_table'].' as child_join_'.$i, 'child_join_'.$i.'.id', '=', $form['table'].'.'.$c['name']);
+                            $data_child->addselect('child_join_'.$i.'.'.$datamodal_title.' as '.$datamodal_table.'_'.$datamodal_title);
                         } elseif ($c['type'] == 'select') {
                             if ($c['datatable']) {
                                 $join_table = explode(',', $c['datatable'])[0];
                                 $join_field = explode(',', $c['datatable'])[1];
-                                $data_child->join($join_table, $join_table.'.id', '=', $c['name']);
-                                $data_child->addselect($join_table.'.'.$join_field.' as '.$join_table.'_'.$join_field);
+                                $data_child->leftJoin($join_table.' as child_join_'.$i, 'child_join_'.$i.'.id', '=', $form['table'].'.'.$c['name']);
+                                $data_child->addselect('child_join_'.$i.'.'.$join_field.' as '.$join_table.'_'.$join_field);
                             }
                         }
                     }

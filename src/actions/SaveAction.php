@@ -55,14 +55,19 @@ class SaveAction extends CrudAction
 
         $controller->hook_before_add($controller->arr);
 
-        $insertId = $id = DB::table($controller->table)->insertGetId($controller->arr);
+        // The row and its child rows and pivot links are saved together: if one fails, none is kept.
+        $insertId = DB::transaction(function () use ($controller) {
+            $insertId = $id = DB::table($controller->table)->insertGetId($controller->arr);
 
-        // A UUID primary key set by the module is the row's id, not what insertGetId() returns.
-        if (isset($controller->arr[$controller->primary_key]) && $controller->arr[$controller->primary_key] != $id) {
-            $id = $controller->arr[$controller->primary_key];
-        }
+            // A UUID primary key set by the module is the row's id, not what insertGetId() returns.
+            if (isset($controller->arr[$controller->primary_key]) && $controller->arr[$controller->primary_key] != $id) {
+                $id = $controller->arr[$controller->primary_key];
+            }
 
-        $this->forms->afterSave($controller->data_inputan, $controller->formContext()->withRecord($id, $insertId));
+            $this->forms->afterSave($controller->data_inputan, $controller->formContext()->withRecord($id, $insertId));
+
+            return $insertId;
+        });
 
         $controller->hook_after_add($insertId);
 
@@ -97,9 +102,11 @@ class SaveAction extends CrudAction
 
         $controller->hook_before_edit($controller->arr, $id);
 
-        DB::table($controller->table)->where($controller->primary_key, $id)->update($controller->arr);
+        DB::transaction(function () use ($controller, $id) {
+            DB::table($controller->table)->where($controller->primary_key, $id)->update($controller->arr);
 
-        $this->forms->afterSave($controller->data_inputan, $controller->formContext($id));
+            $this->forms->afterSave($controller->data_inputan, $controller->formContext($id));
+        });
 
         $controller->hook_after_edit($id);
 
