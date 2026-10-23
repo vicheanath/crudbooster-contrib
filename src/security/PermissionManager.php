@@ -1,14 +1,19 @@
 <?php
 
-namespace crocodicstudio\crudbooster\services;
+namespace crocodicstudio\crudbooster\security;
 
+use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
 use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
+/**
+ * Reads the current module's permissions from the privilege roles stored in the session at login.
+ */
 final class PermissionManager implements PermissionCheckerInterface
 {
     public function __construct(
+        private readonly AuthenticationServiceInterface $auth,
         private readonly Session $session,
         private readonly Request $request,
     ) {
@@ -41,14 +46,14 @@ final class PermissionManager implements PermissionCheckerInterface
 
     private function allows(string $permission): bool
     {
-        if ((bool) $this->session->get('admin_is_superadmin')) {
+        if ($this->auth->isSuperadmin()) {
             return true;
         }
 
         $modulePath = $this->modulePath();
 
-        foreach ($this->session->get('admin_privileges_roles', []) ?: [] as $role) {
-            if (isset($role->path) && $role->path === $modulePath) {
+        foreach ($this->session->get('admin_privileges_roles') ?: [] as $role) {
+            if (isset($role->path) && $role->path == $modulePath) {
                 return (bool) $role->{$permission};
             }
         }
@@ -56,14 +61,20 @@ final class PermissionManager implements PermissionCheckerInterface
         return false;
     }
 
+    /**
+     * The URL segment after the admin path, as CRUDBooster::getModulePath() reads it.
+     */
     private function modulePath(): ?string
     {
+        $segments = $this->request->segments();
         $adminPath = config('crudbooster.ADMIN_PATH');
-        $segments = explode('/', trim($this->request->path(), '/'));
-        $adminIndex = array_search($adminPath, $segments, true);
 
-        return $adminIndex === false
-            ? ($segments[0] ?? null)
-            : ($segments[$adminIndex + 1] ?? null);
+        if (! $adminPath) {
+            return $segments[0] ?? null;
+        }
+
+        $index = array_search($adminPath, $segments, true);
+
+        return $index === false ? null : ($segments[$index + 1] ?? null);
     }
 }

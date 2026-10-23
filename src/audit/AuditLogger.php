@@ -1,30 +1,39 @@
 <?php
 
-namespace crocodicstudio\crudbooster\services;
+namespace crocodicstudio\crudbooster\audit;
 
 use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
+use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
 use crocodicstudio\crudbooster\models\CmsLog;
-use Illuminate\Contracts\Session\Session;
+use CRUDBooster;
 use Illuminate\Http\Request;
 
+/**
+ * Writes cms_logs entries. As in 5.x, nothing is logged unless the "api_debug_mode" setting is on.
+ */
 final class AuditLogger implements AuditLoggerInterface
 {
     public function __construct(
         private readonly CmsLog $logs,
-        private readonly Session $session,
+        private readonly AuthenticationServiceInterface $auth,
         private readonly Request $request,
     ) {
     }
 
     public function log(string $description, string $details = ''): void
     {
+        if (! CRUDBooster::getSetting('api_debug_mode')) {
+            return;
+        }
+
         $this->logs->newQuery()->create([
+            'created_at' => now()->format('Y-m-d H:i:s'),
             'ipaddress' => $this->request->ip(),
             'useragent' => $this->request->userAgent(),
-            'url' => $this->request->fullUrl(),
+            'url' => $this->request->url(),
             'description' => $description,
             'details' => $details,
-            'id_cms_users' => $this->session->get('admin_id'),
+            'id_cms_users' => $this->auth->currentUserId(),
         ]);
     }
 }

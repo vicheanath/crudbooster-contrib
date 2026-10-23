@@ -4,17 +4,26 @@ use crocodicstudio\crudbooster\commands\CrudboosterVersionCommand;
 use crocodicstudio\crudbooster\commands\Mailqueues;
 use crocodicstudio\crudbooster\database\seeds\CBSeeder;
 use crocodicstudio\crudbooster\helpers\LegacyNoticeHandler;
+use crocodicstudio\crudbooster\audit\AuditLogger;
 use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
+use crocodicstudio\crudbooster\contracts\Files\FileUploaderInterface;
+use crocodicstudio\crudbooster\contracts\Forms\FormProcessorInterface;
+use crocodicstudio\crudbooster\contracts\Forms\FormValidatorInterface;
 use crocodicstudio\crudbooster\contracts\Grid\GridFilterParserInterface;
+use crocodicstudio\crudbooster\contracts\Grid\GridQueryBuilderInterface;
+use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
 use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
 use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
-use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
-use crocodicstudio\crudbooster\services\AdminAuthenticationService;
-use crocodicstudio\crudbooster\services\AuditLogger;
-use crocodicstudio\crudbooster\services\GridFilterParser;
-use crocodicstudio\crudbooster\services\PermissionManager;
-use crocodicstudio\crudbooster\services\SessionAuthenticationService;
-use crocodicstudio\crudbooster\services\SchemaInspector;
+use crocodicstudio\crudbooster\export\ExporterRegistry;
+use crocodicstudio\crudbooster\files\FileUploader;
+use crocodicstudio\crudbooster\forms\FieldHandlerRegistry;
+use crocodicstudio\crudbooster\forms\FormProcessor;
+use crocodicstudio\crudbooster\forms\FormValidator;
+use crocodicstudio\crudbooster\grid\GridFilterParser;
+use crocodicstudio\crudbooster\grid\GridQueryBuilder;
+use crocodicstudio\crudbooster\schema\SchemaInspector;
+use crocodicstudio\crudbooster\security\PermissionManager;
+use crocodicstudio\crudbooster\security\SessionAuthenticationService;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -86,12 +95,7 @@ class CRUDBoosterServiceProvider extends ServiceProvider
    
     private function registerSingleton()
     {
-        $this->app->bind(AuthenticationServiceInterface::class, SessionAuthenticationService::class);
-        $this->app->bind(PermissionCheckerInterface::class, PermissionManager::class);
-        $this->app->bind(AuditLoggerInterface::class, AuditLogger::class);
-        $this->app->bind(GridFilterParserInterface::class, GridFilterParser::class);
-        $this->app->bind(SchemaInspectorInterface::class, SchemaInspector::class);
-        $this->app->bind(SessionAuthenticationService::class);
+        $this->registerServices();
 
         $this->app->singleton('crudbooster', function ()
         {
@@ -113,6 +117,27 @@ class CRUDBoosterServiceProvider extends ServiceProvider
         $this->app->singleton("crudboosterMailQueue", function() {
             return new Mailqueues;
         });
+    }
+
+    /**
+     * Binds the contracts CBController and the CRUDBooster helper depend on. Apps replace any of
+     * them by binding their own implementation, e.g. in their AppServiceProvider.
+     */
+    private function registerServices()
+    {
+        $this->app->bind(AuthenticationServiceInterface::class, SessionAuthenticationService::class);
+        $this->app->bind(PermissionCheckerInterface::class, PermissionManager::class);
+        $this->app->bind(AuditLoggerInterface::class, AuditLogger::class);
+        $this->app->bind(SchemaInspectorInterface::class, SchemaInspector::class);
+        $this->app->bind(GridFilterParserInterface::class, GridFilterParser::class);
+        $this->app->bind(GridQueryBuilderInterface::class, GridQueryBuilder::class);
+        $this->app->bind(FormProcessorInterface::class, FormProcessor::class);
+        $this->app->bind(FormValidatorInterface::class, FormValidator::class);
+        $this->app->bind(FileUploaderInterface::class, FileUploader::class);
+
+        // Registries are shared so types and formats registered at boot reach every request.
+        $this->app->singleton(FieldHandlerRegistry::class);
+        $this->app->singleton(ExporterRegistry::class);
     }
 
     protected function registerSeeder()

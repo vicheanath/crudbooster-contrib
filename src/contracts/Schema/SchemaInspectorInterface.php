@@ -11,4 +11,11 @@ interface SchemaInspectorInterface
     public function hasColumn(string $table, string $column): bool;
 
     public function hasTable(string $table): bool;
+
+    /**
+     * The column's database type name, or 'varchar' when it cannot be read.
+     */
+    public function columnType(string $table, string $column): string;
+
+    public function isNullable(string $table, string $column): bool;
 }
