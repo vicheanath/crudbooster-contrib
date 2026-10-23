@@ -123,6 +123,13 @@ if(!function_exists('str_slug')) {
     }
 }
 
+if(!function_exists('str_limit')) {
+    // Removed from Laravel 6; grid columns and exports use it for 'str_limit'.
+    function str_limit($value, $limit = 100, $end = '...') {
+        return \Illuminate\Support\Str::limit((string) $value, (int) $limit, $end);
+    }
+}
+
 if(!function_exists('g')) {
     /**
      * @param $key
