@@ -80,8 +80,11 @@ export default defineConfig({
         const href = tokens[idx].attrGet('href') ?? ''
         const [path, hash] = href.split('#')
         const file = path.split('/').pop() ?? ''
-        if (rootPages[file] && !/^https?:/.test(href)) {
-          tokens[idx].attrSet('href', rootPages[file] + (hash ? `#${hash}` : ''))
+        // Root files (UPGRADE.md, ...) link to docs pages with repo-relative paths: docs/en/x.md -> /en/x.
+        const docsPage = path.match(/^(?:\.\/)?docs\/(.+)\.md$/)
+        const target = /^https?:/.test(href) ? null : rootPages[file] ?? (docsPage && `/${docsPage[1]}`)
+        if (target) {
+          tokens[idx].attrSet('href', target + (hash ? `#${hash}` : ''))
         }
         return render(tokens, idx, options, env, self)
       }

@@ -120,90 +120,62 @@ flowchart TD
 
 ## 4. Domain Decomposition & Package Structure
 
-The package directory structure in `src/` will be organized into clear domain boundaries:
+The package keeps its lowercase top-level directories (`controllers/`, `helpers/`, `export/`, ...), so the new
+domains follow the same convention. A capitalized `Export/` next to the existing `export/` would collide on
+case-insensitive file systems such as the macOS default.
 
 ```text
 src/
-├── Contracts/                          <-- [ISP / DIP] Clean interface contracts
-│   ├── Security/
-│   │   ├── AuthenticationServiceInterface.php
-│   │   └── PermissionCheckerInterface.php
-│   ├── Schema/
-│   │   └── SchemaInspectorInterface.php
-│   ├── Grid/
-│   │   ├── GridQueryBuilderInterface.php
-│   │   └── GridFilterParserInterface.php
-│   ├── Forms/
-│   │   ├── FormProcessorInterface.php
-│   │   ├── FormValidatorInterface.php
-│   │   └── FieldHandlerInterface.php
-│   ├── Actions/
-│   │   └── CrudActionInterface.php
-│   ├── Export/
-│   │   └── ExporterInterface.php
-│   └── Audit/
-│       └── AuditLoggerInterface.php
+├── contracts/                          <-- [ISP / DIP] Interfaces
+│   ├── Actions/CrudActionInterface.php
+│   ├── Audit/AuditLoggerInterface.php
+│   ├── Export/ExporterInterface.php
+│   ├── Files/FileUploaderInterface.php
+│   ├── Forms/FieldHandlerInterface.php, FormProcessorInterface.php, FormValidatorInterface.php
+│   ├── Grid/GridQueryBuilderInterface.php, GridFilterParserInterface.php
+│   ├── Schema/SchemaInspectorInterface.php
+│   └── Security/AuthenticationServiceInterface.php, PermissionCheckerInterface.php
 │
-├── Security/                           <-- Auth & RBAC Domain
-│   ├── AdminAuthenticationService.php  (Already started in 7.0!)
+├── security/                           <-- Auth & RBAC
+│   ├── AdminAuthenticationService.php  (login, logout, lock screen, password reset)
 │   ├── AdminAuthenticationContext.php
-│   ├── PermissionManager.php           (Implements PermissionCheckerInterface)
-│   └── PrivilegeService.php
+│   ├── SessionAuthenticationService.php (implements AuthenticationServiceInterface)
+│   └── PermissionManager.php           (implements PermissionCheckerInterface)
+├── audit/AuditLogger.php               (implements AuditLoggerInterface)
+├── schema/SchemaInspector.php          (columns, primary keys, types, nullability, cached)
 │
-├── Schema/                             <-- Database Introspection & Metadata Cache
-│   ├── SchemaInspector.php             (Implements SchemaInspectorInterface)
-│   └── TableMetadata.php
+├── grid/                               <-- Index page
+│   ├── GridQueryBuilder.php            (joins, subqueries, search, where, filters, ordering)
+│   ├── GridFilterParser.php            (the filter_column URL format)
+│   ├── GridQuery.php                   (query + resolved columns DTO)
+│   └── GridRowRenderer.php             (cell HTML, row buttons, hook_row_index)
 │
-├── Grid/                               <-- Data Table & Index Logic
-│   ├── GridQueryBuilder.php            (Handles joins, subqueries, search, sorts)
-│   ├── GridFilterParser.php            (Handles CB URL filter format)
-│   └── GridResult.php                  (Pagination & collection DTO)
+├── forms/                              <-- Input handling
+│   ├── FormContext.php                 (table, primary key, create/edit, record id)
+│   ├── FormProcessor.php               (input_assignment and the after-save step)
+│   ├── FormValidator.php               (validation)
+│   ├── FieldHandlerRegistry.php        (OCP: type => handler)
+│   └── handlers/                       BaseFieldHandler, Text, Money, Select, Select2, Checkbox,
+│                                       Multitext, GoogleMaps, Upload, FileManager, Child (+ SyncsPivotTable)
+├── files/FileUploader.php              (uploads, image resizing, thumbnails)
 │
-├── Forms/                              <-- Input Handling & Form Lifecycle
-│   ├── FormProcessor.php               (Orchestrates before-save, save, after-save)
-│   ├── FormValidator.php               (Extracts validation rules & runs Validator)
-│   ├── FieldHandlerRegistry.php        (OCP: Extensible field processor registry)
-│   └── Handlers/                       (Individual field type strategies)
-│       ├── TextFieldHandler.php
-│       ├── PasswordFieldHandler.php
-│       ├── UploadFieldHandler.php
-│       ├── CheckboxRelationHandler.php
-│       └── Select2RelationHandler.php
+├── actions/                            <-- One class per endpoint
+│   ├── CrudAction.php                  (shared permission check / logging)
+│   ├── IndexAction.php, FormAction.php (add/edit forms), DetailAction.php, SaveAction.php,
+│   ├── DeleteAction.php (+ delete image), BulkAction.php, ExportAction.php, ImportAction.php
+│   └── LookupAction.php                (find-data, data-table, modal-data)
 │
-├── Actions/                            <-- Single Responsibility Action Handlers
-│   ├── IndexAction.php                 (Handles getIndex & postDataQuery)
-│   ├── DetailAction.php                (Handles getDetail & modal views)
-│   ├── SaveAction.php                  (Handles postAddSave & postEditSave)
-│   ├── DeleteAction.php                (Handles getDelete & soft/cascade delete)
-│   ├── BulkAction.php                  (Handles postActionSelected)
-│   ├── ExportAction.php                (Handles getExportData & postExportData)
-│   └── ImportAction.php                (Handles chunked data import)
+├── export/                             <-- Strategy-based exporters (OCP)
+│   ├── ExporterRegistry.php, PdfExporter.php, ExcelExporter.php, CsvExporter.php
+│   └── DefaultExportXls.php, DefaultImportRows.php (unchanged)
 │
-├── Export/                             <-- Strategy-based Exporters (OCP)
-│   ├── ExporterRegistry.php
-│   ├── ExcelExporter.php
-│   ├── CsvExporter.php
-│   └── PdfExporter.php
+├── compatibility/CrudConfig.php        <-- Immutable module configuration (props <-> fluent API)
+├── modern/                             <-- Phase 6 fluent API
+│   ├── CrudController.php, CrudDefinition.php, Column.php, Field.php
 │
-├── Audit/                              <-- Audit & Logging Domain
-│   ├── AuditLogger.php                 (Implements AuditLoggerInterface)
-│   └── LogContext.php
-│
-├── Compatibility/                      <-- Backward Compatibility Bridge
-│   ├── CBControllerBridge.php          (Trait or delegator for legacy CBController)
-│   └── CrudConfigDTO.php               (Encapsulates $this->table, $this->col, etc.)
-│
-├── controllers/                        <-- Maintained for 100% BC
-│   ├── CBController.php                (Extends Controller; delegates to Actions)
-│   ├── AdminController.php
-│   └── ...
-│
-├── helpers/                            <-- Maintained for 100% BC
-│   ├── CRUDBooster.php                 (Static facade forwarding to container services)
-│   ├── CB.php
-│   └── ...
-│
-└── CRUDBoosterServiceProvider.php      <-- Container bindings & IoC configuration
+├── controllers/CBController.php        <-- Same public API, delegates to actions/
+├── helpers/CRUDBooster.php, CB.php     <-- Same static API, delegates to contracts
+└── CRUDBoosterServiceProvider.php      <-- Container bindings
 ```
 
 ---
@@ -295,26 +267,19 @@ Currently, `CBController::input_assignment()` has a 200-line `switch($ro['type']
 **New SOLID Design**:
 1. `FieldHandlerInterface`:
 ```php
-namespace crocodicstudio\crudbooster\Contracts\Forms;
+namespace crocodicstudio\crudbooster\contracts\Forms;
 
 interface FieldHandlerInterface
 {
     public function supports(string $type): bool;
-    
-    public function beforeSave(
-        array $fieldConfig,
-        mixed $value,
-        array &$savePayload,
-        ?int $recordId = null
-    ): void;
 
-    public function afterSave(
-        array $fieldConfig,
-        mixed $value,
-        int|string $recordId
-    ): void;
+    public function beforeSave(array $field, mixed $value, array &$payload, FormContext $context): void;
+
+    public function afterSave(array $field, mixed $value, FormContext $context): void;
 }
 ```
+`FormContext` carries the module's table, primary key, the mode (create/edit) and the record id. The record id
+alone is not enough, because pivot handlers also need the owning table to find their foreign keys.
 
 2. Dedicated Handlers (SRP):
 - `UploadFieldHandler`: Handles file validation, disk storage, image resizing, and path generation.
@@ -325,7 +290,7 @@ interface FieldHandlerInterface
 Developers or plugins can register custom field types dynamically:
 ```php
 $registry->register('signature', new SignatureFieldHandler());
-$registry->register('s3_file', new S3UploadFieldHandler());
+$registry->register('upload', S3UploadFieldHandler::class); // replace a built-in type
 ```
 Core controllers no longer need to be modified when new UI field types are introduced.
 
@@ -341,16 +306,10 @@ namespace crocodicstudio\crudbooster\Contracts\Grid;
 
 interface GridQueryBuilderInterface
 {
-    public function buildQuery(
-        string $tableName,
-        array $columns,
-        array $options = []
-    ): \Illuminate\Database\Query\Builder;
+    // Returns the prepared query plus the columns resolved for the views (field, field_with, type_data...).
+    public function buildQuery(string $table, string $primaryKey, array $columns, array $options = []): GridQuery;
 
-    public function applyFilters(
-        \Illuminate\Database\Query\Builder $query,
-        array $filterParams
-    ): \Illuminate\Database\Query\Builder;
+    public function applyFilters(Builder $query, array $filterParams): bool;
 }
 ```
 
@@ -365,8 +324,6 @@ Controllers and blade directives only ask `PermissionCheckerInterface`, making i
 
 ## 7. Migration & Implementation Roadmap
 
-To maintain total stability and avoid regressions across the existing 94 tests, the redesign will follow a phased, incremental approach:
-
 ```mermaid
 flowchart LR
     P1["Phase 1\nContracts & IoC"] --> P2["Phase 2\nSecurity & Audit"]
@@ -376,44 +333,81 @@ flowchart LR
     P5 --> P6["Phase 6\nModern Resource API"]
 ```
 
-### Phase 1: Contracts & Service Container Setup
-- Define the interfaces in `src/contracts/`.
-- Bind interfaces to default implementations in `CRUDBoosterServiceProvider`.
-- Keep the legacy static helper and controller APIs unchanged.
-- Run tests (`phpunit`) to verify zero disruption. **Implemented.**
+Before Phase 3, `tests/Feature/CrudBehaviourTest.php` pinned down what a classic module does today. It covers
+every field type, joins, subquery columns, search, filters, soft deletes, hooks and their order, bulk actions,
+export and lookups. Those tests passed against the pre-refactor code, except where a bug was fixed on purpose
+(see section 9), and they pass unchanged after it.
 
-### Phase 2: Security, Permissions & Audit Logging
-- Extract `PermissionManager` (implementing `PermissionCheckerInterface`) using existing `CmsPrivilege` / `CmsPrivilegeRole` models.
-- Extract `AuditLogger` (implementing `AuditLoggerInterface`) using `CmsLog` model.
-- Delegate `CRUDBooster::myId()`, `CRUDBooster::isView()`, `CRUDBooster::isCreate()`, `CRUDBooster::isRead()`, `CRUDBooster::isUpdate()`, `CRUDBooster::isDelete()`, and `CRUDBooster::insertLog()` to these services.
-- Verify tests pass. **Implemented.**
+### Phase 1: Contracts & Service Container Setup — **Implemented.**
+### Phase 2: Security, Permissions & Audit Logging — **Implemented.**
+`CRUDBooster::myId()`, `isSuperadmin()`, `isView/Create/Read/Update/Delete()` and `insertLog()` delegate to
+the security and audit contracts.
 
-### Phase 3: Schema Inspector & Grid Query Builder
-- Extract database column reflection and primary key caching into `SchemaInspector`.
-- Extract index query construction, joins, and filter parsing into `GridQueryBuilder`.
-- Delegate `CBController::getIndex()` query creation to `GridQueryBuilder`.
-- Schema metadata and filter parsing are now behind `SchemaInspectorInterface` and `GridFilterParserInterface`; the full query builder extraction remains the next step.
-- Verify grid rendering, pagination, and sorting tests pass.
+### Phase 3: Schema Inspector & Grid Query Builder — **Implemented.**
+- `SchemaInspector` also owns column types and nullability (same cache keys as 5.x).
+- `GridQueryBuilder` builds the whole index query and `GridRowRenderer` the cell HTML.
 
-### Phase 4: Form Processor & Field Handler Registry
-- Build `FieldHandlerRegistry` with standard handlers (`UploadFieldHandler`, `PasswordFieldHandler`, `RelationshipFieldHandler`).
-- Extract `validation()` and `input_assignment()` into `FormProcessor`.
-- Verify form submissions, validations, and uploads in playground and test suite.
+### Phase 4: Form Processor & Field Handler Registry — **Implemented.**
+- `validation()` and `input_assignment()` stay public on `CBController`, because modules override and call them.
+  They delegate to `FormValidator` and `FormProcessor`.
+- The after-save loop (pivot tables, child rows) became each handler's `afterSave()`.
+- Uploads moved to `FileUploader`. `CRUDBooster::uploadFile()` and `uploadBase64()` delegate to it.
+- Password hashing depends on the field name (`PASSWORD_FIELDS_CANDIDATE`), not on the `password` type, so it
+  lives in `BaseFieldHandler` for every type instead of in a separate `PasswordFieldHandler`.
 
-### Phase 5: Action Orchestrator Refactoring
-- Decompose `CBController`'s monolithic methods into discrete actions:
-  - `IndexAction`, `SaveAction`, `DeleteAction`, `DetailAction`, `ExportAction`, `ImportAction`.
-- `CBController` methods become clean, thin delegates to these Actions.
-- Ensure all 94 PHPUnit tests and playground workflows continue to pass with 100% green status.
+### Phase 5: Action Orchestrator Refactoring — **Implemented.**
+- `CBController` shrank from 1,790 to about 440 lines, and most of the rest are its public properties and
+  hook stubs. Each endpoint calls `cbLoader()` and then `app(SomeAction::class)->execute($this, ...)`.
+- Actions read the controller's live properties and call its hooks and overridable methods (`getIndex()`,
+  `validation()`, `input_assignment()`, `actionButtonSelected()`). This keeps the 5.x behaviour of hooks that
+  change `$this->arr` or `$this->return_url`, and of modules that override one step.
 
-### Phase 6 (Bonus): Optional Modern CrudController API
-- Add a modern, fluent module definition syntax for developers creating brand-new modules in Laravel 12/13, while preserving classic `CBController` for legacy modules.
+### Phase 6 (Bonus): Optional Modern CrudController API — **Implemented.**
+`modern\CrudController` + `CrudDefinition`, `Column` and `Field` builders. The definition becomes a
+`compatibility\CrudConfig`, which is applied to the classic properties, so everything downstream is shared.
+See [docs/en/how-to-extend.md](en/how-to-extend.md).
 
 ---
 
 ## 8. Summary of Benefits
 
-1. **Maintainability**: `CBController.php` shrinks from 1,790 lines to ~200 lines of clear delegation.
+1. **Maintainability**: `CBController.php` shrinks from 1,790 lines to ~440, most of it the documented public properties and hook stubs.
 2. **Testability**: Every component (Query Builder, Form Processor, Field Handlers, Permissions) can be unit-tested independently with mocks.
 3. **Extensibility**: Adding custom fields or export drivers requires writing a single class and registering it, without modifying vendor code.
 4. **Reliability**: Legacy projects upgrade with zero breaking changes; classic controllers and static helper methods continue to behave identically.
+
+---
+
+## 9. Implementation Notes
+
+### Deviations from the original plan
+- **Directory case**: lowercase domain directories (see section 4).
+- **No `CBControllerBridge`**: each endpoint delegates in one line, so a trait or delegator would only add
+  indirection.
+- **`CrudConfig` is a snapshot, not the actions' input**: hooks may change controller properties mid-request,
+  so actions read the controller. `CrudConfig` links the classic properties and the fluent API, and
+  `CBController::crudConfig()` exposes it read-only.
+- **`ImportAction` and `LookupAction`** expose one method per step or endpoint instead of `execute()`, because
+  each covers several routes.
+- **`ExporterInterface::label()`**: the export dialog lists the registered formats, so custom exporters show up
+  in the UI.
+- **`AuditLogger` applies the `api_debug_mode` check** that `CRUDBooster::insertLog()` used to do, so every
+  caller follows the same policy.
+
+### Bugs fixed along the way
+Found by the characterization tests or while moving code:
+- A `child` field submitted without rows inserted an empty child row, which failed on NOT NULL columns.
+- The `googlemaps` form component crashed with "Array to string conversion" (`$row->$form['latitude']` parses
+  differently since PHP 7).
+- The `str_limit` column option called `str_limit()`, which Laravel 6 removed.
+- Audit log entries lost `created_at` in the Phase 2 extraction.
+- `hide_form` was passed to `unserialize()` with objects allowed (PHP object injection). It now allows plain
+  values only.
+- The select2 `find-data` lookup interpolated the search term into SQL when a `format` was set. It is now a
+  bound parameter.
+- A bare `unique` rule used a table literally named "unique". It now means the module's table.
+- A string `$orderby` with a qualified column (`"table.column,desc"`) produced `table.table.column`.
+- `getIndex()` no longer turns a string `$orderby` into an array, which broke a second call on the same instance.
+- The `where[column]=value` index parameter used the table of the last listed column instead of the
+  module's table.
+- Import no longer calls `exit()` when creating a related row fails; the error surfaces as an exception.
