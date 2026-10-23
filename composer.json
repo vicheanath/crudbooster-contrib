@@ -58,13 +58,29 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "test:mysql": [
+            "@putenv CB_TEST_DB=mysql",
+            "@putenv DB_HOST=127.0.0.1",
+            "@putenv DB_PORT=3307",
+            "@putenv DB_DATABASE=crudbooster_test",
+            "@putenv DB_USERNAME=crudbooster",
+            "@putenv DB_PASSWORD=secret",
+            "phpunit"
+        ],
+        "playground": "@php bin/playground"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "process-timeout": 0
     },
     "support": {
         "issues": "https://github.com/vicheanath/crudbooster-contrib/issues",
         "source": "https://github.com/vicheanath/crudbooster-contrib"
+    },
+    "scripts-descriptions": {
+        "test": "Run the test suite on SQLite",
+        "test:mysql": "Run the test suite on the docker-compose MySQL service",
+        "playground": "Manage the local Laravel playground app (composer playground -- help)"
     }
 }

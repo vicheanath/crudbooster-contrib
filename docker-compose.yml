@@ -1,0 +1,30 @@
+# Optional services for local development. SQLite works without any of this.
+#   docker compose up -d                       start MySQL + Mailpit
+#   php bin/playground setup --mysql --mailpit use them in the playground app
+#   composer test:mysql                        run the test suite against MySQL
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: crudbooster
+      MYSQL_USER: crudbooster
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-psecret"]
+      interval: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:v1.21
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web inbox: http://localhost:8025
+
+volumes:
+  mysql-data:

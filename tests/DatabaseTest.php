@@ -46,6 +46,17 @@ class DatabaseTest extends TestCase
         }
     }
 
+    public function test_seeder_is_idempotent_and_sets_the_forgot_password_subject()
+    {
+        DB::table('cms_email_templates')->where('slug', 'forgot_password_backend')->update(['subject' => null]);
+
+        $this->seed(\crocodicstudio\crudbooster\database\seeds\CBSeeder::class);
+
+        $templates = DB::table('cms_email_templates')->where('slug', 'forgot_password_backend')->get();
+        $this->assertCount(1, $templates);
+        $this->assertSame('Your new password', $templates[0]->subject);
+    }
+
     public function test_table_columns_listing_on_mysql()
     {
         if (DB::getDriverName() !== 'mysql') {

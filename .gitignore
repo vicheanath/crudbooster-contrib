@@ -1,7 +1,25 @@
-.idea
+# Dependencies (this is a library: consumers resolve their own versions)
 /vendor
+composer.lock
+
+# Local Laravel app created by `php bin/playground setup`
+/playground
+
+# Test and tool caches
+.phpunit.cache
+.phpunit.result.cache
+/coverage
+.php-cs-fixer.cache
+
+# Local environment
+.env
+docker-compose.override.yml
+
+# Editors and OS
+.idea
 *.iml
+.vscode
+.DS_Store
+Thumbs.db
 out
 gen
-composer.lock
-.phpunit.cache
