@@ -5,6 +5,7 @@ I have several projects built with **CRUDbooster**, but the original project is 
 [![Latest Stable Version](https://poser.pugx.org/vicheanath/crudbooster/v/stable)](https://packagist.org/packages/vicheanath/crudbooster)
 [![Tests](https://github.com/vicheanath/crudbooster-contrib/actions/workflows/tests.yml/badge.svg)](https://github.com/vicheanath/crudbooster-contrib/actions/workflows/tests.yml)
 [![License](https://poser.pugx.org/vicheanath/crudbooster/license)](https://packagist.org/packages/vicheanath/crudbooster)
+[![Docs](https://img.shields.io/badge/docs-online-blue)](https://vicheanath.github.io/crudbooster-contrib/)
 
 > Laravel CRUD Generator, Make a Web Application Just In Minutes, Even With Less Code and fewer Steps !
 
@@ -23,6 +24,8 @@ php artisan crudbooster:install
 Coming from `crocodicstudio/crudbooster` 5.x? Read [UPGRADE.md](UPGRADE.md). Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 ## Let's Get Started
+📖 **Documentation site: https://vicheanath.github.io/crudbooster-contrib/**
+
 ### [Installation](/docs/en/installation.md)
 ### [Documentation](/docs/en/index.md)
 

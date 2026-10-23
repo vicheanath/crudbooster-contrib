@@ -21,3 +21,7 @@
 /CONTRIBUTING.md    export-ignore
 /docker-compose.yml export-ignore
 /phpunit.xml.dist   export-ignore
+/package.json       export-ignore
+/package-lock.json  export-ignore
+/docs/.vitepress    export-ignore
+/docs/index.md      export-ignore
