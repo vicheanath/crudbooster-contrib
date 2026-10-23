@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Contributor setup: `bin/playground` (local Laravel app wired to the repo), optional Docker MySQL + Mailpit, `composer test:mysql`, CONTRIBUTING.md and issue/PR templates.
+- Forgot-password email had no subject, and every `crudbooster:update` added another copy of its template.
+
 ## v7.0.0
 
 First release as `vicheanath/crudbooster`: the classic CRUDBooster 5.x line on current PHP and Laravel.

@@ -34,18 +34,13 @@ Dear Developer, you are not end new user, to use CRUDBooster, **Laravel knowledg
 
 ## Contribution
 
-All ways to contribute are welcome. 
+All ways to contribute are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers the local playground (a Laravel app wired to this repository), running the tests, and opening a pull request. The short version:
 
-#### Changing the source code
-
-To contribute directly to the source code:
-
-- Fork the repository
-- Clone your forked repo to your machine ```git clone https://github.com/YOUR_USERNAME/CRUDBooster.git```
-- Make your changes, corrections, or improvements
-- Make the commits to your local machine
-- Push the commits to your forked repo on github 
-- Create a pull request
+```bash
+composer install
+php bin/playground setup && php bin/playground serve   # http://127.0.0.1:8000/admin/login
+composer test
+```
 
 #### Attention
 
