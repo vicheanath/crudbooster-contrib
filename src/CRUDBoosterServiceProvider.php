@@ -4,6 +4,17 @@ use crocodicstudio\crudbooster\commands\CrudboosterVersionCommand;
 use crocodicstudio\crudbooster\commands\Mailqueues;
 use crocodicstudio\crudbooster\database\seeds\CBSeeder;
 use crocodicstudio\crudbooster\helpers\LegacyNoticeHandler;
+use crocodicstudio\crudbooster\contracts\Audit\AuditLoggerInterface;
+use crocodicstudio\crudbooster\contracts\Grid\GridFilterParserInterface;
+use crocodicstudio\crudbooster\contracts\Security\AuthenticationServiceInterface;
+use crocodicstudio\crudbooster\contracts\Security\PermissionCheckerInterface;
+use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
+use crocodicstudio\crudbooster\services\AdminAuthenticationService;
+use crocodicstudio\crudbooster\services\AuditLogger;
+use crocodicstudio\crudbooster\services\GridFilterParser;
+use crocodicstudio\crudbooster\services\PermissionManager;
+use crocodicstudio\crudbooster\services\SessionAuthenticationService;
+use crocodicstudio\crudbooster\services\SchemaInspector;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -75,6 +86,13 @@ class CRUDBoosterServiceProvider extends ServiceProvider
    
     private function registerSingleton()
     {
+        $this->app->bind(AuthenticationServiceInterface::class, SessionAuthenticationService::class);
+        $this->app->bind(PermissionCheckerInterface::class, PermissionManager::class);
+        $this->app->bind(AuditLoggerInterface::class, AuditLogger::class);
+        $this->app->bind(GridFilterParserInterface::class, GridFilterParser::class);
+        $this->app->bind(SchemaInspectorInterface::class, SchemaInspector::class);
+        $this->app->bind(SessionAuthenticationService::class);
+
         $this->app->singleton('crudbooster', function ()
         {
             return true;
