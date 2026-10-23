@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Delete confirmation uses SweetAlert2's `Swal.fire()` on pages that load it. SweetAlert2 also takes over the global `swal`, so the legacy call silently never deleted. Extra options via the new `SWEETALERT2_DELETE_OPTIONS` config key.
+- UPGRADE.md: apps that copied the CRUDBooster helper class into `autoload.files` must remove it.
 - Contributor setup: `bin/playground` (local Laravel app wired to the repo), optional Docker MySQL + Mailpit, `composer test:mysql`, CONTRIBUTING.md and issue/PR templates.
 - Forgot-password email had no subject, and every `crudbooster:update` added another copy of its template.
 

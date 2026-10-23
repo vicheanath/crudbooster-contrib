@@ -80,6 +80,12 @@ return [
     */
     'FCM_SERVICE_ACCOUNT' => env('CB_FCM_SERVICE_ACCOUNT'),
 
+    /*
+    * Extra SweetAlert2 options for the delete confirmation, used on pages that load SweetAlert2
+    * (window.Swal), e.g. ['width' => '500px', 'reverseButtons' => true, 'customClass' => 'my-class'].
+    */
+    'SWEETALERT2_DELETE_OPTIONS' => [],
+
     'LEGACY_NOTICE_COMPAT' => env('CB_LEGACY_NOTICE_COMPAT', true),
 
     /*
