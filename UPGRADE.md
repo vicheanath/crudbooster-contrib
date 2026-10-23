@@ -72,8 +72,6 @@ generated modules rely on the PHP 7 behaviour, so these warnings are ignored ins
 and `app/Http/Controllers`. Disable with `CB_LEGACY_NOTICE_COMPAT=false` to surface them.
 
 ### Other behaviour changes
-- **Validation:** required fields submitted empty are validated again. Laravel's `ConvertEmptyStringsToNull` made
-  them skip validation.
 - **API tokens:** these now really last 2880 minutes (48h). They used to expire after 2880 seconds.
 - **Seeder:** `CBSeeder` is namespaced `crocodicstudio\crudbooster\database\seeds\CBSeeder`.
   `php artisan db:seed --class=CBSeeder` still works.

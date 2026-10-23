@@ -857,9 +857,9 @@ class CBController extends Controller
             $ai = [];
             $name = $di['name'];
 
-            // Empty inputs arrive as null (ConvertEmptyStringsToNull): still validate them when the field is required.
-            $submittedEmpty = array_key_exists($name, $request_all) && (@$di['required'] || str_contains((string) @$di['validation'], 'required'));
-            if (! isset($request_all[$name]) && ! $submittedEmpty) {
+            // Empty inputs (null via ConvertEmptyStringsToNull) are skipped, as in 5.x: modules commonly
+            // declare hidden `required` fields that hook_before_add/edit fills in after validation.
+            if (! isset($request_all[$name])) {
                 continue;
             }
 
@@ -1253,7 +1253,8 @@ class CBController extends Controller
         $this->cbLoader();
         $row = DB::table($this->table)->where($this->primary_key, $id)->first();
 
-        if (! CRUDBooster::isRead() && $this->global_privilege == false || $this->button_edit == false) {
+        // The edit form needs update permission (postEditSave enforces it too); read-only roles were shown the form.
+        if (! CRUDBooster::isUpdate() && $this->global_privilege == false || $this->button_edit == false) {
             CRUDBooster::insertLog(cbLang("log_try_edit", [
                 'name' => $row->{$this->title_field},
                 'module' => CRUDBooster::getCurrentModule()->name,
