@@ -52,6 +52,23 @@ The admin UI moves from AdminLTE 2.3.8 (Bootstrap 3.4) to **AdminLTE 4.10 (Boots
   unchanged, so stored `fa fa-*` module and menu icons and custom scripts keep working. The AdminLTE 2 files stay
   in `assets/adminlte` for custom views that load its plugins.
 
+### Security: front-end libraries updated
+Libraries with published advisories are updated to the newest release that works with the bundled plugins:
+- jQuery 2.2.3 → **3.7.1**, with jQuery Migrate 3.6.0 (muted) for jQuery 1/2 APIs that older plugins and custom
+  scripts still call. Not 4.0, which removes APIs the date and time pickers use.
+- Moment 2.13.0 → **2.31.0** (ReDoS fixes), same path.
+- DataTables 1.10.7 → **2.3.8** with Bootstrap 5 styling, in `assets/datatables`.
+- Select2 4.0.2 → **4.1.0**, Lightbox2 2.9.0 → **2.12.0**, Summernote (classic build) 0.8.1 → **0.9.1**, all at
+  their old paths so custom pages that load them get the fixes too.
+- Statistic builder: jQuery UI 1.11.4 and Raphaël 2.1.0 from CDNs → **1.14.2** and **2.3.0**, bundled.
+- Docs site: Vite is pinned to 6.4.5 (`overrides` in `package.json`) because VitePress 1.6.4 asks for Vite 5, which
+  has no patched release. `npm audit` reports no vulnerabilities.
+
+### Fixed (front end)
+- The grid's bulk-action confirmation never opened: a line break inside a JavaScript string stopped the whole
+  script, which also held the responsive-table toggle.
+- The statistic builder's widget panel came back empty after dropping a widget.
+
 ### Changed
 - A `header` field's `'collapsed' => true` now starts its section folded and `false` keeps it open; both were
   inverted. Sections without the option still start open.
