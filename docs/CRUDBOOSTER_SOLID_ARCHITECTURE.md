@@ -445,6 +445,67 @@ Tests are split into two PHPUnit suites (`composer test:unit`, `composer test`):
 The seeder keeps its plain inserts: it runs during installation and upgrades, where model behaviour such as
 casts adds nothing.
 
+### Phase 9: A code-first resource layer — **Implemented.**
+Phases 1–8 cleaned up the internals but kept the developer workflow: generate a module from a table, then edit
+arrays in `cbInit()`. Phase 9 adds a second front end on the same services, built for developers instead of
+generation. It lives in its own namespace, `CrudBooster\` (`core/`), so it is free of the 5.x API's constraints
+while the classic layer stays untouched.
+
+```mermaid
+flowchart TD
+    subgraph Classic ["Classic layer (unchanged)"]
+        Module["CBController modules\n(cms_moduls rows, cbInit arrays)"]
+    end
+    subgraph Panel ["Resource layer (CrudBooster\\)"]
+        PanelReg["Panel registry\n(discovery, plugins, render hooks)"]
+        Resource["Resource: Table / Form / Detail\nColumns, Fields, Filters, Actions"]
+        Page["Page: view + data() / submit()"]
+        Ctrl["ResourceController / PageController"]
+        Authz["Authorizer\n(policy, then privileges)"]
+    end
+    subgraph Shared ["Shared"]
+        Auth["Login session, CBBackend"]
+        Layout["admin_template + sidebar"]
+        Priv["cms_privileges_roles"]
+        Audit["AuditLoggerInterface"]
+    end
+    Module --> Auth & Layout & Priv & Audit
+    PanelReg --> Resource & Page
+    Ctrl --> Resource & Page & Authz & Audit
+    Ctrl --> Auth
+    Ctrl --> Layout
+    Authz --> Priv
+```
+
+Design rules:
+1. **Eloquent first.** A resource names a model; relationships, casts, scopes, events and policies work as
+   in any Laravel code. Classic modules keep `DB::table()` (Phase 8, rule 3).
+2. **Components are classes, not array keys.** A column, field, filter or action is an object with
+   autocompleted options and its own Blade view. A new type is a subclass, so no registry has to be
+   edited (the classic layer's `FieldHandlerRegistry` stays for `cbInit()` types).
+3. **Closures go through the container.** Every option that takes a closure can ask for `$record`,
+   `$state`, `$operation` or any service by name.
+4. **The form is the whitelist.** Only declared, visible, enabled fields are read from the request. Rules
+   come from the fields, choices are validated against their options or the related table, and records
+   are saved with `forceFill()->save()` in a transaction.
+5. **Routes come from classes, not the database.** Resources and pages are discovered or registered at
+   boot. Their routes are named and support `route:cache`. A slug shared by two classes fails at boot.
+6. **Same session, layout and privileges.** Resource routes run behind `CBBackend`. The admin layout gained
+   an opt-in `page_header` section and two render hooks; the sidebar appends panel links. Without a policy,
+   abilities map onto the classic privilege matrix through the module path (the slug).
+   `crudbooster:sync-panel` creates those modules with no controller, so `CBRouter` never routes them.
+
+| Concern | Classic | Resource layer |
+| :--- | :--- | :--- |
+| Entry point | `CBController` + `cbInit()` | `Resource` / `Page` subclasses |
+| Registration | `cms_moduls` row | `app/Admin/*` discovery, `Panel::resources()`, plugins |
+| Customisation | `hook_*()`, `$this->col` / `$this->form` arrays | Lifecycle methods, component subclasses, render hooks |
+| Authorization | `PermissionCheckerInterface` (privileges) | `Authorizer` (policy, then privileges) |
+| Scaffolding | Module Generator (UI) | `crudbooster:make-resource --generate`, `crudbooster:make-page` |
+
+Covered by `tests/Feature/PanelTest.php` (requests through a resource, a read-only resource, a page and a
+plugin, as superadmin and as a standard admin), `PanelCommandsTest.php` and `tests/Unit/Panel`.
+
 ---
 
 ## 8. Summary of Benefits

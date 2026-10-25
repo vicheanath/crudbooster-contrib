@@ -2,6 +2,10 @@
 ## Table Of Contents
 - [How To Install/Update](./installation.md)
 - [How To Create A Module (CRUD)](./how-to-create-module.md)
+- **Resources & Pages (code-first)**
+  - [Resources: Code-First Admin Pages](./panel.md)
+  - [Custom Pages](./panel-pages.md)
+  - [Extending The Panel](./panel-extending.md)
 - **Grid Data Column Section**
   - [How To Add Column In Grid Data](./how-to-add-column.md)
   - [How To Join Table In Grid Data](./how-to-join-in-grid-data.md)

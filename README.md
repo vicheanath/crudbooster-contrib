@@ -23,6 +23,39 @@ php artisan crudbooster:install
 
 Coming from `crocodicstudio/crudbooster` 5.x? Read [UPGRADE.md](UPGRADE.md). Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
+### Two ways to build screens
+- **Classic modules**: generate a CRUD from a table with the Module Generator and customise it in `cbInit()`.
+  Unchanged from 5.x.
+- **Resources and pages**: code-first classes on Eloquent models, with typed columns, fields, filters and actions,
+  policies, plugins and generators. See [Resources: Code-First Admin Pages](/docs/en/panel.md).
+
+```php
+class ProductResource extends Resource
+{
+    protected static string $model = Product::class;
+
+    public function table(Table $table): Table
+    {
+        return $table->columns([
+            TextColumn::make('name')->searchable()->sortable(),
+            TextColumn::make('category.name'),
+            TextColumn::make('price')->money('$'),
+        ]);
+    }
+
+    public function form(Form $form): Form
+    {
+        return $form->schema([
+            TextInput::make('name')->required(),
+            Select::make('category_id')->relationship('category', 'name'),
+            TextInput::make('price')->numeric(),
+        ]);
+    }
+}
+```
+
+Both use the same login, layout, privileges and audit log, so they can run side by side in one app.
+
 ## Let's Get Started
 📖 **Documentation site: https://vicheanath.github.io/crudbooster-contrib/**
 

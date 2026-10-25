@@ -21,10 +21,13 @@
     <source>
         <include>
             <directory>src</directory>
+            <directory>core</directory>
         </include>
         <exclude>
             <directory>src/assets</directory>
             <directory>src/views</directory>
+            <directory>core/resources</directory>
+            <directory>core/Console/stubs</directory>
         </exclude>
     </source>
     <php>

@@ -81,6 +81,7 @@
     </style>
 
     @stack('head')
+    {{ app(\CrudBooster\Panel\Panel::class)->renderHooks('head') }}
 </head>
 @php
     // The AdminLTE 2 skin chosen per privilege (skin-blue, skin-red-light, ...) still picks the
@@ -104,7 +105,10 @@
             <?php
             $module = CRUDBooster::getCurrentModule();
             ?>
-            @if($module)
+            {{-- A page that defines its own header (resources and pages of the panel) replaces the module header. --}}
+            @hasSection('page_header')
+                @yield('page_header')
+            @elseif($module)
               <div class="row align-items-center g-2">
                 <div class="col-md">
                 <h1 class="cb-page-title">
@@ -230,6 +234,7 @@
 </script>
 
 @stack('bottom')
+{{ app(\CrudBooster\Panel\Panel::class)->renderHooks('body.end') }}
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the

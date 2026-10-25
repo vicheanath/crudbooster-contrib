@@ -82,6 +82,9 @@
                     </li>
                 @endforeach
 
+                {{-- Resources, pages and links registered with the panel (CrudBooster\Panel\Panel). --}}
+                @include('cb::navigation')
+
                 @if(CRUDBooster::isSuperadmin())
                     @php
                         $groupSetting = app(\crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface::class)->groups();

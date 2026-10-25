@@ -42,7 +42,8 @@
     },
     "autoload": {
         "psr-4": {
-            "crocodicstudio\\crudbooster\\": "src/"
+            "crocodicstudio\\crudbooster\\": "src/",
+            "CrudBooster\\": "core/"
         }
     },
     "autoload-dev": {
