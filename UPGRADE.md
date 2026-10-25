@@ -95,6 +95,15 @@ attributes and `$(el).modal()` calls onto Bootstrap 5. Check these if you custom
 - **DataTables 2** replaces 1.10. `$(el).DataTable({...})` is unchanged; pages that load
   `assets/adminlte/plugins/datatables/` themselves should switch to `assets/datatables/`.
 
+### Resources and pages (optional)
+The code-first resource layer (`CrudBooster\` namespace, see [docs/en/panel.md](docs/en/panel.md)) needs no setup:
+existing modules are untouched, and nothing changes until you add a resource or page. If you overrode the layout views
+in `resources/views/vendor/crudbooster`, copy these additions into them:
+- `admin_template.blade.php`: wrap the module header in `@hasSection('page_header') @yield('page_header') @elseif($module)
+  ... @endif`, and add `{{ app(\CrudBooster\Panel\Panel::class)->renderHooks('head') }}` before `</head>` and
+  `{{ app(\CrudBooster\Panel\Panel::class)->renderHooks('body.end') }}` before `</body>`.
+- `sidebar.blade.php`: add `@include('cb::navigation')` after the `CRUDBooster::sidebarMenu()` loop.
+
 ### Other behaviour changes
 - **API tokens:** these now really last 2880 minutes (48h). They used to expire after 2880 seconds.
 - **Seeder:** `CBSeeder` is namespaced `crocodicstudio\crudbooster\database\seeds\CBSeeder`.

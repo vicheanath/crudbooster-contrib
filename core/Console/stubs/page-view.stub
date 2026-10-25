@@ -1,0 +1,6 @@
+{{-- The body of the {{ title }} page. It is shown inside the CRUDBooster admin layout. --}}
+<div class="card">
+    <div class="card-body">
+        <p class="mb-0">{{ __('Edit :view to fill this page.', ['view' => '{{ path }}']) }}</p>
+    </div>
+</div>

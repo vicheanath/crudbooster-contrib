@@ -94,6 +94,9 @@ class CRUDBoosterServiceProvider extends ServiceProvider
 
         $this->registerSingleton();
 
+        // Resources and pages (CrudBooster\ namespace), on top of the classic modules.
+        $this->app->register(\CrudBooster\PanelServiceProvider::class);
+
         if($this->app->runningInConsole()) {
             $this->commands('crudboosterinstall');
             $this->commands('crudboosterupdate');

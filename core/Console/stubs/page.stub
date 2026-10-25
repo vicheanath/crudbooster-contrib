@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }};
+
+use CrudBooster\Pages\Page;
+
+class {{ class }} extends Page
+{
+    protected static ?string $navigationIcon = 'fa fa-file-o';
+
+    protected static string $view = '{{ view }}';
+
+    /**
+     * Variables for the view; arguments are injected from the container.
+     */
+    public function data(): array
+    {
+        return [];
+    }
+}

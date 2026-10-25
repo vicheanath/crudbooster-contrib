@@ -89,6 +89,21 @@ return [
     'LEGACY_NOTICE_COMPAT' => env('CB_LEGACY_NOTICE_COMPAT', true),
 
     /*
+    * The resource and page layer (CrudBooster\ namespace, see docs/en/panel.md).
+    * discover: namespace => directory; the resources and pages found there are registered.
+    * disk: where FileUpload stores files and ImageColumn reads them.
+    * middleware: added after "web" and CRUDBooster's login check on every panel route.
+    */
+    'PANEL' => [
+        'discover' => [
+            'App\\Admin\\Resources' => app_path('Admin/Resources'),
+            'App\\Admin\\Pages' => app_path('Admin/Pages'),
+        ],
+        'disk' => 'public',
+        'middleware' => [],
+    ],
+
+    /*
     * NOTE :
     * Make sure yo clear your config cache by using command : php artisan config:clear
     */

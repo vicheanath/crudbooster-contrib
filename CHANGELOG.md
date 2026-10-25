@@ -2,6 +2,33 @@
 
 ## Unreleased
 
+### Resources and pages: a code-first admin layer (no changes needed in existing modules)
+A second way to build admin screens, next to classic modules. It lives in the new `CrudBooster\` namespace
+(`core/`), works with Eloquent models, and is defined in code instead of in the Module Generator. Guides:
+`docs/en/panel.md`, `docs/en/panel-pages.md`, `docs/en/panel-extending.md`.
+- **Resources** (`CrudBooster\Resources\Resource`): one class per model gives a list with search, filters,
+  sorting, pagination and row and bulk actions, plus create, edit, detail and delete pages, validation, a
+  sidebar link and audit log entries. Lifecycle hooks (`beforeCreate()`, `afterUpdate()`, ...) replace `hook_*()`.
+- **Tables:** `TextColumn`, `BadgeColumn`, `BooleanColumn` and `ImageColumn` with relationship paths
+  (`category.name`, eager loaded); `SelectFilter`, `TernaryFilter` and `Filter`; `Action` and `BulkAction`.
+- **Forms:** `TextInput`, `Textarea`, `Select` (options, relationships, many-to-many sync), `Radio`,
+  `CheckboxList`, `Toggle`, `DatePicker`, `FileUpload`, `Hidden`, `Placeholder`, `ViewField` and `Section`.
+  Validation rules come from the fields, and only the fields in the form are saved.
+- **Pages** (`CrudBooster\Pages\Page`): custom screens in the admin layout with injected `data()` and an
+  optional `submit()`.
+- **Permissions:** a model policy if there is one, otherwise the existing privilege matrix.
+  `php artisan crudbooster:sync-panel` lists resources and pages on Privileges > Edit. Replace the whole policy
+  by binding `CrudBooster\Auth\Authorizer`.
+- **Extending:** custom field, column and filter classes, plugins (`CrudBooster\Plugins\Plugin`), render hooks
+  and sidebar links through the `CrudBooster\Facades\Panel` facade.
+- **Commands:** `crudbooster:make-resource` (with `--generate` to read the table), `crudbooster:make-page`.
+- Classes in `app/Admin/Resources` and `app/Admin/Pages` are discovered; see the new `PANEL` config key.
+- The admin layout accepts a `page_header` section and the `head` / `body.end` render hooks; the sidebar lists
+  panel links after the Menu Management menus. Classic module pages render as before.
+- Playground: `Products` and `Reviews` resources and a `Store Overview` page, under "Catalog (resources)", on
+  the same tables as the classic shop modules.
+- 29 new tests (`tests/Feature/PanelTest.php`, `PanelCommandsTest.php`, `tests/Unit/Panel`).
+
 ## v7.1.0
 
 ### SOLID architecture (no changes needed in existing modules)
