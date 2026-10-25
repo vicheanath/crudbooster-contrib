@@ -10,5 +10,7 @@ class CheckboxList extends Select
 {
     protected string $view = 'cb::fields.checkbox-list';
 
+    protected ?string $component = 'CheckboxList';
+
     protected bool $multiple = true;
 }

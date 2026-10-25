@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### Tailwind CSS + React theme for resources and pages
+A second look for the resource layer, next to AdminLTE: `CB_PANEL_THEME=tailwind` (or `Panel::theme('tailwind')`).
+Classic modules keep the AdminLTE layout, and the default theme is unchanged. Guide: `docs/en/panel-themes.md`.
+- A Tailwind CSS layout with its own sidebar (Menu Management menus, panel links, superadmin tools), top bar,
+  dark mode (light / dark / system) and a mobile menu.
+- Form inputs are React components mounted on server-rendered "islands": a searchable select with keyboard
+  navigation and chips for multiple values, a drag-and-drop upload with preview and size check, password
+  reveal, input prefixes and suffixes, switches and option cards. Each island contains plain HTML that
+  submits the same names, so validation, old input and saving are unchanged, and forms work without JavaScript.
+- Confirmation dialogs instead of `window.confirm()`, and a bulk action menu that counts the selected rows.
+- Built with Vite (`npm run panel:build`) into `src/assets/panel`, which is committed and published with the
+  `cb_asset` tag, so installs need no Node.js. The layout warns when the published copy is missing or stale.
+- Theme-independent page components: `<x-cb::card>`, `<x-cb::stat>`, `<x-cb::grid>`, `<x-cb::table>`,
+  `<x-cb::button>`, `<x-cb::badge>`, `<x-cb::alert>`.
+- Extending: custom field types name a React component (`$component`, `getComponentProps()`), scripts
+  register components with `CrudBooster.register()` or `registerMount()`, the brand colour is a set of CSS
+  variables, and `CrudBooster\Themes\Theme` lets you write your own theme.
+- The superadmin sidebar menu moved into `CrudBooster\Navigation\SuperadminMenu`, shared by both layouts.
+- Fixed: switching the theme after views were rendered kept serving the old theme's views.
+- Tests: the whole resource test suite also runs on the Tailwind theme (`PanelTailwindThemeTest`), plus 18
+  Vitest component tests and a CI job that checks the committed build matches its sources.
+
 ### Resources and pages: a code-first admin layer (no changes needed in existing modules)
 A second way to build admin screens, next to classic modules. It lives in the new `CrudBooster\` namespace
 (`core/`), works with Eloquent models, and is defined in code instead of in the Module Generator. Guides:

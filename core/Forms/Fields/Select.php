@@ -23,6 +23,8 @@ class Select extends Field
 {
     protected string $view = 'cb::fields.select';
 
+    protected ?string $component = 'Select';
+
     protected array|Closure $options = [];
 
     protected ?string $relationship = null;
@@ -97,6 +99,26 @@ class Select extends Field
 
         // A list of values is its own labels.
         return array_is_list($options) ? array_combine($options, $options) : $options;
+    }
+
+    /**
+     * Options are a list of {value, label} pairs, so their order survives JSON.
+     */
+    public function getComponentProps(): array
+    {
+        $state = $this->getState();
+        $selected = array_values(array_map('strval', array_filter((array) $state, fn ($value) => $value !== null && $value !== '')));
+
+        $options = [];
+        foreach ($this->getOptions() as $value => $label) {
+            $options[] = ['value' => (string) $value, 'label' => (string) $label];
+        }
+
+        return [
+            'value' => $this->isMultiple() ? $selected : ($selected[0] ?? ''),
+            'options' => $options,
+            'multiple' => $this->isMultiple(),
+        ] + parent::getComponentProps();
     }
 
     protected function getRecordState(Model $record): mixed

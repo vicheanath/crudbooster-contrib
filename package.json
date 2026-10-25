@@ -1,14 +1,27 @@
 {
-  "name": "crudbooster-docs",
+  "name": "crudbooster-dev",
   "private": true,
   "type": "module",
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "panel:build": "vite build --config vite.panel.config.js",
+    "panel:watch": "vite build --config vite.panel.config.js --watch",
+    "panel:test": "vitest run --config vite.panel.config.js"
   },
   "devDependencies": {
-    "vitepress": "1.6.4"
+    "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@vitejs/plugin-react": "^5.2.0",
+    "jsdom": "^29.1.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3",
+    "vitepress": "1.6.4",
+    "vitest": "^5.0.5"
   },
   "overrides": {
     "vite": "6.4.5"

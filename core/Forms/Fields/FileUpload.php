@@ -17,6 +17,8 @@ class FileUpload extends Field
 {
     protected string $view = 'cb::fields.file-upload';
 
+    protected ?string $component = 'FileUpload';
+
     protected ?string $disk = null;
 
     protected string $directory = 'uploads';
@@ -85,6 +87,21 @@ class FileUpload extends Field
         }
 
         return $this->image ? 'image/*' : null;
+    }
+
+    public function getComponentProps(): array
+    {
+        $path = $this->getState();
+
+        return [
+            'value' => '',
+            'accept' => $this->getAccept(),
+            'image' => $this->image,
+            'fileUrl' => $this->getFileUrl($path),
+            'fileName' => $path ? basename($path) : null,
+            'removeName' => $this->getRemoveInputName(),
+            'maxSize' => $this->maxSize,
+        ] + parent::getComponentProps();
     }
 
     public function getRemoveInputName(): string

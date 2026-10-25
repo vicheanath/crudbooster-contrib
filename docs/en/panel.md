@@ -332,4 +332,5 @@ use CrudBooster\Facades\Panel;
 Panel::resources([ProductResource::class])->pages([SalesReport::class]);
 ```
 
-Next: [custom pages](./panel-pages.md) and [extending the panel](./panel-extending.md).
+Next: [custom pages](./panel-pages.md), [extending the panel](./panel-extending.md) and
+[themes](./panel-themes.md) (AdminLTE, or Tailwind CSS with React inputs).

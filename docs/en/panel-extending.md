@@ -41,6 +41,12 @@ class SlugInput extends Field
 
 Use it like a built-in field: `SlugInput::make('slug')->required()`.
 
+A view in the default views is used by both themes. To give the Tailwind theme its own markup, set
+`$component` to a React component (see [Your own React input](./panel-themes.md#your-own-react-input)),
+or ship a Tailwind version of the view in a [theme](./panel-themes.md#writing-your-own-theme). In
+that version, `@include('cb::fields.partials.label')` and `cb::fields.partials.help` render the
+Tailwind label and error text.
+
 What you can override:
 
 | Method | Purpose |
@@ -52,6 +58,7 @@ What you can override:
 | `dehydrate($value)` | The value written to the attribute |
 | `savesToAttribute()` + `saveRelationships(Model $record, $value)` | Save through a relationship after the record exists |
 | `render()` | Full control over the markup |
+| `$component` + `getComponentProps()` | The React component the Tailwind theme mounts, and its props |
 
 For a one-off input, `ViewField::make('location')->view('admin.fields.map-picker')` renders your view
 without a new class.

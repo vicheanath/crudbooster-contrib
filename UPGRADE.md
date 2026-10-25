@@ -115,6 +115,10 @@ in `resources/views/vendor/crudbooster`, copy these additions into them:
   ```
 - `sidebar.blade.php`: add `@include('cb::navigation')` after the `CRUDBooster::sidebarMenu()` loop.
 
+Resource and page screens can use a Tailwind CSS theme with React inputs (`CB_PANEL_THEME=tailwind`, see
+[docs/en/panel-themes.md](docs/en/panel-themes.md)). Its compiled assets ship with the package; publish them with
+`php artisan crudbooster:update` (or `vendor:publish --tag=cb_asset --force`) after each update.
+
 ### Other behaviour changes
 - **API tokens:** these now really last 2880 minutes (48h). They used to expire after 2880 seconds.
 - **Seeder:** `CBSeeder` is namespaced `crocodicstudio\crudbooster\database\seeds\CBSeeder`.
