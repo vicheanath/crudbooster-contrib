@@ -1,9 +1,9 @@
-<fieldset class="col-span-12 rounded-xl border border-gray-200 p-5 dark:border-white/10">
+<fieldset class="col-span-12 rounded-xl border p-5">
     @if($section->getHeading())
-        <legend class="px-2 text-sm font-semibold text-gray-900 dark:text-white">{{ $section->getHeading() }}</legend>
+        <legend class="px-2 text-sm font-medium">{{ $section->getHeading() }}</legend>
     @endif
     @if($section->getDescription())
-        <p class="-mt-1 mb-4 text-sm text-gray-500 dark:text-gray-400">{{ $section->getDescription() }}</p>
+        <p class="text-muted-foreground -mt-1 mb-4 text-sm">{{ $section->getDescription() }}</p>
     @endif
     <div class="grid grid-cols-12 gap-x-6 gap-y-5">
         @include('cb::forms.components', ['components' => $section->getSchema()])

@@ -13,7 +13,7 @@
     @if($resource->can('delete', $record))
         <form method="POST" action="{{ route($resource::getRouteName('destroy'), ['record' => $record->getKey()]) }}">
             @csrf @method('DELETE')
-            <button type="submit" class="cb-btn text-red-600 dark:text-red-400" data-cb-confirm="{{ __('Delete this record?') }}" data-cb-confirm-color="danger" data-cb-confirm-label="{{ __('Delete') }}">
+            <button type="submit" class="cb-btn cb-btn-destructive" data-cb-confirm="{{ __('Delete this record?') }}" data-cb-confirm-color="danger" data-cb-confirm-label="{{ __('Delete') }}">
                 <i class="fa fa-trash-o" aria-hidden="true"></i> {{ __('Delete') }}
             </button>
         </form>
@@ -23,18 +23,18 @@
 @section('content')
     {{ $panel->renderHooks('detail.before', ['resource' => $resource, 'record' => $record]) }}
 
-    <div class="cb-card">
-        <dl class="divide-y divide-gray-100 dark:divide-white/5">
+    <div class="cb-card overflow-hidden">
+        <dl class="divide-y">
             @foreach($detail->getEntries() as $entry)
                 <div class="grid gap-1 px-5 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $entry->getLabel() }}</dt>
-                    <dd class="text-sm text-gray-900 sm:col-span-2 dark:text-gray-100">{!! $entry->render($record) !!}</dd>
+                    <dt class="text-muted-foreground text-sm font-medium">{{ $entry->getLabel() }}</dt>
+                    <dd class="text-sm sm:col-span-2">{!! $entry->render($record) !!}</dd>
                 </div>
             @endforeach
         </dl>
         @if($resource::hasPage('index'))
-            <div class="border-t border-gray-200 px-5 py-3 sm:px-6 dark:border-white/10">
-                <a href="{{ $resource::url() }}" class="text-sm font-medium text-brand-600 hover:underline dark:text-brand-400"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ __('Back to :label', ['label' => $resource::getPluralLabel()]) }}</a>
+            <div class="bg-muted/50 border-t px-5 py-3 sm:px-6">
+                <a href="{{ $resource::url() }}" class="cb-btn cb-btn-ghost -ml-2.5"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{ __('Back to :label', ['label' => $resource::getPluralLabel()]) }}</a>
             </div>
         @endif
     </div>

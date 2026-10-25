@@ -105,11 +105,11 @@ jobs:
           name: coverage-clover
           path: build/clover.xml
 
-  # The Tailwind theme's React components, and a check that the committed build in
-  # src/assets/panel matches its sources (npm run panel:build).
+  # The Tailwind theme's React components (TypeScript, shadcn/ui on Base UI), and a check that the
+  # committed build in src/assets/panel matches its sources (npm run panel:build).
   panel-assets:
     runs-on: ubuntu-latest
-    name: Panel assets (React + Tailwind)
+    name: Panel assets (TypeScript + shadcn)
     steps:
       - uses: actions/checkout@v4
 
@@ -119,6 +119,9 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - name: Typecheck
+        run: npm run panel:typecheck
 
       - name: Component tests
         run: npm run panel:test

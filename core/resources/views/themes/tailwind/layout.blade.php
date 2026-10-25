@@ -10,7 +10,7 @@
     $locale = str_replace('_', '-', App::getLocale());
 @endphp
 <!DOCTYPE html>
-<html lang="{{ $locale }}" dir="{{ in_array(App::getLocale(), ['ar', 'fa']) ? 'rtl' : 'ltr' }}" class="h-full bg-gray-50 dark:bg-gray-950">
+<html lang="{{ $locale }}" dir="{{ in_array(App::getLocale(), ['ar', 'fa']) ? 'rtl' : 'ltr' }}" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,18 +59,18 @@
     {{ $panel->renderHooks('head') }}
     @stack('head')
 </head>
-<body class="h-full font-sans text-gray-900 antialiased dark:text-gray-100">
+<body class="bg-background text-foreground h-full font-sans antialiased">
 @if(method_exists($theme, 'assetsNeedPublishing') && $theme->assetsNeedPublishing())
-    <div class="bg-amber-100 px-4 py-2 text-center text-sm text-amber-900" role="alert" id="cb-assets-warning">
+    <div class="bg-amber-500/15 px-4 py-2 text-center text-sm text-amber-800 dark:text-amber-300" role="alert" id="cb-assets-warning">
         {{ __('The panel\'s assets are missing or out of date. Run') }}
-        <code class="rounded bg-amber-200 px-1">php artisan vendor:publish --tag=cb_asset --force</code>
+        <code class="rounded bg-amber-500/20 px-1 font-mono">php artisan vendor:publish --tag=cb_asset --force</code>
     </div>
 @endif
 
-<div class="fixed inset-0 z-30 hidden bg-gray-900/50 lg:hidden" data-cb-sidebar-backdrop data-cb-sidebar-close></div>
+<div class="fixed inset-0 z-30 hidden bg-black/30 supports-backdrop-filter:backdrop-blur-xs lg:hidden" data-cb-sidebar-backdrop data-cb-sidebar-close></div>
 @include('cb::partials.sidebar')
 
-<div class="flex min-h-full flex-col lg:pl-72">
+<div class="flex min-h-full flex-col lg:pl-64">
     @include('cb::partials.topbar')
 
     <main class="flex-1 px-4 py-6 sm:px-6 lg:px-8">
@@ -78,15 +78,15 @@
             <header class="mb-6">
                 @if(!empty($breadcrumbs))
                     <nav aria-label="Breadcrumb" class="mb-2">
-                        <ol class="flex flex-wrap items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                            <li><a href="{{ CRUDBooster::adminPath() }}" class="hover:text-gray-700 dark:hover:text-gray-200"><i class="fa fa-home" aria-hidden="true"></i><span class="sr-only">{{ cbLang('home') }}</span></a></li>
+                        <ol class="text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm">
+                            <li><a href="{{ CRUDBooster::adminPath() }}" class="hover:text-foreground transition-colors"><i class="fa fa-home" aria-hidden="true"></i><span class="sr-only">{{ cbLang('home') }}</span></a></li>
                             @foreach($breadcrumbs as $label => $url)
-                                <li aria-hidden="true"><i class="fa fa-angle-right text-gray-400"></i></li>
+                                <li aria-hidden="true"><i class="fa fa-angle-right opacity-60"></i></li>
                                 <li>
                                     @if($url)
-                                        <a href="{{ $url }}" class="hover:text-gray-700 dark:hover:text-gray-200">{{ $label }}</a>
+                                        <a href="{{ $url }}" class="hover:text-foreground transition-colors">{{ $label }}</a>
                                     @else
-                                        <span aria-current="page" class="text-gray-700 dark:text-gray-200">{{ $label }}</span>
+                                        <span aria-current="page" class="text-foreground">{{ $label }}</span>
                                     @endif
                                 </li>
                             @endforeach
@@ -94,9 +94,9 @@
                     </nav>
                 @endif
                 <div class="flex flex-wrap items-center justify-between gap-3">
-                    <h1 class="cb-page-title flex items-center gap-3 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                    <h1 class="cb-page-title flex items-center gap-3 text-2xl font-semibold tracking-tight">
                         @if(!empty($page_icon))
-                            <span class="flex size-9 items-center justify-center rounded-lg bg-brand-50 text-base text-brand-600 dark:bg-brand-500/15 dark:text-brand-300"><i class="{{ $page_icon }}" aria-hidden="true"></i></span>
+                            <span class="bg-muted text-foreground flex size-9 items-center justify-center rounded-lg text-base"><i class="{{ $page_icon }}" aria-hidden="true"></i></span>
                         @endif
                         {{ $page_title ?? '' }}
                     </h1>
@@ -116,7 +116,7 @@
         </div>
     </main>
 
-    <footer class="border-t border-gray-200 px-4 py-4 text-sm text-gray-500 sm:px-6 lg:px-8 dark:border-white/10 dark:text-gray-400">
+    <footer class="text-muted-foreground border-t px-4 py-4 text-sm sm:px-6 lg:px-8">
         <div class="mx-auto flex max-w-7xl flex-wrap justify-between gap-2">
             <span>&copy; {{ date('Y') }} {{ $appName }}</span>
             <span>{{ cbLang('powered_by') }} CRUDBooster</span>

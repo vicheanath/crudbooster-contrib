@@ -1,4 +1,5 @@
-import { defineConfig } from 'vite'
+import { fileURLToPath } from 'node:url'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -10,23 +11,29 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   publicDir: false,
+  // Asset URLs relative to the stylesheet, wherever public/vendor/crudbooster/panel is served from.
+  base: './',
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('./core/resources/js', import.meta.url)) },
+  },
   build: {
     outDir: 'src/assets/panel',
     emptyOutDir: true,
     target: 'es2020',
     reportCompressedSize: false,
     rollupOptions: {
-      input: 'core/resources/js/panel.jsx',
+      input: 'core/resources/js/panel.tsx',
       output: {
         entryFileNames: 'panel.js',
         chunkFileNames: 'panel-[name].js',
-        assetFileNames: 'panel[extname]',
+        // The stylesheet is panel.css; fonts keep their own (hashed) names next to it.
+        assetFileNames: (asset) => (asset.names?.some((name) => name.endsWith('.css')) ? 'panel[extname]' : 'fonts/[name]-[hash][extname]'),
       },
     },
   },
   test: {
     environment: 'jsdom',
-    include: ['core/resources/js/**/*.test.{js,jsx}'],
-    setupFiles: ['core/resources/js/test/setup.js'],
+    include: ['core/resources/js/**/*.test.{ts,tsx}'],
+    setupFiles: ['core/resources/js/test/setup.ts'],
   },
 })

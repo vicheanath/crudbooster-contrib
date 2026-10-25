@@ -26,14 +26,14 @@
             <div class="grid grid-cols-12 gap-x-6 gap-y-5 p-5 sm:p-6">
                 @include('cb::forms.components', ['components' => $form->getSchema()])
             </div>
-            <div class="flex flex-wrap items-center gap-2 border-t border-gray-200 bg-gray-50 px-5 py-3 sm:px-6 dark:border-white/10 dark:bg-white/5">
+            <div class="bg-muted/50 flex flex-wrap items-center gap-2 border-t px-5 py-3 sm:px-6">
                 <button type="submit" class="cb-btn cb-btn-primary" name="_after" value="index" id="cb-save">
                     <i class="fa fa-check" aria-hidden="true"></i> {{ __('Save') }}
                 </button>
                 @if(! $record && $resource->can('create'))
                     <button type="submit" class="cb-btn" name="_after" value="create">{{ __('Save and create another') }}</button>
                 @endif
-                <a href="{{ $return }}" class="ml-auto text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">{{ __('Cancel') }}</a>
+                <a href="{{ $return }}" class="cb-btn cb-btn-ghost ml-auto">{{ __('Cancel') }}</a>
             </div>
         </div>
     </form>

@@ -525,6 +525,10 @@ or classic modules.
    class lists are written out in full. CI rebuilds and fails on a difference.
 5. **One React per page.** `window.CrudBooster` exposes `React`, `register()`, `registerMount()`, `mount()`
    and `confirm()` for app scripts, and fires `crudbooster:ready`.
+6. **shadcn/ui, owned in the repository.** The islands are TypeScript on shadcn's `base-nova` components (Base
+   UI primitives) in `core/resources/js/components/ui`, generated with the shadcn CLI's own transforms and
+   configured by `components.json`. The Blade views and the plain-HTML fallbacks use the same Nova classes
+   and design tokens, so server-rendered and React parts match.
 
 ---
 

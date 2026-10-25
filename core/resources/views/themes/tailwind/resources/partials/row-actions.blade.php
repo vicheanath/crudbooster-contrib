@@ -5,7 +5,7 @@
         @if($action->isLink())
             <a href="{{ $action->getUrl() }}" class="cb-icon-btn {{ \CrudBooster\Themes\TailwindTheme::text($action->getColor()) }}" title="{{ $action->getLabel() }}"
                @if($action->shouldOpenUrlInNewTab()) target="_blank" rel="noopener" @endif>
-                @if($action->getIcon())<i class="{{ $action->getIcon() }}" aria-hidden="true"></i><span class="sr-only">{{ $action->getLabel() }}</span>@else<span class="px-1 text-xs font-semibold">{{ $action->getLabel() }}</span>@endif
+                @if($action->getIcon())<i class="{{ $action->getIcon() }}" aria-hidden="true"></i><span class="sr-only">{{ $action->getLabel() }}</span>@else<span class="px-1 text-xs font-medium">{{ $action->getLabel() }}</span>@endif
             </a>
         @else
             <button type="submit" form="cb-action-form" class="cb-icon-btn {{ \CrudBooster\Themes\TailwindTheme::text($action->getColor()) }}" title="{{ $action->getLabel() }}"
@@ -24,7 +24,7 @@
             <a href="{{ $resource::url('edit', $record) }}" class="cb-icon-btn" title="{{ __('Edit') }}"><i class="fa fa-pencil" aria-hidden="true"></i><span class="sr-only">{{ __('Edit') }}</span></a>
         @endif
         @if($resource->can('delete', $record))
-            <button type="submit" form="cb-delete-form" class="cb-icon-btn hover:text-red-600 dark:hover:text-red-400" title="{{ __('Delete') }}"
+            <button type="submit" form="cb-delete-form" class="cb-icon-btn hover:bg-destructive/10 hover:text-destructive" title="{{ __('Delete') }}"
                     formaction="{{ route($resource::getRouteName('destroy'), ['record' => $record->getKey()]) }}"
                     data-cb-confirm="{{ __('Delete this record?') }}" data-cb-confirm-color="danger" data-cb-confirm-label="{{ __('Delete') }}">
                 <i class="fa fa-trash-o" aria-hidden="true"></i><span class="sr-only">{{ __('Delete') }}</span>

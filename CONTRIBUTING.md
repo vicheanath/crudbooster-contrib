@@ -62,8 +62,8 @@ vendor/bin/phpunit --filter ImportExportTest
 - `tests/Feature/` drives the admin panel over HTTP as a logged-in admin. Extend `FeatureTestCase`, call
   `$this->loginAsAdmin()`, and use `$this->admin('path')` for admin URLs.
 - CI runs PHP 8.2–8.5 × Laravel 12/13 plus MySQL. Please add a test with every bug fix.
-- The panel's Tailwind theme has React components in `core/resources/js`, with Vitest tests next to them:
-  `npm install && npm run panel:test`. After changing them (or the theme's Blade views, whose classes
+- The panel's Tailwind theme has TypeScript React components in `core/resources/js` (shadcn/ui on Base UI in
+  `components/ui`), with Vitest tests next to them: `npm install && npm run panel:typecheck && npm run panel:test`. After changing them (or the theme's Blade views, whose classes
   Tailwind reads), run `npm run panel:build` and commit `src/assets/panel`. CI checks that it is up to date.
   See [Themes](docs/en/panel-themes.md#working-on-the-theme).
 
