@@ -8,6 +8,8 @@ class TextInput extends Field
 {
     protected string $view = 'cb::fields.text-input';
 
+    protected ?string $component = 'TextInput';
+
     protected string $type = 'text';
 
     protected ?int $maxLength = null;
@@ -98,6 +100,16 @@ class TextInput extends Field
     public function getSuffix(): ?string
     {
         return $this->suffix;
+    }
+
+    public function getComponentProps(): array
+    {
+        return parent::getComponentProps() + [
+            'type' => $this->type,
+            'prefix' => $this->prefix,
+            'suffix' => $this->suffix,
+            'maxLength' => $this->maxLength,
+        ];
     }
 
     public function isPassword(): bool

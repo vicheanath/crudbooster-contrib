@@ -7,6 +7,9 @@ use CrudBooster\Navigation\NavigationItem;
 use CrudBooster\Pages\Page;
 use CrudBooster\Plugins\Plugin;
 use CrudBooster\Resources\Resource;
+use CrudBooster\Themes\AdminLteTheme;
+use CrudBooster\Themes\TailwindTheme;
+use CrudBooster\Themes\Theme;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
@@ -45,6 +48,16 @@ class Panel
     protected array $navigationGroups = [];
 
     protected bool $booted = false;
+
+    /** @var array<string, Theme> */
+    protected array $themes = [];
+
+    protected ?string $theme = null;
+
+    public function __construct()
+    {
+        $this->registerTheme(new AdminLteTheme)->registerTheme(new TailwindTheme);
+    }
 
     public function resources(array $resources): static
     {
@@ -179,6 +192,64 @@ class Panel
     }
 
     /**
+     * Makes a theme available to theme(). The built-in ones are "adminlte" and "tailwind".
+     */
+    public function registerTheme(Theme $theme): static
+    {
+        $this->themes[$theme->getName()] = $theme;
+
+        return $this;
+    }
+
+    /**
+     * Picks the look of resource and page screens, overriding crudbooster.PANEL.theme:
+     * Panel::theme('tailwind'), or Panel::theme(new MyTheme).
+     */
+    public function theme(string|Theme $theme): static
+    {
+        if ($theme instanceof Theme) {
+            $this->registerTheme($theme);
+            $theme = $theme->getName();
+        }
+        if (! isset($this->themes[$theme])) {
+            throw new \InvalidArgumentException("No CRUDBooster theme [$theme] is registered.");
+        }
+        $this->theme = $theme;
+
+        if ($this->booted) {
+            $this->applyTheme();
+        }
+
+        return $this;
+    }
+
+    public function getTheme(): Theme
+    {
+        $name = $this->theme ?? (string) config('crudbooster.PANEL.theme', 'adminlte');
+
+        return $this->themes[$name] ?? throw new \InvalidArgumentException("No CRUDBooster theme [$name] is registered.");
+    }
+
+    /**
+     * Points the cb:: view namespace at the theme's views, then the default ones. Views published
+     * to resources/views/vendor/cb still come first.
+     */
+    public function applyTheme(): void
+    {
+        $paths = [];
+        foreach ((array) config('view.paths', []) as $path) {
+            if (is_dir($published = $path.'/vendor/cb')) {
+                $paths[] = $published;
+            }
+        }
+
+        $view = app('view');
+        $view->replaceNamespace('cb', [...$paths, ...$this->getTheme()->getViewPaths(), dirname(__DIR__).'/resources/views']);
+        // Views found before the switch are cached by name.
+        $view->getFinder()->flush();
+    }
+
+    /**
      * @return array<class-string<Resource>>
      */
     public function getResources(): array
@@ -286,6 +357,8 @@ class Panel
         foreach ($this->plugins as $plugin) {
             $plugin->boot($this);
         }
+
+        $this->applyTheme();
     }
 
     /**

@@ -23,5 +23,6 @@
 /phpunit.xml.dist   export-ignore
 /package.json       export-ignore
 /package-lock.json  export-ignore
+/vite.panel.config.js export-ignore
 /docs/.vitepress    export-ignore
 /docs/index.md      export-ignore

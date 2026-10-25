@@ -11,6 +11,8 @@ use Illuminate\Support\Carbon;
  */
 class DatePicker extends TextInput
 {
+    protected ?string $component = 'DatePicker';
+
     protected function setUp(): void
     {
         $this->type('date');

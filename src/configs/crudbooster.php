@@ -90,11 +90,14 @@ return [
 
     /*
     * The resource and page layer (CrudBooster\ namespace, see docs/en/panel.md).
+    * theme: "adminlte" (the classic layout) or "tailwind" (Tailwind CSS and React inputs, see
+    * docs/en/panel-themes.md). Classic modules always use the AdminLTE layout.
     * discover: namespace => directory; the resources and pages found there are registered.
     * disk: where FileUpload stores files and ImageColumn reads them.
     * middleware: added after "web" and CRUDBooster's login check on every panel route.
     */
     'PANEL' => [
+        'theme' => env('CB_PANEL_THEME', 'adminlte'),
         'discover' => [
             'App\\Admin\\Resources' => app_path('Admin/Resources'),
             'App\\Admin\\Pages' => app_path('Admin/Pages'),

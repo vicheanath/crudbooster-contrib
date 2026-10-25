@@ -1,0 +1,121 @@
+/*
+ * The Tailwind theme of the CRUDBooster panel. Built with `npm run panel:build` into
+ * src/assets/panel/panel.css. Only classes used in the files listed by @source are generated.
+ */
+/* source(none): only the @source paths below are scanned, not the whole repository. */
+@import "tailwindcss" source(none);
+
+@source "../views/themes/tailwind";
+@source "../js";
+@source "../../Themes";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * The brand colour. Override --cb-brand-* in your own stylesheet (e.g. through the "head" render
+ * hook) to rebrand without rebuilding. The defaults are Tailwind's indigo.
+ */
+@theme {
+  --color-brand-50: var(--cb-brand-50, oklch(96.2% 0.018 272.314));
+  --color-brand-100: var(--cb-brand-100, oklch(93% 0.034 272.788));
+  --color-brand-200: var(--cb-brand-200, oklch(87% 0.065 274.039));
+  --color-brand-300: var(--cb-brand-300, oklch(78.5% 0.115 274.713));
+  --color-brand-400: var(--cb-brand-400, oklch(67.3% 0.182 276.935));
+  --color-brand-500: var(--cb-brand-500, oklch(58.5% 0.233 277.117));
+  --color-brand-600: var(--cb-brand-600, oklch(51.1% 0.262 276.966));
+  --color-brand-700: var(--cb-brand-700, oklch(45.7% 0.24 277.023));
+  --color-brand-800: var(--cb-brand-800, oklch(39.8% 0.195 277.366));
+  --color-brand-900: var(--cb-brand-900, oklch(35.9% 0.144 278.697));
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  /* Font Awesome 4 is loaded for the module and menu icons stored as "fa fa-*". */
+  .fa {
+    line-height: inherit;
+  }
+}
+
+/* Shared by the React components and the plain HTML they replace, so both look the same. */
+@layer components {
+  .cb-label {
+    @apply mb-1.5 block text-sm font-medium text-gray-900 dark:text-white;
+  }
+  .cb-help {
+    @apply mt-1.5 text-sm text-gray-500 dark:text-gray-400;
+  }
+  .cb-error {
+    @apply mt-1.5 text-sm text-red-600 dark:text-red-400;
+  }
+  .cb-input {
+    @apply block w-full rounded-lg bg-white px-3 py-2 text-sm text-gray-900 shadow-xs outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400;
+    @apply focus:outline-2 focus:-outline-offset-2 focus:outline-brand-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500;
+    @apply dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-brand-500 dark:disabled:bg-white/10;
+  }
+  .cb-input-invalid {
+    @apply outline-red-400 focus:outline-red-600 dark:outline-red-500/60;
+  }
+  select.cb-input {
+    @apply pr-8;
+  }
+  .cb-input-group {
+    @apply flex w-full items-stretch overflow-hidden rounded-lg bg-white shadow-xs outline-1 -outline-offset-1 outline-gray-300;
+    @apply focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-brand-600 dark:bg-white/5 dark:outline-white/10;
+  }
+  .cb-input-group.cb-input-invalid {
+    @apply outline-red-400 focus-within:outline-red-600;
+  }
+  .cb-input-bare {
+    @apply min-w-0 flex-1 rounded-none bg-transparent shadow-none outline-0 focus:outline-0 dark:bg-transparent;
+  }
+  .cb-input-addon {
+    @apply flex shrink-0 items-center px-3 text-sm text-gray-500 dark:text-gray-400;
+  }
+  .cb-btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-semibold whitespace-nowrap text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset;
+    @apply hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15;
+  }
+  .cb-btn-sm {
+    @apply px-2.5 py-1.5 text-xs;
+  }
+  .cb-btn-primary {
+    @apply bg-brand-600 text-white ring-0 hover:bg-brand-500 dark:bg-brand-500 dark:hover:bg-brand-400;
+  }
+  .cb-btn-danger {
+    @apply bg-red-600 text-white ring-0 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-400;
+  }
+  .cb-card {
+    @apply rounded-xl bg-white shadow-xs ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-white/10;
+  }
+  .cb-icon-btn {
+    @apply inline-flex size-8 cursor-pointer items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-white;
+  }
+  .cb-nav-link {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white;
+  }
+  .cb-nav-link-active {
+    @apply bg-brand-50 text-brand-700 hover:bg-brand-50 hover:text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 dark:hover:bg-brand-500/15 dark:hover:text-brand-300;
+  }
+}
+
+/* The mobile sidebar: hidden off-canvas until the menu button sets data-cb-sidebar-open. */
+@media (width < 64rem) {
+  [data-cb-sidebar] {
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  html[data-cb-sidebar-open] [data-cb-sidebar] {
+    transform: none;
+  }
+  html[data-cb-sidebar-open] [data-cb-sidebar-backdrop] {
+    display: block;
+  }
+}
