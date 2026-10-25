@@ -99,9 +99,20 @@ attributes and `$(el).modal()` calls onto Bootstrap 5. Check these if you custom
 The code-first resource layer (`CrudBooster\` namespace, see [docs/en/panel.md](docs/en/panel.md)) needs no setup:
 existing modules are untouched, and nothing changes until you add a resource or page. If you overrode the layout views
 in `resources/views/vendor/crudbooster`, copy these additions into them:
-- `admin_template.blade.php`: wrap the module header in `@hasSection('page_header') @yield('page_header') @elseif($module)
-  ... @endif`, and add `{{ app(\CrudBooster\Panel\Panel::class)->renderHooks('head') }}` before `</head>` and
-  `{{ app(\CrudBooster\Panel\Panel::class)->renderHooks('body.end') }}` before `</body>`.
+- `admin_template.blade.php`: wrap the module header, and add the two render hooks:
+
+  ```blade
+  @hasSection('page_header')
+      @yield('page_header')
+  @elseif($module)
+      {{-- the existing module header --}}
+  @else
+      {{-- the existing dashboard header --}}
+  @endif
+
+  {{ app(\CrudBooster\Panel\Panel::class)->renderHooks('head') }}      {{-- before </head> --}}
+  {{ app(\CrudBooster\Panel\Panel::class)->renderHooks('body.end') }}  {{-- before </body> --}}
+  ```
 - `sidebar.blade.php`: add `@include('cb::navigation')` after the `CRUDBooster::sidebarMenu()` loop.
 
 ### Other behaviour changes
