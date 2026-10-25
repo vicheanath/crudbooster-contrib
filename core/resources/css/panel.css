@@ -1,108 +1,196 @@
 /*
- * The Tailwind theme of the CRUDBooster panel. Built with `npm run panel:build` into
- * src/assets/panel/panel.css. Only classes used in the files listed by @source are generated.
+ * The Tailwind theme of the CRUDBooster panel: shadcn/ui (base-nova: Base UI primitives, the Nova
+ * style, neutral colours, Geist). Built with `npm run panel:build` into src/assets/panel/panel.css.
+ *
+ * source(none): only the @source paths below are scanned, not the whole repository.
  */
-/* source(none): only the @source paths below are scanned, not the whole repository. */
 @import "tailwindcss" source(none);
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @source "../views/themes/tailwind";
 @source "../js";
 @source "../../Themes";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:is(.dark *));
 
 /*
- * The brand colour. Override --cb-brand-* in your own stylesheet (e.g. through the "head" render
- * hook) to rebrand without rebuilding. The defaults are Tailwind's indigo.
+ * shadcn's design tokens (theme "neutral"). Override any of them in your own stylesheet, for
+ * example through the "head" render hook, to rebrand without rebuilding: --primary,
+ * --primary-foreground, --radius, ...
  */
-@theme {
-  --color-brand-50: var(--cb-brand-50, oklch(96.2% 0.018 272.314));
-  --color-brand-100: var(--cb-brand-100, oklch(93% 0.034 272.788));
-  --color-brand-200: var(--cb-brand-200, oklch(87% 0.065 274.039));
-  --color-brand-300: var(--cb-brand-300, oklch(78.5% 0.115 274.713));
-  --color-brand-400: var(--cb-brand-400, oklch(67.3% 0.182 276.935));
-  --color-brand-500: var(--cb-brand-500, oklch(58.5% 0.233 277.117));
-  --color-brand-600: var(--cb-brand-600, oklch(51.1% 0.262 276.966));
-  --color-brand-700: var(--cb-brand-700, oklch(45.7% 0.24 277.023));
-  --color-brand-800: var(--cb-brand-800, oklch(39.8% 0.195 277.366));
-  --color-brand-900: var(--cb-brand-900, oklch(35.9% 0.144 278.697));
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@theme inline {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
   html {
     color-scheme: light;
   }
   html.dark {
     color-scheme: dark;
   }
-  /* Font Awesome 4 is loaded for the module and menu icons stored as "fa fa-*". */
+  body {
+    @apply bg-background text-foreground;
+  }
+  /* Font Awesome 4 is still loaded for the module and menu icons stored as "fa fa-*". */
   .fa {
     line-height: inherit;
   }
 }
 
-/* Shared by the React components and the plain HTML they replace, so both look the same. */
+/*
+ * The Nova classes of shadcn's input, textarea, label, button, card and badge, for the Blade views
+ * and for the plain HTML inside each island, so both match the React components.
+ */
 @layer components {
   .cb-label {
-    @apply mb-1.5 block text-sm font-medium text-gray-900 dark:text-white;
+    @apply mb-2 flex items-center gap-1 text-sm leading-none font-medium select-none;
   }
   .cb-help {
-    @apply mt-1.5 text-sm text-gray-500 dark:text-gray-400;
+    @apply text-muted-foreground mt-2 text-sm;
   }
   .cb-error {
-    @apply mt-1.5 text-sm text-red-600 dark:text-red-400;
+    @apply text-destructive mt-2 text-sm;
   }
   .cb-input {
-    @apply block w-full rounded-lg bg-white px-3 py-2 text-sm text-gray-900 shadow-xs outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400;
-    @apply focus:outline-2 focus:-outline-offset-2 focus:outline-brand-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500;
-    @apply dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-brand-500 dark:disabled:bg-white/10;
+    @apply dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 h-8 w-full min-w-0 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-3 aria-invalid:ring-3 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm;
   }
-  .cb-input-invalid {
-    @apply outline-red-400 focus:outline-red-600 dark:outline-red-500/60;
+  textarea.cb-input {
+    @apply h-auto min-h-16 py-2;
   }
   select.cb-input {
-    @apply pr-8;
+    @apply dark:hover:bg-input/50 cursor-pointer appearance-none bg-[length:1rem] bg-[right_0.5rem_center] bg-no-repeat pr-8;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   }
-  .cb-input-group {
-    @apply flex w-full items-stretch overflow-hidden rounded-lg bg-white shadow-xs outline-1 -outline-offset-1 outline-gray-300;
-    @apply focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-brand-600 dark:bg-white/5 dark:outline-white/10;
-  }
-  .cb-input-group.cb-input-invalid {
-    @apply outline-red-400 focus-within:outline-red-600;
-  }
-  .cb-input-bare {
-    @apply min-w-0 flex-1 rounded-none bg-transparent shadow-none outline-0 focus:outline-0 dark:bg-transparent;
-  }
-  .cb-input-addon {
-    @apply flex shrink-0 items-center px-3 text-sm text-gray-500 dark:text-gray-400;
+  select.cb-input[multiple] {
+    @apply h-auto bg-none py-1 pr-2.5;
   }
   .cb-btn {
-    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-white px-3 py-2 text-sm font-semibold whitespace-nowrap text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset;
-    @apply hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:cursor-not-allowed disabled:opacity-50;
-    @apply dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/15;
+    @apply focus-visible:border-ring focus-visible:ring-ring/50 border-border bg-background hover:bg-muted hover:text-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg border bg-clip-padding px-2.5 text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:translate-y-px disabled:pointer-events-none disabled:opacity-50;
   }
+  /* Variants repeat their dark: border and background: .cb-btn's dark: classes are more specific. */
   .cb-btn-sm {
-    @apply px-2.5 py-1.5 text-xs;
+    @apply h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem];
   }
   .cb-btn-primary {
-    @apply bg-brand-600 text-white ring-0 hover:bg-brand-500 dark:bg-brand-500 dark:hover:bg-brand-400;
+    @apply bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground dark:bg-primary dark:hover:bg-primary/80 border-transparent dark:border-transparent;
   }
-  .cb-btn-danger {
-    @apply bg-red-600 text-white ring-0 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-400;
+  .cb-btn-ghost {
+    @apply hover:bg-muted dark:hover:bg-muted/50 border-transparent bg-transparent dark:border-transparent dark:bg-transparent;
   }
-  .cb-card {
-    @apply rounded-xl bg-white shadow-xs ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-white/10;
+  .cb-btn-destructive {
+    @apply bg-destructive/10 hover:bg-destructive/20 text-destructive dark:bg-destructive/20 dark:hover:bg-destructive/30 hover:text-destructive border-transparent dark:border-transparent;
   }
   .cb-icon-btn {
-    @apply inline-flex size-8 cursor-pointer items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-white;
+    @apply hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 text-muted-foreground inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-all outline-none focus-visible:ring-3 focus-visible:ring-ring/50;
+  }
+  .cb-card {
+    @apply ring-foreground/10 bg-card text-card-foreground rounded-xl text-sm ring-1;
+  }
+  .cb-badge {
+    @apply inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap;
   }
   .cb-nav-link {
-    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white;
+    @apply text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex w-full items-center gap-2 rounded-md p-2 text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring;
   }
   .cb-nav-link-active {
-    @apply bg-brand-50 text-brand-700 hover:bg-brand-50 hover:text-brand-700 dark:bg-brand-500/15 dark:text-brand-300 dark:hover:bg-brand-500/15 dark:hover:text-brand-300;
+    @apply bg-sidebar-accent text-sidebar-accent-foreground font-medium;
   }
 }
 

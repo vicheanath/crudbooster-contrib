@@ -1,20 +1,21 @@
 @props(['type' => 'info', 'title' => null, 'dismissible' => false])
 @php
     $styles = [
-        'success' => ['bg-emerald-50 text-emerald-800 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-200 dark:ring-emerald-400/20', 'fa-check-circle'],
-        'danger' => ['bg-red-50 text-red-800 ring-red-600/20 dark:bg-red-500/10 dark:text-red-200 dark:ring-red-400/20', 'fa-exclamation-circle'],
-        'warning' => ['bg-amber-50 text-amber-800 ring-amber-600/20 dark:bg-amber-500/10 dark:text-amber-200 dark:ring-amber-400/20', 'fa-exclamation-triangle'],
-        'info' => ['bg-sky-50 text-sky-800 ring-sky-600/20 dark:bg-sky-500/10 dark:text-sky-200 dark:ring-sky-400/20', 'fa-info-circle'],
+        'success' => ['text-emerald-700 dark:text-emerald-400', 'fa-check-circle'],
+        'danger' => ['text-destructive', 'fa-exclamation-circle'],
+        'warning' => ['text-amber-700 dark:text-amber-400', 'fa-exclamation-triangle'],
+        'info' => ['', 'fa-info-circle'],
     ];
-    [$classes, $icon] = $styles[$type] ?? $styles['info'];
+    [$tone, $icon] = $styles[$type] ?? $styles['info'];
 @endphp
-<div {{ $attributes->merge(['class' => 'flex gap-3 rounded-lg p-4 text-sm ring-1 ring-inset '.$classes, 'role' => $type === 'danger' ? 'alert' : 'status']) }} @if($dismissible) data-cb-dismissible @endif>
-    <i class="fa {{ $icon }} mt-0.5" aria-hidden="true"></i>
+{{-- shadcn's Alert: a bordered card; the status colours the icon and the title. --}}
+<div {{ $attributes->merge(['class' => 'bg-card flex gap-2.5 rounded-lg border px-3 py-2.5 text-sm', 'role' => $type === 'danger' ? 'alert' : 'status']) }} @if($dismissible) data-cb-dismissible @endif>
+    <i class="fa {{ $icon }} {{ $tone }} mt-0.5" aria-hidden="true"></i>
     <div class="min-w-0 flex-1">
-        @if($title)<p class="mb-1 font-semibold">{{ $title }}</p>@endif
-        {{ $slot }}
+        @if($title)<p class="{{ $tone }} mb-0.5 font-medium">{{ $title }}</p>@endif
+        <div class="text-muted-foreground">{{ $slot }}</div>
     </div>
     @if($dismissible)
-        <button type="button" class="cursor-pointer opacity-60 hover:opacity-100" data-cb-dismiss aria-label="{{ __('Dismiss') }}"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <button type="button" class="text-muted-foreground hover:text-foreground cursor-pointer" data-cb-dismiss aria-label="{{ __('Dismiss') }}"><i class="fa fa-times" aria-hidden="true"></i></button>
     @endif
 </div>

@@ -333,4 +333,4 @@ Panel::resources([ProductResource::class])->pages([SalesReport::class]);
 ```
 
 Next: [custom pages](./panel-pages.md), [extending the panel](./panel-extending.md) and
-[themes](./panel-themes.md) (AdminLTE, or Tailwind CSS with React inputs).
+[themes](./panel-themes.md) (AdminLTE, or Tailwind CSS with shadcn/ui components in TypeScript).

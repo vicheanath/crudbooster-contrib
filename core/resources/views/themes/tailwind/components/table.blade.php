@@ -1,6 +1,6 @@
-{{-- Styles a plain <table> (thead, tbody, th, td) put inside it. --}}
-<div {{ $attributes->merge(['class' => 'relative overflow-x-auto']) }}>
-    <div class="min-w-full text-sm [&_table]:min-w-full [&_table]:divide-y [&_table]:divide-gray-200 dark:[&_table]:divide-white/10 [&_thead]:bg-gray-50 dark:[&_thead]:bg-white/5 [&_th]:px-5 [&_th]:py-3 [&_th]:text-left [&_th]:text-xs [&_th]:font-semibold [&_th]:tracking-wide [&_th]:text-gray-500 [&_th]:uppercase dark:[&_th]:text-gray-400 [&_tbody]:divide-y [&_tbody]:divide-gray-100 dark:[&_tbody]:divide-white/5 [&_td]:px-5 [&_td]:py-3 [&_td]:text-gray-700 dark:[&_td]:text-gray-300 [&_a]:font-medium [&_a]:text-brand-600 [&_a:hover]:underline dark:[&_a]:text-brand-400 [&_.text-end]:text-right">
+{{-- shadcn's Table on a plain <table> (thead, tbody, th, td) put inside it. --}}
+<div {{ $attributes->merge(['class' => 'relative w-full overflow-x-auto']) }}>
+    <div class="text-sm [&_table]:w-full [&_table]:caption-bottom [&_thead_tr]:border-b [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:border-b [&_tbody_tr:last-child]:border-0 [&_th]:text-foreground [&_th]:h-10 [&_th]:px-4 [&_th]:text-left [&_th]:align-middle [&_th]:font-medium [&_th]:whitespace-nowrap [&_td]:px-4 [&_td]:py-2 [&_td]:align-middle [&_a]:font-medium [&_a]:underline-offset-4 [&_a:hover]:underline [&_.text-end]:text-right">
         {{ $slot }}
     </div>
 </div>

@@ -4,7 +4,7 @@
     <div role="group" aria-labelledby="{{ $field->getId() }}-label" class="flex flex-wrap gap-4">
         @foreach($field->getOptions() as $optionValue => $optionLabel)
             <label class="inline-flex items-center gap-2 text-sm">
-                <input type="checkbox" class="size-4 rounded accent-brand-600" name="{{ $field->getName() }}[]" value="{{ $optionValue }}"
+                <input type="checkbox" class="accent-primary size-4" name="{{ $field->getName() }}[]" value="{{ $optionValue }}"
                        @checked(in_array((string) $optionValue, $selected, true)) @if($field->isDisabled()) disabled @endif> {{ $optionLabel }}
             </label>
         @endforeach

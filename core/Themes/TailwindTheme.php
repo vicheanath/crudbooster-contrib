@@ -5,8 +5,9 @@ namespace CrudBooster\Themes;
 use Illuminate\Support\HtmlString;
 
 /**
- * Resource pages in a Tailwind CSS layout, with React components for the form inputs. The
- * compiled assets ship in src/assets/panel and are published with the "cb_asset" tag.
+ * Resource pages in a Tailwind CSS layout styled as shadcn/ui (base-nova), with React components
+ * on Base UI for the form inputs. The compiled assets ship in src/assets/panel and are published
+ * with the "cb_asset" tag.
  *
  * The class lists below are written out in full so Tailwind finds them when it scans this file.
  */
@@ -14,40 +15,42 @@ class TailwindTheme extends Theme
 {
     public const ASSET_DIRECTORY = 'vendor/crudbooster/panel';
 
+    // shadcn has tokens for primary, secondary and destructive; success, warning and info are
+    // tinted the way its destructive badge is.
     private const BADGES = [
-        'primary' => 'bg-brand-50 text-brand-700 ring-brand-600/20 dark:bg-brand-500/15 dark:text-brand-300 dark:ring-brand-400/30',
-        'secondary' => 'bg-gray-100 text-gray-700 ring-gray-500/20 dark:bg-white/10 dark:text-gray-300 dark:ring-white/15',
-        'success' => 'bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-400/30',
-        'danger' => 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/15 dark:text-red-300 dark:ring-red-400/30',
-        'warning' => 'bg-amber-50 text-amber-800 ring-amber-600/20 dark:bg-amber-500/15 dark:text-amber-300 dark:ring-amber-400/30',
-        'info' => 'bg-sky-50 text-sky-700 ring-sky-600/20 dark:bg-sky-500/15 dark:text-sky-300 dark:ring-sky-400/30',
+        'primary' => 'bg-primary text-primary-foreground',
+        'secondary' => 'bg-secondary text-secondary-foreground',
+        'success' => 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400',
+        'danger' => 'bg-destructive/10 text-destructive dark:bg-destructive/20',
+        'warning' => 'bg-amber-500/15 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400',
+        'info' => 'bg-sky-500/10 text-sky-700 dark:bg-sky-500/20 dark:text-sky-400',
     ];
 
     private const BUTTONS = [
-        'primary' => 'bg-brand-600 text-white hover:bg-brand-500 focus-visible:outline-brand-600',
-        'secondary' => 'bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:ring-white/15 dark:hover:bg-white/15',
-        'success' => 'bg-emerald-600 text-white hover:bg-emerald-500 focus-visible:outline-emerald-600',
-        'danger' => 'bg-red-600 text-white hover:bg-red-500 focus-visible:outline-red-600',
-        'warning' => 'bg-amber-500 text-white hover:bg-amber-400 focus-visible:outline-amber-500',
-        'info' => 'bg-sky-600 text-white hover:bg-sky-500 focus-visible:outline-sky-600',
+        'primary' => 'cb-btn-primary',
+        'secondary' => '',
+        'success' => 'border-transparent bg-emerald-600 text-white hover:bg-emerald-600/85 hover:text-white dark:border-transparent dark:bg-emerald-600 dark:hover:bg-emerald-600/85',
+        'danger' => 'cb-btn-destructive',
+        'warning' => 'border-transparent bg-amber-500 text-white hover:bg-amber-500/85 hover:text-white dark:border-transparent dark:bg-amber-500 dark:hover:bg-amber-500/85',
+        'info' => 'border-transparent bg-sky-600 text-white hover:bg-sky-600/85 hover:text-white dark:border-transparent dark:bg-sky-600 dark:hover:bg-sky-600/85',
     ];
 
     private const TEXT = [
-        'primary' => 'text-brand-600 dark:text-brand-400',
-        'secondary' => 'text-gray-500 dark:text-gray-400',
+        'primary' => 'text-foreground',
+        'secondary' => 'text-muted-foreground',
         'success' => 'text-emerald-600 dark:text-emerald-400',
-        'danger' => 'text-red-600 dark:text-red-400',
+        'danger' => 'text-destructive',
         'warning' => 'text-amber-600 dark:text-amber-400',
         'info' => 'text-sky-600 dark:text-sky-400',
     ];
 
     private const ICON_BACKGROUNDS = [
-        'primary' => 'bg-brand-600',
-        'secondary' => 'bg-gray-500',
-        'success' => 'bg-emerald-600',
-        'danger' => 'bg-red-600',
-        'warning' => 'bg-amber-500',
-        'info' => 'bg-sky-600',
+        'primary' => 'bg-primary text-primary-foreground',
+        'secondary' => 'bg-muted text-muted-foreground',
+        'success' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+        'danger' => 'bg-destructive/10 text-destructive',
+        'warning' => 'bg-amber-500/15 text-amber-600 dark:text-amber-400',
+        'info' => 'bg-sky-500/10 text-sky-600 dark:text-sky-400',
     ];
 
     private const SPANS = [
@@ -97,13 +100,17 @@ class TailwindTheme extends Theme
     }
 
     /**
-     * Classes for a coloured badge: primary, secondary, success, danger, warning or info.
+     * Colour classes for a badge (used with .cb-badge): primary, secondary, success, danger,
+     * warning or info.
      */
     public static function badge(?string $color): string
     {
         return self::BADGES[$color] ?? self::BADGES['secondary'];
     }
 
+    /**
+     * Colour classes for a .cb-btn; secondary is the outline button.
+     */
     public static function button(?string $color): string
     {
         return self::BUTTONS[$color] ?? self::BUTTONS['secondary'];
@@ -114,6 +121,9 @@ class TailwindTheme extends Theme
         return self::TEXT[$color] ?? self::TEXT['secondary'];
     }
 
+    /**
+     * Background and icon colour of a stat's icon tile.
+     */
     public static function iconBackground(?string $color): string
     {
         return self::ICON_BACKGROUNDS[$color] ?? self::ICON_BACKGROUNDS['primary'];

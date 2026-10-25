@@ -1,11 +1,11 @@
-# Themes: AdminLTE Or Tailwind + React
+# Themes: AdminLTE Or Tailwind + shadcn/ui
 
 Resource and page screens come in two looks:
 
 | Theme | What it is |
 | --- | --- |
 | `adminlte` (default) | The classic CRUDBooster layout: AdminLTE 4 and Bootstrap 5. |
-| `tailwind` | A layout built with Tailwind CSS. Form inputs and table controls are React components, with dark mode, a searchable select, a drag-and-drop upload and confirmation dialogs. |
+| `tailwind` | A Tailwind CSS layout styled as [shadcn/ui](https://ui.shadcn.com) (the `base-nova` preset: [Base UI](https://base-ui.com) primitives, the Nova style, neutral colours, Lucide icons, the Geist font). Form inputs and table controls are React components written in TypeScript, with dark mode, a searchable combobox, a drag-and-drop upload and confirmation dialogs. |
 
 The theme only changes how screens look. Resources, pages, fields, columns, filters, actions,
 permissions, hooks and plugins are the same code in both. **Classic `CBController` modules always use
@@ -42,8 +42,11 @@ If they are missing or out of date, the layout shows a banner with this command.
   with plain HTML inside it, and the script swaps in the React component. The component submits the same
   input names the plain HTML does, so validation, old input, error messages and saving all work as
   before, and the form still works if the script is blocked.
-- **Select** is a searchable combobox with keyboard navigation. With `multiple()`, the selected values show
-  as removable chips.
+- **The components are shadcn/ui's**, built on Base UI's accessible primitives: Select is shadcn's
+  Combobox (searchable, keyboard navigation, chips for `multiple()`), Toggle is its Switch, Radio and
+  CheckboxList use RadioGroup and Checkbox, confirmations are AlertDialog, the bulk menu is
+  DropdownMenu and the theme switch is a ToggleGroup. The server-rendered parts (layout, table, cards,
+  plain inputs) use the same Nova classes and design tokens, so the whole page looks like one shadcn app.
 - **FileUpload** has drag and drop, an image preview, a client-side size check (`maxSize()`) and a
   Remove/Undo button for the current file.
 - **TextInput** shows its `prefix()`/`suffix()` and a show/hide button for passwords. **Toggle** is a switch,
@@ -54,15 +57,17 @@ If they are missing or out of date, the layout shows a banner with this command.
   `localStorage`).
 - The **sidebar** collapses into a menu button on small screens.
 
-### Brand colour
+### Colours and radius
 
-The theme's accent colour is a set of CSS variables, so you can rebrand it without rebuilding:
+The theme uses shadcn's design tokens (`--background`, `--foreground`, `--primary`, `--muted`,
+`--border`, `--radius`, …, with a `.dark` set). Override any of them to rebrand without rebuilding, for
+example with a theme from [ui.shadcn.com/themes](https://ui.shadcn.com/themes):
 
 ```php
-Panel::renderHook('head', fn () => '<style>:root {
-    --cb-brand-50: #ecfdf5; --cb-brand-100: #d1fae5; --cb-brand-300: #6ee7b7; --cb-brand-400: #34d399;
-    --cb-brand-500: #10b981; --cb-brand-600: #059669; --cb-brand-700: #047857;
-}</style>');
+Panel::renderHook('head', fn () => '<style>
+    :root { --primary: oklch(0.546 0.245 262.881); --primary-foreground: oklch(0.985 0 0); --radius: 0.5rem; }
+    .dark { --primary: oklch(0.623 0.214 259.815); --primary-foreground: oklch(0.985 0 0); }
+</style>');
 ```
 
 ## Page components that work in both themes
@@ -115,9 +120,12 @@ and load it with a render hook:
 ```css
 /* resources/css/admin.css */
 @import "tailwindcss/utilities.css" layer(utilities);
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:is(.dark *));
 @source "../views/admin";
 ```
+
+To use the shadcn token utilities (`bg-primary`, `text-muted-foreground`, …) in that stylesheet, copy the
+`@theme inline` block from `core/resources/css/panel.css` into it.
 
 ```php
 Panel::renderHook('head', fn () => app(\Illuminate\Foundation\Vite::class)(['resources/css/admin.css']));
@@ -159,7 +167,7 @@ document.addEventListener('crudbooster:ready', ({ detail: CrudBooster }) => {
       swatches.map((swatch) => h('button', {
         key: swatch, type: 'button', id: swatch === color ? id : undefined,
         onClick: () => setColor(swatch), 'aria-pressed': swatch === color,
-        className: 'size-8 rounded-full ring-2 ring-offset-2 ' + (swatch === color ? 'ring-gray-900' : 'ring-transparent'),
+        className: 'size-8 rounded-full ring-2 ring-offset-2 ' + (swatch === color ? 'ring-foreground' : 'ring-transparent'),
         style: { backgroundColor: swatch },
       })),
     )
@@ -171,6 +179,20 @@ Not using React? Use `CrudBooster.registerMount('ColorPicker', (element, props) 
 It can return a cleanup function. Islands added to the page later are mounted with
 `CrudBooster.mount(container)`, and `CrudBooster.confirm({ message })` opens the confirmation dialog
 and resolves to `true` or `false`.
+
+## shadcn/ui components
+
+The components in `core/resources/js/components/ui` are shadcn/ui's, as `npx shadcn add` writes them for
+the `base-nova` preset: you own the code, so change them freely. `components.json` at the repository root
+configures the CLI (TypeScript, `@/components/ui` → `core/resources/js/components/ui`,
+`core/resources/css/panel.css`), so contributors can add more:
+
+```bash
+npx shadcn@latest add popover tabs
+```
+
+The field and table islands in `core/resources/js/components` are typed with the props the PHP side
+sends (`lib/types.ts`), and `npm run panel:typecheck` runs `tsc` in strict mode.
 
 ## Writing your own theme
 
@@ -207,15 +229,16 @@ To change a few of the Tailwind theme's views, extend `TailwindTheme` and put yo
 
 ## Working on the theme
 
-The sources are in `core/resources/js` (React components, with Vitest tests next to them) and
-`core/resources/css/panel.css`. The build goes to `src/assets/panel` and is committed. CI fails if it
-is out of date.
+The sources are in `core/resources/js` (TypeScript and React, with Vitest tests next to them) and
+`core/resources/css/panel.css`. The build goes to `src/assets/panel` and is committed. CI typechecks,
+runs the tests and fails if the build is out of date.
 
 ```bash
 npm install
-npm run panel:test    # component tests
-npm run panel:watch   # rebuild on change
-npm run panel:build   # before committing
+npm run panel:typecheck  # tsc --strict
+npm run panel:test       # component tests
+npm run panel:watch      # rebuild on change
+npm run panel:build      # before committing
 php artisan vendor:publish --tag=cb_asset --force   # in the playground, to see the new build
 ```
 

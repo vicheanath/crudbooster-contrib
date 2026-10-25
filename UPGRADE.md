@@ -115,7 +115,7 @@ in `resources/views/vendor/crudbooster`, copy these additions into them:
   ```
 - `sidebar.blade.php`: add `@include('cb::navigation')` after the `CRUDBooster::sidebarMenu()` loop.
 
-Resource and page screens can use a Tailwind CSS theme with React inputs (`CB_PANEL_THEME=tailwind`, see
+Resource and page screens can use a Tailwind CSS + shadcn/ui theme (`CB_PANEL_THEME=tailwind`, see
 [docs/en/panel-themes.md](docs/en/panel-themes.md)). Its compiled assets ship with the package; publish them with
 `php artisan crudbooster:update` (or `vendor:publish --tag=cb_asset --force`) after each update.
 

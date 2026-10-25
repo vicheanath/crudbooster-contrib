@@ -1,7 +1,7 @@
 @if($display === null || $display === '')
-    <span class="text-gray-400 dark:text-gray-600">{{ $column->getPlaceholder() }}</span>
+    <span class="text-muted-foreground">{{ $column->getPlaceholder() }}</span>
 @elseif($url)
-    <a href="{{ $url }}" class="font-medium text-brand-600 hover:underline dark:text-brand-400" @if($column->shouldOpenUrlInNewTab()) target="_blank" rel="noopener" @endif>{{ $display }}</a>
+    <a href="{{ $url }}" class="font-medium underline-offset-4 hover:underline" @if($column->shouldOpenUrlInNewTab()) target="_blank" rel="noopener" @endif>{{ $display }}</a>
 @else
     {{ $display }}
 @endif
