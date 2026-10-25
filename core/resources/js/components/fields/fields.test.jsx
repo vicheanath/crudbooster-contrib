@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { safeUrl } from '../../lib/url'
 import CheckboxList from './CheckboxList'
 import FileUpload from './FileUpload'
 import Select from './Select'
@@ -145,6 +146,34 @@ describe('FileUpload', () => {
 
     await user.click(screen.getByRole('button', { name: 'Undo' }))
     expect(submitted(container)).not.toContainEqual(['photo__remove', '1'])
+  })
+
+  afterEach(() => vi.unstubAllGlobals())
+
+  it('previews a chosen image on a canvas', async () => {
+    const close = vi.fn()
+    vi.stubGlobal('createImageBitmap', vi.fn(async () => ({ width: 640, height: 320, close })))
+    const { container } = render(<FileUpload name="photo" id="p" image />)
+    expect(container.querySelector('canvas')).toHaveClass('hidden')
+
+    const photo = new File(['png'], 'photo.png', { type: 'image/png' })
+    await act(async () => {
+      fireEvent.change(container.querySelector('input[type=file]'), { target: { files: [photo] } })
+    })
+
+    const canvas = container.querySelector('canvas')
+    expect(canvas).not.toHaveClass('hidden')
+    expect([canvas.width, canvas.height]).toEqual([320, 160])
+    expect(close).toHaveBeenCalled()
+    expect(container.querySelector('img')).toBeNull()
+  })
+
+  it('ignores a current-file URL that is not http(s)', () => {
+    const { container } = render(<FileUpload name="f" id="f" fileUrl="javascript:alert(1)" fileName="x.pdf" removeName="f__remove" />)
+    expect(container.querySelector('a')).toBeNull()
+    expect(safeUrl('/storage/a.jpg')).toBe(`${window.location.origin}/storage/a.jpg`)
+    expect(safeUrl('https://cdn.test/a.jpg')).toBe('https://cdn.test/a.jpg')
+    expect(safeUrl('data:image/png;base64,xx')).toBeUndefined()
   })
 
   it('rejects files over the size limit before upload', async () => {

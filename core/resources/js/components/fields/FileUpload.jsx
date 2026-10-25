@@ -1,29 +1,45 @@
 import { useEffect, useRef, useState } from 'react'
 import cx from '../../lib/cx'
 import { t } from '../../lib/lang'
+import { safeUrl } from '../../lib/url'
 
 /**
  * A drop zone around a real <input type="file">, so the file is uploaded with the form. Shows
  * the current file, a preview of the new one, and "Remove", which submits removeName=1.
  */
 export default function FileUpload({
-  name, id, accept, image = false, fileUrl, fileName, removeName, maxSize, required, disabled, invalid,
+  name, id, accept, image = false, fileUrl: rawFileUrl, fileName, removeName, maxSize, required, disabled, invalid,
 }) {
+  const fileUrl = safeUrl(rawFileUrl)
   const input = useRef(null)
   const [file, setFile] = useState(null)
-  const [preview, setPreview] = useState(null)
+  const canvas = useRef(null)
+  const [preview, setPreview] = useState(false)
   const [removing, setRemoving] = useState(false)
   const [dragging, setDragging] = useState(false)
   const [error, setError] = useState(null)
 
+  // The preview is drawn on a canvas from the decoded image, so no URL or text from the file reaches the DOM.
   useEffect(() => {
-    if (!file || !image || !file.type?.startsWith('image/') || typeof URL.createObjectURL !== 'function') {
-      setPreview(null)
-      return undefined
+    setPreview(false)
+    if (!file || !image || !file.type?.startsWith('image/') || typeof createImageBitmap !== 'function') return undefined
+
+    let cancelled = false
+    createImageBitmap(file)
+      .then((bitmap) => {
+        if (cancelled || !canvas.current) return bitmap.close?.()
+        const scale = Math.min(1, 160 / bitmap.height, 320 / bitmap.width)
+        canvas.current.width = Math.round(bitmap.width * scale)
+        canvas.current.height = Math.round(bitmap.height * scale)
+        canvas.current.getContext('2d')?.drawImage(bitmap, 0, 0, canvas.current.width, canvas.current.height)
+        bitmap.close?.()
+        setPreview(true)
+      })
+      .catch(() => setPreview(false))
+
+    return () => {
+      cancelled = true
     }
-    const url = URL.createObjectURL(file)
-    setPreview(url)
-    return () => URL.revokeObjectURL(url)
   }, [file, image])
 
   const accepted = (files) => {
@@ -98,11 +114,8 @@ export default function FileUpload({
           disabled && 'cursor-not-allowed opacity-60',
         )}
       >
-        {preview ? (
-          <img src={preview} alt="" className="max-h-40 rounded-md object-contain" />
-        ) : (
-          <i className={cx('fa text-2xl text-gray-400', image ? 'fa-picture-o' : 'fa-cloud-upload')} aria-hidden="true" />
-        )}
+        <canvas ref={canvas} aria-hidden="true" className={cx('max-h-40 rounded-md', !preview && 'hidden')} />
+        {!preview && <i className={cx('fa text-2xl text-gray-400', image ? 'fa-picture-o' : 'fa-cloud-upload')} aria-hidden="true" />}
         <span className="text-gray-600 dark:text-gray-300">
           {file ? file.name : fileUrl ? t('replaceFile') : t('dropFile')}
         </span>
