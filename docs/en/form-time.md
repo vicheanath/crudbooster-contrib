@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`DatePicker::make('opens_at')->timeOnly()`."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#date-upload-yes-no-hidden
   guide: /en/panel#forms
 ---
 

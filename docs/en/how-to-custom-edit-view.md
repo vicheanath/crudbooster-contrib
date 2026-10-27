@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "Override `form()` on the resource, a `ViewField`, or a page for a fully custom screen."
-  migrate: /en/deprecations#modules-cbcontroller-to-resource
+  migrate: /en/migration-examples#statistics-and-custom-screens
   guide: /en/panel-pages
 ---
 

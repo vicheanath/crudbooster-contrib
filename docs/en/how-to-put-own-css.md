@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`Panel::renderHook('head', ...)`, or the theme's CSS variables."
-  migrate: /en/deprecations#module-properties
+  migrate: /en/migration-examples#extra-html-javascript-and-css
   guide: /en/panel-extending#render-hooks
 ---
 

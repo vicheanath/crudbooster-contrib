@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "A relationship column: `TextColumn::make('category.name')`, eager loaded."
-  migrate: /en/deprecations#columns
+  migrate: /en/migration-examples#a-joined-column
   guide: /en/panel#columns
 ---
 

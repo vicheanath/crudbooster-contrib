@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`beforeCreate(array $data)` and `beforeUpdate(array $data, $record)` on the resource."
-  migrate: /en/deprecations#hooks
+  migrate: /en/migration-examples#hooks
   guide: /en/panel#lifecycle-hooks
 ---
 

@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`state(fn ($record) => ...)`, or `withCount()` / `withSum()` in `modifyQuery()`."
-  migrate: /en/deprecations#columns
+  migrate: /en/migration-examples#a-subquery-column
   guide: /en/panel#columns
 ---
 

@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`CheckboxList::make('tags')->relationship('tags', 'name')`."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#many-to-many
   guide: /en/panel#forms
 ---
 

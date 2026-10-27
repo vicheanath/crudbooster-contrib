@@ -50,6 +50,9 @@ Laravel replace. Everything keeps working in 7.x; removal is possible in 8.0 at 
 - Docs site: every classic page opens with a "Deprecated since 7.2" notice naming its replacement, with links to
   the migration guide and the new guide (`deprecated:` frontmatter, shown by `docs/.vitepress/theme`). The sidebar
   groups those pages under a collapsed "Classic Modules (deprecated)", and the home page and nav link to the guide.
+- New guide `docs/en/migration-examples.md`: a module migrated in six steps (keeping its URL and privileges), then
+  before/after code for columns, filters, form types, hooks, buttons, exports, sub modules, render hooks, pages,
+  helpers and API endpoints. Each classic page's "How to migrate" link opens its matching example.
 
 ### Resources and pages: a code-first admin layer (no changes needed in existing modules)
 A second way to build admin screens, next to classic modules. It lives in the new `CrudBooster\` namespace

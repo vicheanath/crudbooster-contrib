@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "A page with `<x-cb::stat>` cards, or the `index.before` render hook."
-  migrate: /en/deprecations#module-properties
+  migrate: /en/migration-examples#statistics-and-custom-screens
   guide: /en/panel-themes#page-components-that-work-in-both-themes
 ---
 

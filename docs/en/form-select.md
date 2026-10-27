@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`Select::make('category_id')->relationship('category', 'name')` or `->options([...])`."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#select-from-a-table
   guide: /en/panel#forms
 ---
 

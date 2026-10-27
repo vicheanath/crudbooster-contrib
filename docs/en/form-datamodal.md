@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`Select::make('customer_id')->relationship('customer', 'name')`."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#select-from-a-table
   guide: /en/panel#forms
 ---
 

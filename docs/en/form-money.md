@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`TextInput::make('price')->numeric()->prefix('$')`."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#sections-and-widths
   guide: /en/panel#forms
 ---
 

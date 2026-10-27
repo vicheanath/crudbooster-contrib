@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "A separate resource for the child model, filtered by its parent with `SelectFilter::relationship()`."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#sub-modules-parent-and-child
   guide: /en/panel#filters
 ---
 

@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "Bulk actions: `BulkAction::make('archive')->action(fn ($records) => ...)`."
-  migrate: /en/deprecations#module-properties
+  migrate: /en/migration-examples#a-button-for-the-ticked-rows
   guide: /en/panel#row-and-bulk-actions
 ---
 

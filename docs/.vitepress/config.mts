@@ -98,7 +98,8 @@ export default defineConfig({
       {
         text: 'Migrate',
         items: [
-          { text: 'Classic modules to resources', link: '/en/deprecations' },
+          { text: 'Classic modules to resources', link: '/en/migration-examples' },
+          { text: 'Deprecated APIs reference', link: '/en/deprecations' },
           { text: 'CRUDBooster 5.x to 7.x', link: '/en/upgrade' },
         ],
       },

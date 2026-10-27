@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "Generate a resource: `php artisan crudbooster:make-resource Product --generate`."
-  migrate: /en/deprecations#modules-cbcontroller-to-resource
+  migrate: /en/migration-examples#the-whole-module-in-six-steps
   guide: /en/panel#quick-start
 ---
 

@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "The service contracts (`AuthenticationServiceInterface`, `SettingsRepositoryInterface`, ...) and Laravel APIs."
-  migrate: /en/deprecations#the-crudbooster-helper
+  migrate: /en/migration-examples#helpers
 ---
 
 # Helpers

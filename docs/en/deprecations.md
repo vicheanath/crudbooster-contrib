@@ -6,6 +6,9 @@ deprecation is a `@deprecated` tag in the source, so your IDE and static analysi
 Psalm) strike the calls through and show the replacement. Nothing is logged and nothing changes at
 runtime. The classes and functions may be removed in 8.0, no earlier.
 
+For worked examples with before and after code, see
+[Migrating A Module Step By Step](./migration-examples.md).
+
 Move at your own pace. Classic modules and resources share the login, layout, sidebar, privileges
 and audit log, so you can convert one module at a time.
 

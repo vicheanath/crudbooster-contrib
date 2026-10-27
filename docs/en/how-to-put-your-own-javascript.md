@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`Panel::renderHook('body.end', ...)`."
-  migrate: /en/deprecations#module-properties
+  migrate: /en/migration-examples#extra-html-javascript-and-css
   guide: /en/panel-extending#render-hooks
 ---
 

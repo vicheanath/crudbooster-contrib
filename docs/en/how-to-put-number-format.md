@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`TextColumn::make('price')->numeric(2)` or `->money('$')`."
-  migrate: /en/deprecations#columns
+  migrate: /en/migration-examples#number-format-and-callbacks
   guide: /en/panel#columns
 ---
 

@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`BadgeColumn::make('status')->colors([...])`, or `formatStateUsing()`."
-  migrate: /en/deprecations#columns
+  migrate: /en/migration-examples#coloured-status
   guide: /en/panel#columns
 ---
 

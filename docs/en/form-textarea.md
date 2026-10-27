@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`Textarea::make('body')`."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#text-email-number-password-textarea
   guide: /en/panel#forms
 ---
 

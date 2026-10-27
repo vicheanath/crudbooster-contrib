@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "The `index.before` render hook."
-  migrate: /en/deprecations#module-properties
+  migrate: /en/migration-examples#extra-html-javascript-and-css
   guide: /en/panel-extending#render-hooks
 ---
 

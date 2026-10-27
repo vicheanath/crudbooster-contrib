@@ -11,7 +11,7 @@ hero:
       link: /en/installation
     - theme: alt
       text: Migrate to resources
-      link: /en/deprecations
+      link: /en/migration-examples
     - theme: alt
       text: Upgrade from 5.x
       link: /en/upgrade
@@ -26,8 +26,8 @@ features:
     linkText: Read the guide
   - title: Easy migration
     details: Classic modules, CRUDBooster::* helpers and the Module Generator are deprecated but keep working in 7.x. Every API names its replacement.
-    link: /en/deprecations
-    linkText: See the replacements
+    link: /en/migration-examples
+    linkText: See the examples
   - title: Drop-in upgrade
     details: Same crocodicstudio\crudbooster namespace, cbInit() controllers, hooks and cms_* tables. Existing 5.x modules keep working.
   - title: Batteries included
@@ -39,8 +39,8 @@ features:
 ::: warning Classic modules are deprecated
 `CBController` modules, the `CRUDBooster::*` helpers and the Module and API generators are deprecated since 7.2.
 They keep working in every 7.x release, so nothing breaks, but new screens should be
-[resources and pages](/en/panel). [Deprecated APIs and How To Replace Them](/en/deprecations) maps each classic
-API to its replacement.
+[resources and pages](/en/panel). [Migrating A Module Step By Step](/en/migration-examples) shows each change
+with before and after code.
 :::
 
 ## Install

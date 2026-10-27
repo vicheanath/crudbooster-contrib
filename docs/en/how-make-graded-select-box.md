@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`Select::make()->relationship()`; dependent options need your own field type."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#select-from-a-table
   guide: /en/panel-extending#your-own-field-type
 ---
 

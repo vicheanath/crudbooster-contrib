@@ -2,8 +2,8 @@
 ## Table Of Contents
 
 > **Building something new? Use resources and pages.** The classic module pages are kept for existing
-> projects and are deprecated since 7.2. [Deprecated APIs and How To Replace Them](./deprecations.md) maps each
-> classic API to its replacement.
+> projects and are deprecated since 7.2. [Migrating A Module Step By Step](./migration-examples.md) shows
+> each change with before and after code.
 
 - [How To Install/Update](./installation.md)
 - [How To Change The Application Name](./how-to-change-app-name.md)
@@ -14,6 +14,7 @@
   - [Extending The Panel](./panel-extending.md)
   - [Themes: AdminLTE Or Tailwind + shadcn/ui](./panel-themes.md)
 - **Migrating From Classic Modules**
+  - [Migrating A Module Step By Step](./migration-examples.md)
   - [Deprecated APIs and How To Replace Them](./deprecations.md)
   - [Upgrade From 5.x](./upgrade.md)
 - **Classic Modules (deprecated)**

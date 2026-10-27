@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "Table columns: `TextColumn::make('name')->searchable()->sortable()`."
-  migrate: /en/deprecations#columns
+  migrate: /en/migration-examples#a-plain-column
   guide: /en/panel#columns
 ---
 

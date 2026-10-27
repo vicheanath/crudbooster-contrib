@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "A child resource with `SelectFilter::relationship()`, linked from the parent with `Column::url()`."
-  migrate: /en/deprecations#module-properties
+  migrate: /en/migration-examples#sub-modules-parent-and-child
   guide: /en/panel#filters
 ---
 

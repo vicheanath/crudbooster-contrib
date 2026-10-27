@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "Row actions: `Action::make('publish')->action(fn ($record) => ...)`."
-  migrate: /en/deprecations#module-properties
+  migrate: /en/migration-examples#a-button-on-each-row
   guide: /en/panel#row-and-bulk-actions
 ---
 

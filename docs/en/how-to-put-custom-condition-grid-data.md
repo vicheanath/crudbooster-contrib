@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`modifyQuery()` on the resource, or `Table::modifyQueryUsing()`."
-  migrate: /en/deprecations#hooks
+  migrate: /en/migration-examples#the-list-query
   guide: /en/panel#scoping-every-page
 ---
 

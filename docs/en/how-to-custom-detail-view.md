@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "Override `detail()` on the resource, or a page for a fully custom screen."
-  migrate: /en/deprecations#modules-cbcontroller-to-resource
+  migrate: /en/migration-examples#statistics-and-custom-screens
   guide: /en/panel#detail-page
 ---
 

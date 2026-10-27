@@ -1,7 +1,7 @@
 ---
 deprecated:
   instead: "`Hidden::make('shop_id')`."
-  migrate: /en/deprecations#form-types
+  migrate: /en/migration-examples#date-upload-yes-no-hidden
   guide: /en/panel#forms
 ---
 
