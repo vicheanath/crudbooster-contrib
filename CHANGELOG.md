@@ -2,6 +2,34 @@
 
 ## Unreleased
 
+### Tailwind CSS + shadcn/ui theme for resources and pages
+A second look for the resource layer, next to AdminLTE: `CB_PANEL_THEME=tailwind` (or `Panel::theme('tailwind')`).
+Classic modules keep the AdminLTE layout, and the default theme is unchanged. Guide: `docs/en/panel-themes.md`.
+- Styled as **shadcn/ui** with the `base-nova` preset: Base UI primitives, the Nova style, shadcn's neutral design
+  tokens (light and dark), Lucide icons and the Geist font. `components.json` lets contributors run
+  `npx shadcn add`; the components in `core/resources/js/components/ui` are shadcn's own, as the CLI writes them.
+- Written in **TypeScript** (strict). Field props are typed after `Field::getComponentProps()`.
+- A layout with its own sidebar (Menu Management menus, panel links, superadmin tools), top bar, dark mode
+  (light / dark / system, without a transition flash) and a mobile menu.
+- Form inputs are React components mounted on server-rendered "islands": shadcn's Combobox (search, keyboard
+  navigation, chips for multiple values), a drag-and-drop upload with a canvas preview and size check, input
+  groups with prefixes, suffixes and password reveal, Switch, RadioGroup and Checkbox cards. Each island contains
+  plain HTML that submits the same names, so validation, old input and saving are unchanged, and forms work
+  without JavaScript.
+- AlertDialog confirmations instead of `window.confirm()`, and a DropdownMenu of bulk actions that counts the
+  selected rows.
+- Built with Vite (`npm run panel:build`) into `src/assets/panel`, which is committed and published with the
+  `cb_asset` tag, so installs need no Node.js. The layout warns when the published copy is missing or stale.
+- Theme-independent page components: `<x-cb::card>`, `<x-cb::stat>`, `<x-cb::grid>`, `<x-cb::table>`,
+  `<x-cb::button>`, `<x-cb::badge>`, `<x-cb::alert>`.
+- Extending: custom field types name a React component (`$component`, `getComponentProps()`), scripts register
+  components with `CrudBooster.register()` or `registerMount()`, colours and radius are shadcn's CSS variables,
+  and `CrudBooster\Themes\Theme` lets you write your own theme.
+- The superadmin sidebar menu moved into `CrudBooster\Navigation\SuperadminMenu`, shared by both layouts.
+- Fixed: switching the theme after views were rendered kept serving the old theme's views.
+- Tests: the whole resource test suite also runs on the Tailwind theme (`PanelTailwindThemeTest`), plus 20
+  Vitest component tests, and a CI job that typechecks, tests and checks the committed build matches its sources.
+
 ### Deprecated: the classic module layer (no runtime change)
 `@deprecated` tags, each naming its replacement, on the classic APIs that resources, pages, the service contracts or
 Laravel replace. Everything keeps working in 7.x; removal is possible in 8.0 at the earliest. Migration guide:
@@ -17,7 +45,8 @@ Laravel replace. Everything keeps working in 7.x; removal is possible in 8.0 at 
   Statistic Builder, and the `Image` alias (`CBImage`).
 - Not deprecated: models, migrations, middlewares, the built-in admin screens, `CBRouter`, `CBHook`, `FCM` and the
   shared service contracts.
-- The resource layer no longer calls `CRUDBooster::adminPath()` or `cbLang()`.
+- The AdminLTE resource layout and `ResourceController` no longer call `CRUDBooster::adminPath()` or `cbLang()`.
+  The Tailwind theme views and `SuperadminMenu` still do.
 
 ### Resources and pages: a code-first admin layer (no changes needed in existing modules)
 A second way to build admin screens, next to classic modules. It lives in the new `CrudBooster\` namespace

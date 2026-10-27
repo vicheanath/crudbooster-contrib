@@ -1,0 +1,209 @@
+/*
+ * The Tailwind theme of the CRUDBooster panel: shadcn/ui (base-nova: Base UI primitives, the Nova
+ * style, neutral colours, Geist). Built with `npm run panel:build` into src/assets/panel/panel.css.
+ *
+ * source(none): only the @source paths below are scanned, not the whole repository.
+ */
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@source "../views/themes/tailwind";
+@source "../js";
+@source "../../Themes";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * shadcn's design tokens (theme "neutral"). Override any of them in your own stylesheet, for
+ * example through the "head" render hook, to rebrand without rebuilding: --primary,
+ * --primary-foreground, --radius, ...
+ */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@theme inline {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  /* Font Awesome 4 is still loaded for the module and menu icons stored as "fa fa-*". */
+  .fa {
+    line-height: inherit;
+  }
+}
+
+/*
+ * The Nova classes of shadcn's input, textarea, label, button, card and badge, for the Blade views
+ * and for the plain HTML inside each island, so both match the React components.
+ */
+@layer components {
+  .cb-label {
+    @apply mb-2 flex items-center gap-1 text-sm leading-none font-medium select-none;
+  }
+  .cb-help {
+    @apply text-muted-foreground mt-2 text-sm;
+  }
+  .cb-error {
+    @apply text-destructive mt-2 text-sm;
+  }
+  .cb-input {
+    @apply dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 disabled:bg-input/50 dark:disabled:bg-input/80 h-8 w-full min-w-0 rounded-lg border bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-3 aria-invalid:ring-3 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm;
+  }
+  textarea.cb-input {
+    @apply h-auto min-h-16 py-2;
+  }
+  select.cb-input {
+    @apply dark:hover:bg-input/50 cursor-pointer appearance-none bg-[length:1rem] bg-[right_0.5rem_center] bg-no-repeat pr-8;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+  select.cb-input[multiple] {
+    @apply h-auto bg-none py-1 pr-2.5;
+  }
+  .cb-btn {
+    @apply focus-visible:border-ring focus-visible:ring-ring/50 border-border bg-background hover:bg-muted hover:text-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg border bg-clip-padding px-2.5 text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:translate-y-px disabled:pointer-events-none disabled:opacity-50;
+  }
+  /* Variants repeat their dark: border and background: .cb-btn's dark: classes are more specific. */
+  .cb-btn-sm {
+    @apply h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem];
+  }
+  .cb-btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/80 hover:text-primary-foreground dark:bg-primary dark:hover:bg-primary/80 border-transparent dark:border-transparent;
+  }
+  .cb-btn-ghost {
+    @apply hover:bg-muted dark:hover:bg-muted/50 border-transparent bg-transparent dark:border-transparent dark:bg-transparent;
+  }
+  .cb-btn-destructive {
+    @apply bg-destructive/10 hover:bg-destructive/20 text-destructive dark:bg-destructive/20 dark:hover:bg-destructive/30 hover:text-destructive border-transparent dark:border-transparent;
+  }
+  .cb-icon-btn {
+    @apply hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 text-muted-foreground inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-all outline-none focus-visible:ring-3 focus-visible:ring-ring/50;
+  }
+  .cb-card {
+    @apply ring-foreground/10 bg-card text-card-foreground rounded-xl text-sm ring-1;
+  }
+  .cb-badge {
+    @apply inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap;
+  }
+  .cb-nav-link {
+    @apply text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex w-full items-center gap-2 rounded-md p-2 text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring;
+  }
+  .cb-nav-link-active {
+    @apply bg-sidebar-accent text-sidebar-accent-foreground font-medium;
+  }
+}
+
+/* The mobile sidebar: hidden off-canvas until the menu button sets data-cb-sidebar-open. */
+@media (width < 64rem) {
+  [data-cb-sidebar] {
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  html[data-cb-sidebar-open] [data-cb-sidebar] {
+    transform: none;
+  }
+  html[data-cb-sidebar-open] [data-cb-sidebar-backdrop] {
+    display: block;
+  }
+}

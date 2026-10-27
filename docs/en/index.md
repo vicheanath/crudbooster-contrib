@@ -6,6 +6,7 @@
   - [Resources: Code-First Admin Pages](./panel.md)
   - [Custom Pages](./panel-pages.md)
   - [Extending The Panel](./panel-extending.md)
+  - [Themes: AdminLTE Or Tailwind + shadcn/ui](./panel-themes.md)
   - [Deprecated APIs and How To Replace Them](./deprecations.md)
 - **Grid Data Column Section**
   - [How To Add Column In Grid Data](./how-to-add-column.md)

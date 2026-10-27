@@ -28,6 +28,9 @@ abstract class Field
 
     protected string $view;
 
+    /** The React component that renders the input in the Tailwind theme; null for none. */
+    protected ?string $component = null;
+
     protected array $rules = [];
 
     protected bool|Closure $required = false;
@@ -345,6 +348,31 @@ abstract class Field
      */
     public function saveRelationships(Model $record, mixed $value): void
     {
+    }
+
+    public function getComponent(): ?string
+    {
+        return $this->component;
+    }
+
+    /**
+     * What the React component receives. Values are what the input shows (getState()); the
+     * component submits them under getName(), like a plain input.
+     */
+    public function getComponentProps(): array
+    {
+        $state = $this->getState();
+
+        return [
+            'name' => $this->name,
+            'id' => $this->getId(),
+            'label' => $this->getLabel(),
+            'value' => is_scalar($state) ? (string) $state : ($state === null ? '' : $state),
+            'required' => $this->isRequired(),
+            'disabled' => $this->isDisabled(),
+            'placeholder' => $this->getPlaceholder(),
+            'attributes' => (object) $this->getExtraAttributes(),
+        ];
     }
 
     public function render(): string

@@ -56,6 +56,8 @@ class ProductResource extends Resource
 ```
 
 Both use the same login, layout, privileges and audit log, so they can run side by side in one app.
+Resources and pages can use the classic AdminLTE look or a **Tailwind CSS theme built with shadcn/ui
+(Base UI) and TypeScript**, with dark mode (`CB_PANEL_THEME=tailwind`, see [Themes](/docs/en/panel-themes.md)).
 
 ## Let's Get Started
 📖 **Documentation site: https://vicheanath.github.io/crudbooster-contrib/**

@@ -506,6 +506,30 @@ Design rules:
 Covered by `tests/Feature/PanelTest.php` (requests through a resource, a read-only resource, a page and a
 plugin, as superadmin and as a standard admin), `PanelCommandsTest.php` and `tests/Unit/Panel`.
 
+### Phase 10: Themes for the resource layer — **Implemented.**
+The resource layer's screens are now themed, so they can move off Bootstrap without touching resources
+or classic modules.
+
+1. **A theme is view paths plus head HTML** (`CrudBooster\Themes\Theme`). `Panel::applyTheme()` points the
+   `cb::` view namespace at the theme's directory first, then the default views, so a theme overrides only
+   the views it has. Published overrides in `resources/views/vendor/cb` still win. The view finder's cache
+   is flushed on a switch.
+2. **Shared view names stay theme-neutral.** The AdminLTE sidebar includes `cb::navigation` on classic pages,
+   so the Tailwind theme renders its own sidebar partials instead of overriding that view.
+3. **React islands, not a single-page app.** Pages stay server-rendered Blade. A field describes itself as
+   props (`getComponent()`, `getComponentProps()`), and the theme renders
+   `<div data-cb-component data-cb-props>` around a plain HTML fallback that submits the same names.
+   Validation, old input, authorization and saving stay on the server, unchanged.
+4. **No build step for users.** Vite builds `core/resources/{js,css}` into `src/assets/panel`, committed and
+   published with `cb_asset`. Tailwind scans the theme's views and `TailwindTheme`, where the colour and span
+   class lists are written out in full. CI rebuilds and fails on a difference.
+5. **One React per page.** `window.CrudBooster` exposes `React`, `register()`, `registerMount()`, `mount()`
+   and `confirm()` for app scripts, and fires `crudbooster:ready`.
+6. **shadcn/ui, owned in the repository.** The islands are TypeScript on shadcn's `base-nova` components (Base
+   UI primitives) in `core/resources/js/components/ui`, generated with the shadcn CLI's own transforms and
+   configured by `components.json`. The Blade views and the plain-HTML fallbacks use the same Nova classes
+   and design tokens, so server-rendered and React parts match.
+
 ---
 
 ## 8. Summary of Benefits

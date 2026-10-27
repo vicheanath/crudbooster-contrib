@@ -86,45 +86,8 @@
                 @include('cb::navigation')
 
                 @if(CRUDBooster::isSuperadmin())
-                    @php
-                        $groupSetting = app(\crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface::class)->groups();
-                        $settingLinks = [['route' => route('SettingsControllerGetAdd'), 'icon' => 'fa fa-plus', 'label' => cbLang('Add_New_Setting'), 'active' => Request::is($cbAdminPath.'/settings/add*')]];
-                        foreach ($groupSetting as $gs) {
-                            $settingLinks[] = ['route' => route('SettingsControllerGetShow').'?group='.urlencode($gs).'&m=0', 'icon' => 'fa fa-wrench', 'label' => $gs, 'active' => $gs == Request::get('group')];
-                        }
-
-                        // Superadmin tools: a link, or a group of links.
-                        $superadminMenu = [
-                            ['icon' => 'fa fa-key', 'label' => cbLang('Privileges_Roles'), 'children' => [
-                                ['route' => Route('PrivilegesControllerGetAdd'), 'icon' => 'fa fa-plus', 'label' => cbLang('Add_New_Privilege'), 'active' => Request::is($cbAdminPath.'/privileges/add*')],
-                                ['route' => Route('PrivilegesControllerGetIndex'), 'icon' => 'fa fa-bars', 'label' => cbLang('List_Privilege'), 'active' => Request::is($cbAdminPath.'/privileges')],
-                            ]],
-                            ['icon' => 'fa fa-users', 'label' => cbLang('Users_Management'), 'children' => [
-                                ['route' => Route('AdminCmsUsersControllerGetAdd'), 'icon' => 'fa fa-plus', 'label' => cbLang('add_user'), 'active' => Request::is($cbAdminPath.'/users/add*')],
-                                ['route' => Route('AdminCmsUsersControllerGetIndex'), 'icon' => 'fa fa-bars', 'label' => cbLang('List_users'), 'active' => Request::is($cbAdminPath.'/users')],
-                            ]],
-                            ['route' => Route('MenusControllerGetIndex'), 'icon' => 'fa fa-bars', 'label' => cbLang('Menu_Management'), 'active' => Request::is($cbAdminPath.'/menu_management*')],
-                            ['icon' => 'fa fa-wrench', 'label' => cbLang('settings'), 'children' => $settingLinks],
-                            ['icon' => 'fa fa-th', 'label' => cbLang('Module_Generator'), 'children' => [
-                                ['route' => Route('ModulsControllerGetStep1'), 'icon' => 'fa fa-plus', 'label' => cbLang('Add_New_Module'), 'active' => Request::is($cbAdminPath.'/module_generator/step1')],
-                                ['route' => Route('ModulsControllerGetIndex'), 'icon' => 'fa fa-bars', 'label' => cbLang('List_Module'), 'active' => Request::is($cbAdminPath.'/module_generator')],
-                            ]],
-                            ['icon' => 'fa fa-dashboard', 'label' => cbLang('Statistic_Builder'), 'children' => [
-                                ['route' => Route('StatisticBuilderControllerGetAdd'), 'icon' => 'fa fa-plus', 'label' => cbLang('Add_New_Statistic'), 'active' => Request::is($cbAdminPath.'/statistic_builder/add')],
-                                ['route' => Route('StatisticBuilderControllerGetIndex'), 'icon' => 'fa fa-bars', 'label' => cbLang('List_Statistic'), 'active' => Request::is($cbAdminPath.'/statistic_builder')],
-                            ]],
-                            ['icon' => 'fa fa-fire', 'label' => cbLang('API_Generator'), 'children' => [
-                                ['route' => Route('ApiCustomControllerGetGenerator'), 'icon' => 'fa fa-plus', 'label' => cbLang('Add_New_API'), 'active' => Request::is($cbAdminPath.'/api_generator/generator*')],
-                                ['route' => Route('ApiCustomControllerGetIndex'), 'icon' => 'fa fa-bars', 'label' => cbLang('list_API'), 'active' => Request::is($cbAdminPath.'/api_generator')],
-                                ['route' => Route('ApiCustomControllerGetScreetKey'), 'icon' => 'fa fa-bars', 'label' => cbLang('Generate_Screet_Key'), 'active' => Request::is($cbAdminPath.'/api_generator/screet-key*')],
-                            ]],
-                            ['icon' => 'fa fa-envelope-o', 'label' => cbLang('Email_Templates'), 'children' => [
-                                ['route' => Route('EmailTemplatesControllerGetAdd'), 'icon' => 'fa fa-plus', 'label' => cbLang('Add_New_Email'), 'active' => Request::is($cbAdminPath.'/email_templates/add*')],
-                                ['route' => Route('EmailTemplatesControllerGetIndex'), 'icon' => 'fa fa-bars', 'label' => cbLang('List_Email_Template'), 'active' => Request::is($cbAdminPath.'/email_templates')],
-                            ]],
-                            ['route' => Route('LogsControllerGetIndex'), 'icon' => 'fa fa-flag', 'label' => cbLang('Log_User_Access'), 'active' => Request::is($cbAdminPath.'/logs*')],
-                        ];
-                    @endphp
+                    {{-- A link, or a group of links. Shared with the Tailwind theme's sidebar. --}}
+                    @php $superadminMenu = \CrudBooster\Navigation\SuperadminMenu::items(); @endphp
 
                     <li class="nav-header header">{{ cbLang('SUPERADMIN') }}</li>
                     @foreach($superadminMenu as $item)

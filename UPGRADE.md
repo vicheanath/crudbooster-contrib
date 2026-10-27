@@ -115,6 +115,10 @@ in `resources/views/vendor/crudbooster`, copy these additions into them:
   ```
 - `sidebar.blade.php`: add `@include('cb::navigation')` after the `CRUDBooster::sidebarMenu()` loop.
 
+Resource and page screens can use a Tailwind CSS + shadcn/ui theme (`CB_PANEL_THEME=tailwind`, see
+[docs/en/panel-themes.md](docs/en/panel-themes.md)). Its compiled assets ship with the package; publish them with
+`php artisan crudbooster:update` (or `vendor:publish --tag=cb_asset --force`) after each update.
+
 ### Deprecated classic APIs (7.2)
 `CBController`, the fluent `modern\CrudController`, the `CRUDBooster` / `CB` helpers, the global helper functions
 (`cbLang()`, `get_setting()`, `g()`, ...), the Module and API generators and the classic form, grid, export and action

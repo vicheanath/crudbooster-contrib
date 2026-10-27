@@ -75,7 +75,7 @@ class PanelTest extends FeatureTestCase
         }
     }
 
-    private function seedProducts(): array
+    protected function seedProducts(): array
     {
         $tools = Category::query()->forceCreate(['name' => 'Tools']);
         $toys = Category::query()->forceCreate(['name' => 'Toys']);
@@ -90,7 +90,7 @@ class PanelTest extends FeatureTestCase
         return compact('tools', 'toys', 'red', 'hammer', 'anvil', 'yoyo');
     }
 
-    private function privilegeFor(string $slug, array $permissions): void
+    protected function privilegeFor(string $slug, array $permissions): void
     {
         $this->artisan('crudbooster:sync-panel')->assertSuccessful();
         $moduleId = DB::table('cms_moduls')->where('path', $slug)->value('id');
@@ -121,7 +121,7 @@ class PanelTest extends FeatureTestCase
         // Sorted by name, two per page.
         $response->assertSeeInOrder(['Anvil', 'Hammer'])->assertDontSee('Yo-yo')
             ->assertSee('$1,250.00')->assertSee('Tools')
-            ->assertSee('text-bg-secondary', false)
+            ->assertSee($this->badgeMarkup('secondary'), false)
             ->assertSee('id="shop-hook"', false)
             ->assertSee('Showing 1 to 2 of 3');
 
@@ -378,7 +378,7 @@ class PanelTest extends FeatureTestCase
 
         $this->get($this->admin('products'))->assertOk()
             ->assertSeeInOrder(['Categories', 'Sales Report', 'Shop', 'Products', 'Storefront', cbLang('SUPERADMIN')])
-            ->assertSee('href="'.url($this->admin('products')).'" class="nav-link active"', false)
+            ->assertSee($this->activeNavigationMarkup(url($this->admin('products'))), false)
             ->assertSee('target="_blank"', false);
 
         $this->assertTrue($this->plugin->booted, 'A plugin added after boot is booted at once');
@@ -390,6 +390,19 @@ class PanelTest extends FeatureTestCase
         $this->loginAsAdmin();
 
         $this->get($this->admin('users'))->assertOk()->assertSee("id='btn_add_new_data'", false);
+    }
+
+    /**
+     * Markup the theme under test renders for a badge of this colour.
+     */
+    protected function badgeMarkup(string $color): string
+    {
+        return 'text-bg-'.$color;
+    }
+
+    protected function activeNavigationMarkup(string $url): string
+    {
+        return 'href="'.$url.'" class="nav-link active"';
     }
 
     public function test_duplicate_slugs_are_rejected()
