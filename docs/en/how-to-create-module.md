@@ -1,4 +1,9 @@
 # How To Create Module (CRUD)
+
+> **Deprecated since 7.2.** The Module Generator still works in 7.x, but new code should use `php artisan crudbooster:make-resource Model --generate`
+> ([Resources](./panel.md)). See
+> [Deprecated APIs and How To Replace Them](./deprecations.md).
+
 Go to **Module Generator** menu -> Add New Module
 ## Step 1
 | Field Name      | Description         |

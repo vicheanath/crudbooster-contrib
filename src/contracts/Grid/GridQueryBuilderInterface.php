@@ -5,6 +5,10 @@ namespace crocodicstudio\crudbooster\contracts\Grid;
 use crocodicstudio\crudbooster\grid\GridQuery;
 use Illuminate\Database\Query\Builder;
 
+/**
+ * @deprecated 7.2 Only used by CBController modules. Use Resource::modifyQuery() or
+ *     Table::modifyQueryUsing(). See docs/en/deprecations.md.
+ */
 interface GridQueryBuilderInterface
 {
     /**

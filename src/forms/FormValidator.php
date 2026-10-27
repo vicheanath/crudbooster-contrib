@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Validator;
 /**
  * Builds Laravel rules from the form definition ('required', 'min', 'max', 'image', 'mimes',
  * 'validation', child columns) and validates the request.
+ *
+ * @deprecated 7.2 Only used by CBController modules; resource fields add their own rules. See
+ *     docs/en/deprecations.md.
  */
 class FormValidator implements FormValidatorInterface
 {

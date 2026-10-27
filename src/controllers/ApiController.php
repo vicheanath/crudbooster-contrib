@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @deprecated 7.2 Write API endpoints as Laravel routes and controllers returning JSON resources
+ *     (Illuminate\Http\Resources\Json\JsonResource), authenticated with Sanctum or the CBAuthAPI middleware. See
+ *     docs/en/deprecations.md.
+ */
 class ApiController extends Controller
 {
     public $method_type;
@@ -30,16 +35,25 @@ class ApiController extends Controller
         $this->output = $array;
     }
 
+    /**
+     * @deprecated 7.2 Validate in a Laravel controller or form request.
+     */
     public function hook_before(&$postdata)
     {
 
     }
 
+    /**
+     * @deprecated 7.2 Shape the response with a JsonResource.
+     */
     public function hook_after($postdata, &$result)
     {
 
     }
 
+    /**
+     * @deprecated 7.2 Build the query in your own controller.
+     */
     public function hook_query(&$query)
     {
 

@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Request;
 /**
  * The index page's "selected rows" buttons: delete, or the module's own buttons
  * ($button_selected), handled by its actionButtonSelected().
+ *
+ * @deprecated 7.2 Only used by CBController modules. Use CrudBooster\Actions\BulkAction in
+ *     Table::bulkActions(). See docs/en/deprecations.md.
  */
 class BulkAction extends CrudAction
 {

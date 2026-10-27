@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Request;
 /**
  * The index page. With $index_return set it returns the query result and columns instead
  * (used by export).
+ *
+ * @deprecated 7.2 Only used by CBController modules; a resource's table() builds its list. See
+ *     docs/en/deprecations.md.
  */
 class IndexAction extends CrudAction
 {

@@ -2,6 +2,9 @@
 
 namespace crocodicstudio\crudbooster\contracts\Generator;
 
+/**
+ * @deprecated 7.2 Use `php artisan crudbooster:make-resource Model --generate`. See docs/en/deprecations.md.
+ */
 interface ModuleGeneratorInterface
 {
     /**

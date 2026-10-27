@@ -6,6 +6,10 @@ use crocodicstudio\crudbooster\controllers\CBController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
+/**
+ * @deprecated 7.2 Only used by CBController modules; override detail() in a resource. See
+ *     docs/en/deprecations.md.
+ */
 class DetailAction extends CrudAction
 {
     public function execute(CBController $controller, mixed ...$arguments): mixed

@@ -5,6 +5,10 @@ namespace crocodicstudio\crudbooster\export;
 use crocodicstudio\crudbooster\contracts\Export\ExporterInterface;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @deprecated 7.2 Only used by CBController modules. Use Pdf::loadView()->download() in a BulkAction. See
+ *     docs/en/deprecations.md.
+ */
 class PdfExporter implements ExporterInterface
 {
     public function label(): string

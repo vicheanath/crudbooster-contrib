@@ -28,6 +28,9 @@ use Illuminate\Support\Facades\Session;
  * the public properties below and customizes it with the hook_*() methods. Each endpoint
  * delegates to an action class resolved from the container (see src/actions), so apps can
  * replace one by binding their own subclass.
+ *
+ * @deprecated 7.2 Build new screens as a resource (CrudBooster\Resources\Resource, `php artisan
+ *     crudbooster:make-resource`). See docs/en/deprecations.md.
  */
 class CBController extends Controller
 {
@@ -402,38 +405,66 @@ class CBController extends Controller
         }
     }
 
+    /**
+     * @deprecated 7.2 Use BulkAction::make($name)->action(fn (Collection $records) => ...) in
+     *     Table::bulkActions().
+     */
     public function actionButtonSelected($id_selected, $button_name)
     {
     }
 
+    /**
+     * @deprecated 7.2 Use Resource::modifyQuery() (every page) or Table::modifyQueryUsing() (the list only).
+     */
     public function hook_query_index(&$query)
     {
     }
 
+    /**
+     * @deprecated 7.2 Use Column::formatStateUsing() or Column::state().
+     */
     public function hook_row_index($index, &$value)
     {
     }
 
+    /**
+     * @deprecated 7.2 Use Resource::beforeCreate(array $data): array.
+     */
     public function hook_before_add(&$arr)
     {
     }
 
+    /**
+     * @deprecated 7.2 Use Resource::afterCreate(Model $record).
+     */
     public function hook_after_add($id)
     {
     }
 
+    /**
+     * @deprecated 7.2 Use Resource::beforeUpdate(array $data, Model $record): array.
+     */
     public function hook_before_edit(&$arr, $id)
     {
     }
 
+    /**
+     * @deprecated 7.2 Use Resource::afterUpdate(Model $record).
+     */
     public function hook_after_edit($id)
     {
     }
 
+    /**
+     * @deprecated 7.2 Use Resource::beforeDelete(Model $record).
+     */
     public function hook_before_delete($id)
     {
     }
 
+    /**
+     * @deprecated 7.2 Use Resource::afterDelete(Model $record).
+     */
     public function hook_after_delete($id)
     {
     }

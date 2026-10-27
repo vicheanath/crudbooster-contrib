@@ -9,6 +9,10 @@ use crocodicstudio\crudbooster\controllers\CBController;
 use CRUDBooster;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @deprecated 7.2 Only used by CBController modules. Use CrudBooster\Actions\Action in a resource. See
+ *     docs/en/deprecations.md.
+ */
 abstract class CrudAction implements CrudActionInterface
 {
     public function __construct(

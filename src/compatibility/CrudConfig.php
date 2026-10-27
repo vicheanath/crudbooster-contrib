@@ -7,6 +7,9 @@ use crocodicstudio\crudbooster\controllers\CBController;
 /**
  * A module's configuration as one immutable value: what classic modules set as CBController
  * properties in cbInit(), and what CrudDefinition builds for CrudController modules.
+ *
+ * @deprecated 7.2 Only used by CBController modules; resources are configured by their own class. See
+ *     docs/en/deprecations.md.
  */
 final class CrudConfig
 {

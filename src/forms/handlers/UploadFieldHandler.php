@@ -9,6 +9,8 @@ use crocodicstudio\crudbooster\forms\FormContext;
 /**
  * Stores the uploaded file (resized by 'resize_width'/'resize_height', renamed when 'encrypt'
  * or 'upload_encrypt' is set). Without a new file the current one, posted as "_{name}", is kept.
+ *
+ * @deprecated 7.2 Use CrudBooster\Forms\Fields\FileUpload. See docs/en/deprecations.md.
  */
 class UploadFieldHandler extends BaseFieldHandler
 {

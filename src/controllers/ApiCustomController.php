@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * @deprecated 7.2 The API Generator screen. Write API endpoints as Laravel routes and controllers. See
+ *     docs/en/deprecations.md.
+ */
 class ApiCustomController extends CBController
 {
     use RequiresSuperadmin;

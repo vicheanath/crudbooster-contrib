@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+### Deprecated: the classic module layer (no runtime change)
+`@deprecated` tags, each naming its replacement, on the classic APIs that resources, pages, the service contracts or
+Laravel replace. Everything keeps working in 7.x; removal is possible in 8.0 at the earliest. Migration guide:
+`docs/en/deprecations.md`.
+- `CBController` (and its hooks), `modern\CrudController`, `CrudDefinition`, `Column`, `Field` and `CrudConfig`:
+  use a resource.
+- Every `CRUDBooster` method and the `CB` alias: use the service contracts (`AuthenticationServiceInterface`,
+  `SettingsRepositoryInterface`, `FileUploaderInterface`, ...), `Resource::can()` / `Authorizer`, or Laravel.
+- Global helpers `cbLang()`, `get_setting()`, `g()`, `db()`, `str_random()`, `str_slug()`, `str_limit()`,
+  `ends_with()`, `extract_unit()`, `assetThumbnail()`, `assetResize()`, `min_var_export()`, `rrmdir()`, `now()`.
+- Classic extension points: `actions\*`, `forms\*` and the field handlers, `grid\*`, `export\*` and their contracts.
+- Module Generator, API Generator (`ApiController`, `ApiCustomController`, `ModuleGenerator`, `ApiGenerator`),
+  Statistic Builder, and the `Image` alias (`CBImage`).
+- Not deprecated: models, migrations, middlewares, the built-in admin screens, `CBRouter`, `CBHook`, `FCM` and the
+  shared service contracts.
+- The resource layer no longer calls `CRUDBooster::adminPath()` or `cbLang()`.
+
 ### Resources and pages: a code-first admin layer (no changes needed in existing modules)
 A second way to build admin screens, next to classic modules. It lives in the new `CrudBooster\` namespace
 (`core/`), works with Eloquent models, and is defined in code instead of in the Module Generator. Guides:

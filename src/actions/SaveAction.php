@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Request;
  * (`execute($controller, 'edit', $id)`): validation(), input_assignment(), the before hook,
  * the insert or update, the fields' after-save steps (pivot and child rows), the after hook,
  * the log entry and the redirect.
+ *
+ * @deprecated 7.2 Only used by CBController modules; resources save through Eloquent with
+ *     beforeCreate()/afterCreate()/beforeUpdate()/afterUpdate(). See docs/en/deprecations.md.
  */
 class SaveAction extends CrudAction
 {

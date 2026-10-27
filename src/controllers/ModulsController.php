@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Request;
 use crocodicstudio\crudbooster\fonts\Fontawesome;
 
+/**
+ * @deprecated 7.2 The Module Generator screen. Create resources with `php artisan crudbooster:make-resource
+ *     Model --generate` and add their privileges with `php artisan crudbooster:sync-panel`. See
+ *     docs/en/deprecations.md.
+ */
 class ModulsController extends CBController
 {
     public function cbInit()

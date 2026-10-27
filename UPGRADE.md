@@ -115,6 +115,13 @@ in `resources/views/vendor/crudbooster`, copy these additions into them:
   ```
 - `sidebar.blade.php`: add `@include('cb::navigation')` after the `CRUDBooster::sidebarMenu()` loop.
 
+### Deprecated classic APIs (7.2)
+`CBController`, the fluent `modern\CrudController`, the `CRUDBooster` / `CB` helpers, the global helper functions
+(`cbLang()`, `get_setting()`, `g()`, ...), the Module and API generators and the classic form, grid, export and action
+extension points are marked `@deprecated`. They keep working in every 7.x release and nothing changes at runtime;
+your IDE and PHPStan now point at the replacement. [docs/en/deprecations.md](docs/en/deprecations.md) maps each one
+to a resource, a service contract or a Laravel API.
+
 ### Other behaviour changes
 - **API tokens:** these now really last 2880 minutes (48h). They used to expire after 2880 seconds.
 - **Seeder:** `CBSeeder` is namespaced `crocodicstudio\crudbooster\database\seeds\CBSeeder`.

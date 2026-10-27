@@ -6,6 +6,9 @@ use crocodicstudio\crudbooster\compatibility\CrudConfig;
 
 /**
  * The fluent module definition a CrudController fills in setup().
+ *
+ * @deprecated 7.2 Use CrudBooster\Tables\Table and CrudBooster\Forms\Form in a resource. See
+ *     docs/en/deprecations.md.
  */
 class CrudDefinition
 {

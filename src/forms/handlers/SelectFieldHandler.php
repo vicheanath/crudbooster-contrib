@@ -4,6 +4,10 @@ namespace crocodicstudio\crudbooster\forms\handlers;
 
 use crocodicstudio\crudbooster\forms\FormContext;
 
+/**
+ * @deprecated 7.2 Use CrudBooster\Forms\Fields\Select with options() or relationship(). See
+ *     docs/en/deprecations.md.
+ */
 class SelectFieldHandler extends BaseFieldHandler
 {
     protected array $types = ['select'];

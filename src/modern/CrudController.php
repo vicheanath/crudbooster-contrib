@@ -22,6 +22,9 @@ use crocodicstudio\crudbooster\controllers\CBController;
  *     }
  *
  * It is still a CBController: routes, views, hook_*() methods and actions work the same.
+ *
+ * @deprecated 7.2 Use a resource (CrudBooster\Resources\Resource, `php artisan crudbooster:make-resource`):
+ *     its table() and form() replace setup(). See docs/en/deprecations.md.
  */
 abstract class CrudController extends CBController
 {

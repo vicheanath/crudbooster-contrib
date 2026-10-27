@@ -76,6 +76,8 @@ module whose path is the page's slug. Run `php artisan crudbooster:sync-panel` t
 ```php
 public function can(): bool
 {
-    return CRUDBooster::myPrivilegeName() === 'Accounting';
+    $admin = CmsUser::find(app(AuthenticationServiceInterface::class)->currentUserId());
+
+    return $admin?->privilege?->name === 'Accounting';
 }
 ```

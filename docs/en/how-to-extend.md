@@ -80,6 +80,9 @@ $this->app->bind(\crocodicstudio\crudbooster\actions\DeleteAction::class, \App\C
 
 ## Define a module with the fluent API
 
+> **Deprecated since 7.2.** `CrudController` still works in 7.x, but new code should use a [resource](./panel.md). See
+> [Deprecated APIs and How To Replace Them](./deprecations.md).
+
 New modules can extend `CrudController` and describe themselves in `setup()` instead of setting properties:
 
 ```php

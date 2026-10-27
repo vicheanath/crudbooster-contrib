@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Request;
 
 /**
  * Exports the index page's rows (filters included) in the requested format.
+ *
+ * @deprecated 7.2 Only used by CBController modules. Export from a resource with a BulkAction that returns a
+ *     download (Excel::download()). See docs/en/deprecations.md.
  */
 class ExportAction extends CrudAction
 {
