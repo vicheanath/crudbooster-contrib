@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Hidden::make('shop_id')`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Hidden Form Type
 
 ### Code Sample

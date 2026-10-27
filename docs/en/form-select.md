@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Select::make('category_id')->relationship('category', 'name')` or `->options([...])`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Select Form Type
 Showing a combo box (Spinner) input type
 

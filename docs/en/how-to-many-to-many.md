@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Select::make('tags')->relationship('tags', 'name')->multiple()` or `CheckboxList`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 ### How To Implement A Many To Many Relationship To Form (E.g : Film -> R <- Actors)
 
 ### Films Table - films

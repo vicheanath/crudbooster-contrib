@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "Override `form()` on the resource, a `ViewField`, or a page for a fully custom screen."
+  migrate: /en/deprecations#modules-cbcontroller-to-resource
+  guide: /en/panel-pages
+---
+
 # How To Make A Custom View Of Edit Method
 
 A way to make a custom view of edit method is override it. This is a best way if CB can't handle the layout that you want.

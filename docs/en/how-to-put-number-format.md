@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`TextColumn::make('price')->numeric(2)` or `->money('$')`."
+  migrate: /en/deprecations#columns
+  guide: /en/panel#columns
+---
+
 # How To Put Number Format at Grid Data Column
 
 ### Table : Products

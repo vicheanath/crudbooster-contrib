@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "A relationship column: `TextColumn::make('category.name')`, eager loaded."
+  migrate: /en/deprecations#columns
+  guide: /en/panel#columns
+---
+
 # How To Make A Join Table in Grid Data
 
 ### Table : Products

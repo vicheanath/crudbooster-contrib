@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "The `index.before` render hook, or a page for a separate screen."
+  migrate: /en/deprecations#module-properties
+  guide: /en/panel-extending#render-hooks
+---
+
 # How To Add More Button At Top Of Grid Data
 
 Some cases you need to add extra button at top of grid data. For example you need to add a custom print button. And you've created a method to print.

@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`TextInput::make('price')->numeric()->prefix('$')`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Money Form Type
 Input text with auto money number format
 

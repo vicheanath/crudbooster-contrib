@@ -1,8 +1,10 @@
-# Helpers
+---
+deprecated:
+  instead: "The service contracts (`AuthenticationServiceInterface`, `SettingsRepositoryInterface`, ...) and Laravel APIs."
+  migrate: /en/deprecations#the-crudbooster-helper
+---
 
-> **Deprecated since 7.2.** The `CRUDBooster` helper still works in 7.x, but new code should use the service contracts, Laravel facades and resources listed
-> in the guide. See
-> [Deprecated APIs and How To Replace Them](./deprecations.md).
+# Helpers
 
 | Helper                        | Description                 |
 | ----------------------------- | --------------------------- |

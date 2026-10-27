@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`FileUpload::make('photo')->image()`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Upload Form Input Type
 Showing an upload input type
 

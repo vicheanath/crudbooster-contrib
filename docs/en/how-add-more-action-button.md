@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "Row actions: `Action::make('publish')->action(fn ($record) => ...)`."
+  migrate: /en/deprecations#module-properties
+  guide: /en/panel#row-and-bulk-actions
+---
+
 ## How To Add More Action Button In Grid Data
 
 ### Products Table - products

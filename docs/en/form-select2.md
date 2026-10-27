@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Select::make('tags')->relationship('tags', 'name')->multiple()`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Select2 Form Type
 Showing a select2 combo box (Spinner) input type. Select2 is the jQuery replacement for select boxes. Select2 gives you a customizable select box with support for searching, tagging, remote data sets, infinite scrolling, and many other highly used options
 

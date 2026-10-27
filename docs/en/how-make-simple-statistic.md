@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "A page with `<x-cb::stat>` cards, or the `index.before` render hook."
+  migrate: /en/deprecations#module-properties
+  guide: /en/panel-themes#page-components-that-work-in-both-themes
+---
+
 # How To Make A Simple Statistic At Top Of Grid Data
 
 This simple statistic will shown at top of grid data

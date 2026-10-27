@@ -47,6 +47,9 @@ Laravel replace. Everything keeps working in 7.x; removal is possible in 8.0 at 
   shared service contracts.
 - The AdminLTE resource layout and `ResourceController` no longer call `CRUDBooster::adminPath()` or `cbLang()`.
   The Tailwind theme views and `SuperadminMenu` still do.
+- Docs site: every classic page opens with a "Deprecated since 7.2" notice naming its replacement, with links to
+  the migration guide and the new guide (`deprecated:` frontmatter, shown by `docs/.vitepress/theme`). The sidebar
+  groups those pages under a collapsed "Classic Modules (deprecated)", and the home page and nav link to the guide.
 
 ### Resources and pages: a code-first admin layer (no changes needed in existing modules)
 A second way to build admin screens, next to classic modules. It lives in the new `CrudBooster\` namespace

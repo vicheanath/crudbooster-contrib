@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`DatePicker::make('starts_at')->withTime()`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # DateTime Form Type
 Showing datepicker and time in the input type
 

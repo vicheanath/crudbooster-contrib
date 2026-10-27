@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Radio::make('status')->options([...])`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Radio Form Type
 Showing radio button input type
 

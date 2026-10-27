@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`DatePicker::make('published_on')`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Date Form Type
 Showing datepicker in the input type
 

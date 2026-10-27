@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`BadgeColumn::make('status')->colors([...])`, or `formatStateUsing()`."
+  migrate: /en/deprecations#columns
+  guide: /en/panel#columns
+---
+
 # How To Change The Color Of Row With Specific Condition
 
 Some cases you need to change the color of row. For example is change the rows color that has status 'active' to be green color.

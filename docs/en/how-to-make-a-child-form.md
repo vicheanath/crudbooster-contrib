@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "A separate resource for the child model, filtered by its parent with `SelectFilter::relationship()`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#filters
+---
+
 # How To Make A Child Form (Master - Detail)
 ## Table Products : products 
 | Field Name | Data Type |

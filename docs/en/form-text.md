@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`TextInput::make('name')`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Text Form Input Type
 Showing an input text
 

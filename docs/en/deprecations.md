@@ -22,7 +22,7 @@ These are shared by both layers and stay:
   templates), the `CBBackend` and `CBAuthAPI` middlewares, `CBRouter` and `CBHook`.
 - `FCM`, `crudbooster:install`, `crudbooster:update` and `crudbooster:version`.
 
-## Modules: `CBController` → `Resource`
+## Modules: CBController to Resource
 
 | Deprecated | Replacement |
 | --- | --- |
@@ -152,7 +152,9 @@ delete the old module first), since two screens cannot share one URL.
 
 Model observers and events run too, since resources save with Eloquent.
 
-### Columns (`$this->col[]`)
+### Columns
+
+The `$this->col[]` entries of `cbInit()`.
 
 | Column option | Resource column |
 | --- | --- |
@@ -166,7 +168,9 @@ Model observers and events run too, since resources save with Eloquent.
 | `'visible' => false` | `hidden()` |
 | A subquery column | `state(fn ($record) => ...)`, or `withCount()` / `withSum()` in `modifyQuery()` |
 
-### Form types (`$this->form[]`)
+### Form types
+
+The `type` of each `$this->form[]` entry.
 
 | `type` | Resource field |
 | --- | --- |
@@ -212,10 +216,10 @@ These only serve `CBController` modules and are deprecated with them.
 
 Existing generated APIs keep working, and so do their tokens.
 
-## The `CRUDBooster` helper (and its `CB` alias)
+## The CRUDBooster helper
 
-Most methods already delegate to a service. Inject the service (constructor, method or closure
-injection), or call `app(Interface::class)`. Contracts live in `crocodicstudio\crudbooster\contracts`.
+`CRUDBooster::*` and its `CB` alias. Most methods already delegate to a service. Inject the service
+(constructor, method or closure injection), or call `app(Interface::class)`. Contracts live in `crocodicstudio\crudbooster\contracts`.
 
 ### Current admin
 
@@ -292,13 +296,15 @@ A model policy, when there is one, decides first.
 | `timeAgo()` | `Carbon::parse($date)->diffForHumans()` |
 | `packagePath()` | Internal; no replacement |
 
-## `Image` alias (`CBImage`)
+## The Image alias
 
 Use Intervention Image v3 directly: `\Intervention\Image\ImageManager::gd()->read($path)`, or the
 `intervention/image-laravel` facade. In resources, `ImageColumn` and `FileUpload::image()` cover the
 common cases.
 
-## Global functions (`src/helpers/Helper.php`)
+## Global functions
+
+The functions in `src/helpers/Helper.php`.
 
 | Deprecated | Replacement |
 | --- | --- |

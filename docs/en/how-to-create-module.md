@@ -1,8 +1,11 @@
-# How To Create Module (CRUD)
+---
+deprecated:
+  instead: "Generate a resource: `php artisan crudbooster:make-resource Product --generate`."
+  migrate: /en/deprecations#modules-cbcontroller-to-resource
+  guide: /en/panel#quick-start
+---
 
-> **Deprecated since 7.2.** The Module Generator still works in 7.x, but new code should use `php artisan crudbooster:make-resource Model --generate`
-> ([Resources](./panel.md)). See
-> [Deprecated APIs and How To Replace Them](./deprecations.md).
+# How To Create Module (CRUD)
 
 Go to **Module Generator** menu -> Add New Module
 ## Step 1

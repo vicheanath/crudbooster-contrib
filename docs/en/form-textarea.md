@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Textarea::make('body')`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Textarea Form Input Type
 Showing a textarea input type
 

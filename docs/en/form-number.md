@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`TextInput::make('stock')->numeric()`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Number Form Type
 Showing input number
 

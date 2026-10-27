@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`TextInput::make('email')->email()`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Email Form Type
 Set input type html as email
 
