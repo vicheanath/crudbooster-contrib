@@ -8,6 +8,10 @@ use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @deprecated 7.2 Only used by CBController modules. Use Resource::modifyQuery() or
+ *     Table::modifyQueryUsing(). See docs/en/deprecations.md.
+ */
 final class GridQueryBuilder implements GridQueryBuilderInterface
 {
     public function __construct(

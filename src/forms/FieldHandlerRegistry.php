@@ -20,6 +20,9 @@ use Illuminate\Contracts\Container\Container;
  * Maps form field types to their handlers. Apps add or replace types without touching CBController:
  *
  *     app(FieldHandlerRegistry::class)->register('signature', SignatureFieldHandler::class);
+ *
+ * @deprecated 7.2 Only used by CBController modules. Add field types by extending
+ *     CrudBooster\Forms\Fields\Field. See docs/en/deprecations.md.
  */
 class FieldHandlerRegistry
 {

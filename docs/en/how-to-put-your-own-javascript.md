@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Panel::renderHook('body.end', ...)`."
+  migrate: /en/migration-examples#extra-html-javascript-and-css
+  guide: /en/panel-extending#render-hooks
+---
+
 ## How To Put Your Own Javascript
 
 Open the module controller. Find `$this->script_js` in `cbInit()` method.

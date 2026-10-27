@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Select::make('category_id')->relationship('category', 'name')`."
+  migrate: /en/migration-examples#select-from-a-table
+  guide: /en/panel#forms
+---
+
 ### How To Implement An One To Many Relationship To Form (E.g : Product <- Category)
 
 ### Products Table - products

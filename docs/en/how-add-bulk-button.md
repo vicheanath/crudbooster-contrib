@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "Bulk actions: `BulkAction::make('archive')->action(fn ($records) => ...)`."
+  migrate: /en/migration-examples#a-button-for-the-ticked-rows
+  guide: /en/panel#row-and-bulk-actions
+---
+
 ## How To Add More Bulk Action In Grid Data
 
 Some cases you need to add a bulk button to gives a possibility set status to selected rows

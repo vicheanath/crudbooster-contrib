@@ -6,6 +6,8 @@ use crocodicstudio\crudbooster\contracts\Forms\FormProcessorInterface;
 
 /**
  * Runs each form field through the handler registered for its type.
+ *
+ * @deprecated 7.2 Only used by CBController modules. See docs/en/deprecations.md.
  */
 class FormProcessor implements FormProcessorInterface
 {

@@ -18,6 +18,9 @@ use Illuminate\Support\Str;
  * @method $this download(bool $enabled = true)
  * @method $this image(bool $enabled = true)
  * @method $this visible(bool $visible = true)
+ *
+ * @deprecated 7.2 Use CrudBooster\Tables\Columns\TextColumn, BadgeColumn, BooleanColumn or ImageColumn. See
+ *     docs/en/deprecations.md.
  */
 class Column
 {

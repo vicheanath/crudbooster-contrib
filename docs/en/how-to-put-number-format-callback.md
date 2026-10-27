@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`formatStateUsing(fn ($state, $record) => ...)` on a column."
+  migrate: /en/migration-examples#number-format-and-callbacks
+  guide: /en/panel#columns
+---
+
 # Callback
 
 ### Table : Products

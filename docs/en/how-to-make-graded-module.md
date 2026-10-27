@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "A child resource with `SelectFilter::relationship()`, linked from the parent with `Column::url()`."
+  migrate: /en/migration-examples#sub-modules-parent-and-child
+  guide: /en/panel#filters
+---
+
 # How To Make A Graded Module (Parent Module -> Sub Module -> Sub Module)
 
 ### Albums Table

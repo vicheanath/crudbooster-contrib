@@ -14,6 +14,7 @@ const rootPages: Record<string, string> = {
 /**
  * Builds the sidebar from the table of contents in docs/en/index.md, so that file stays the
  * single source of truth. Bold list items become groups; nested lists become nested groups.
+ * Nested groups, and groups marked "(deprecated)", start collapsed.
  */
 function sidebarFromIndex(): DefaultTheme.SidebarItem[] {
   const index = readFileSync(fileURLToPath(new URL('../en/index.md', import.meta.url)), 'utf8')
@@ -29,7 +30,7 @@ function sidebarFromIndex(): DefaultTheme.SidebarItem[] {
     const group = match[2].match(/^\*\*(.+)\*\*$/)
     const link = match[2].match(/^\[(.+)\]\(\.\/(.+)\.md\)$/)
     if (group) {
-      const item: DefaultTheme.SidebarItem = { text: group[1], collapsed: indent > 0, items: [] }
+      const item: DefaultTheme.SidebarItem = { text: group[1], collapsed: indent > 0 || /\(deprecated\)/i.test(group[1]), items: [] }
       parent.push(item)
       stack.push({ indent, items: item.items! })
     } else if (link) {
@@ -56,7 +57,6 @@ function sidebarFromIndex(): DefaultTheme.SidebarItem[] {
   sidebar.push({
     text: 'Project',
     items: [
-      { text: 'Upgrade Guide', link: '/en/upgrade' },
       { text: 'Changelog', link: '/en/changelog' },
       { text: 'Contributing', link: '/en/contributing' },
     ],
@@ -95,7 +95,14 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/en/installation' },
       { text: 'Table of Contents', link: '/en/' },
-      { text: 'Upgrade to 7.x', link: '/en/upgrade' },
+      {
+        text: 'Migrate',
+        items: [
+          { text: 'Classic modules to resources', link: '/en/migration-examples' },
+          { text: 'Deprecated APIs reference', link: '/en/deprecations' },
+          { text: 'CRUDBooster 5.x to 7.x', link: '/en/upgrade' },
+        ],
+      },
       { text: 'Changelog', link: '/en/changelog' },
       { text: 'Packagist', link: 'https://packagist.org/packages/vicheanath/crudbooster' },
     ],

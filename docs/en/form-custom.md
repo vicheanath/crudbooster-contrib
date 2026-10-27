@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`ViewField::make('signature')->view('admin.fields.signature')`."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Custom Form Type
 You might create your own html input type by using `custom` type
 

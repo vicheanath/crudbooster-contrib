@@ -4,6 +4,9 @@ namespace crocodicstudio\crudbooster\generator;
 
 use crocodicstudio\crudbooster\contracts\Generator\ApiGeneratorInterface;
 
+/**
+ * @deprecated 7.2 Write API endpoints as Laravel routes and controllers. See docs/en/deprecations.md.
+ */
 final class ApiGenerator implements ApiGeneratorInterface
 {
     public function generate(string $name, string $table, string $permalink, string $methodType = 'post'): void

@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
  * A select2 field. With 'relationship_table' it is a many-to-many field saved in that pivot
  * table after the row is saved; with 'datatable_orig' ("table|column|key") the selected ids
  * are also written comma-separated to that column on edit.
+ *
+ * @deprecated 7.2 Use Select::make()->relationship()->multiple() for many-to-many fields. See
+ *     docs/en/deprecations.md.
  */
 class Select2FieldHandler extends SelectFieldHandler
 {

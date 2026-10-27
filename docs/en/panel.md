@@ -4,8 +4,9 @@ CRUDBooster now has a second way to build the admin panel: **resources**, plain 
 your Eloquent models. A resource replaces the Module Generator, the `cms_moduls` row and the
 `cbInit()` arrays with one class you write, read and review like any other code.
 
-The classic layer is unchanged. `CBController` modules, `CRUDBooster::*`, the Module Generator,
-menus and the API generator keep working. Both layers use the same login, layout, sidebar,
+The classic layer still works. `CBController` modules, `CRUDBooster::*`, the Module Generator,
+menus and the API generator keep working, though they are deprecated since 7.2 (see
+[Deprecated APIs and How To Replace Them](./deprecations.md)). Both layers use the same login, layout, sidebar,
 privileges and audit log, so you can keep your existing modules and write new screens as
 resources.
 
@@ -108,7 +109,9 @@ scope returns a 404:
 ```php
 public function modifyQuery(Builder $query): Builder
 {
-    return $query->where('shop_id', CRUDBooster::me()->shop_id);
+    $admin = CmsUser::find(app(AuthenticationServiceInterface::class)->currentUserId());
+
+    return $query->where('shop_id', $admin->shop_id);
 }
 ```
 

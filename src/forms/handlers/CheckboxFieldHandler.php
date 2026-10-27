@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 /**
  * Checked values are saved ";"-separated. With 'datatable' ("table,column") the selected ids
  * are saved as that column's values; with 'relationship_table' they go to a pivot table instead.
+ *
+ * @deprecated 7.2 Use CrudBooster\Forms\Fields\CheckboxList, with relationship() for a pivot table. See
+ *     docs/en/deprecations.md.
  */
 class CheckboxFieldHandler extends BaseFieldHandler
 {

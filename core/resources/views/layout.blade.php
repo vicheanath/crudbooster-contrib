@@ -28,7 +28,7 @@
     </div>
     @if(!empty($breadcrumbs))
         <ol class="breadcrumb mt-1">
-            <li class="breadcrumb-item"><a href="{{ CRUDBooster::adminPath() }}"><i class="fa fa-dashboard"></i> {{ cbLang('home') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(config('crudbooster.ADMIN_PATH')) }}"><i class="fa fa-dashboard"></i> {{ __('crudbooster::crudbooster.home') }}</a></li>
             @foreach($breadcrumbs as $label => $url)
                 @if($url)
                     <li class="breadcrumb-item"><a href="{{ $url }}">{{ $label }}</a></li>

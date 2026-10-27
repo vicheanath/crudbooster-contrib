@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Panel::renderHook('head', ...)`, or the theme's CSS variables."
+  migrate: /en/migration-examples#extra-html-javascript-and-css
+  guide: /en/panel-extending#render-hooks
+---
+
 ## How To Put Your Own CSS Stylesheet
 
 Open the module controller. Find `$this->style_css` in `cbInit()` method.

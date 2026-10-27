@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`DatePicker::make('opens_at')->timeOnly()`."
+  migrate: /en/migration-examples#date-upload-yes-no-hidden
+  guide: /en/panel#forms
+---
+
 # Time Form Input Type
 Showing a timepicker
 

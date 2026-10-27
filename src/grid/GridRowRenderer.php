@@ -8,6 +8,9 @@ use crocodicstudio\crudbooster\controllers\CBController;
  * Renders the cells of the index table: the bulk checkbox, numbering, column values
  * (images, downloads, str_limit, nl2br, callbacks) and the row action buttons.
  * Each cell goes through the module's hook_row_index().
+ *
+ * @deprecated 7.2 Only used by CBController modules. Format cells with Column::formatStateUsing() or your own
+ *     Column subclass. See docs/en/deprecations.md.
  */
 class GridRowRenderer
 {

@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
  * A one-to-many child table edited inside the form. Rows arrive as "{slug of label}-{column}[]"
  * arrays and are saved into 'table' with 'foreign_key' pointing to the parent row. Editing
  * replaces all of the parent's child rows.
+ *
+ * @deprecated 7.2 Manage child rows as their own resource, filtered by the parent
+ *     (SelectFilter::relationship()). See docs/en/deprecations.md.
  */
 class ChildFieldHandler extends BaseFieldHandler
 {

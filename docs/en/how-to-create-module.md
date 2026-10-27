@@ -1,4 +1,12 @@
+---
+deprecated:
+  instead: "Generate a resource: `php artisan crudbooster:make-resource Product --generate`."
+  migrate: /en/migration-examples#the-whole-module-in-six-steps
+  guide: /en/panel#quick-start
+---
+
 # How To Create Module (CRUD)
+
 Go to **Module Generator** menu -> Add New Module
 ## Step 1
 | Field Name      | Description         |

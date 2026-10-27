@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "Table columns: `TextColumn::make('name')->searchable()->sortable()`."
+  migrate: /en/migration-examples#a-plain-column
+  guide: /en/panel#columns
+---
+
 # How To Add Column At Grid Data
 This documentation is for manual add column only instead by using Module Generator.
 

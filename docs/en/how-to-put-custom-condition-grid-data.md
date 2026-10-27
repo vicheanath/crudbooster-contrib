@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`modifyQuery()` on the resource, or `Table::modifyQueryUsing()`."
+  migrate: /en/migration-examples#the-list-query
+  guide: /en/panel#scoping-every-page
+---
+
 ### How To Put A Custom Condition At Grid Data
 
 In some case you need to make a condition of grid data query.

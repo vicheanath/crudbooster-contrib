@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`CheckboxList::make('tags')->relationship('tags', 'name')`."
+  migrate: /en/migration-examples#many-to-many
+  guide: /en/panel#forms
+---
+
 # Checkbox Form Type
 
 ### Checkbox With Your Own Enum

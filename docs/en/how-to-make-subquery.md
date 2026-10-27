@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`state(fn ($record) => ...)`, or `withCount()` / `withSum()` in `modifyQuery()`."
+  migrate: /en/migration-examples#a-subquery-column
+  guide: /en/panel#columns
+---
+
 # How To Make A Subquery Column at Grid Data
 
 ### Table : Products

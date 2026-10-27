@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
  * is left out when its column is nullable and saved as '' otherwise; fields named like a
  * password (PASSWORD_FIELDS_CANDIDATE) are hashed, or left unchanged when empty.
  * Subclasses adjust the value in normalize() and transform().
+ *
+ * @deprecated 7.2 Only used by CBController modules. Extend CrudBooster\Forms\Fields\Field instead. See
+ *     docs/en/deprecations.md.
  */
 abstract class BaseFieldHandler implements FieldHandlerInterface
 {

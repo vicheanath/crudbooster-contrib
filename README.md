@@ -25,7 +25,8 @@ Coming from `crocodicstudio/crudbooster` 5.x? Read [UPGRADE.md](UPGRADE.md). Rel
 
 ### Two ways to build screens
 - **Classic modules**: generate a CRUD from a table with the Module Generator and customise it in `cbInit()`.
-  Unchanged from 5.x.
+  Unchanged from 5.x, and deprecated since 7.2: see [Deprecated APIs](/docs/en/deprecations.md) for the
+  replacement of each class and helper.
 - **Resources and pages**: code-first classes on Eloquent models, with typed columns, fields, filters and actions,
   policies, plugins and generators. See [Resources: Code-First Admin Pages](/docs/en/panel.md).
 

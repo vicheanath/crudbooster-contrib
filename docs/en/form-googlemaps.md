@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "A `ViewField` with your map, or your own field type."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # Google Maps Form Type
 Input address with google maps popup
 

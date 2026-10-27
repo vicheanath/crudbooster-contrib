@@ -9,6 +9,9 @@ use Illuminate\Contracts\Container\Container;
  * The formats offered by the index page's export dialog. Apps add their own:
  *
  *     app(ExporterRegistry::class)->register('json', JsonExporter::class);
+ *
+ * @deprecated 7.2 Only used by CBController modules. Export from a resource with a BulkAction that returns a
+ *     download. See docs/en/deprecations.md.
  */
 class ExporterRegistry
 {

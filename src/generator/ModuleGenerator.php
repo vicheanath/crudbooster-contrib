@@ -8,6 +8,8 @@ use crocodicstudio\crudbooster\contracts\Schema\SchemaInspectorInterface;
 /**
  * Writes the classic module controller from stubs/module_controller.stub. Columns and form fields are
  * guessed from the table's schema and the *_FIELDS_CANDIDATE config lists.
+ *
+ * @deprecated 7.2 Use `php artisan crudbooster:make-resource Model --generate`. See docs/en/deprecations.md.
  */
 final class ModuleGenerator implements ModuleGeneratorInterface
 {

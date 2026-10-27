@@ -4,6 +4,8 @@ namespace crocodicstudio\crudbooster\forms;
 
 /**
  * What a form is saving: the module's table, and the row once it has an id.
+ *
+ * @deprecated 7.2 Only used by CBController modules. See docs/en/deprecations.md.
  */
 final class FormContext
 {

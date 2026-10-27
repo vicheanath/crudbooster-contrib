@@ -5,6 +5,10 @@ namespace crocodicstudio\crudbooster\grid;
 use crocodicstudio\crudbooster\contracts\Grid\GridFilterParserInterface;
 use Illuminate\Database\Query\Builder;
 
+/**
+ * @deprecated 7.2 Only used by CBController modules. Use the filters in CrudBooster\Tables\Filters. See
+ *     docs/en/deprecations.md.
+ */
 final class GridFilterParser implements GridFilterParserInterface
 {
     public function apply(Builder $query, array $filters): bool

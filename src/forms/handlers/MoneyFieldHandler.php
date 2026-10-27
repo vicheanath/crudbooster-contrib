@@ -2,6 +2,9 @@
 
 namespace crocodicstudio\crudbooster\forms\handlers;
 
+/**
+ * @deprecated 7.2 Use TextInput::make()->numeric()->prefix('$'). See docs/en/deprecations.md.
+ */
 class MoneyFieldHandler extends BaseFieldHandler
 {
     protected array $types = ['money'];

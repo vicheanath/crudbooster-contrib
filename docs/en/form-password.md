@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`TextInput::make('password')->password()`."
+  migrate: /en/migration-examples#text-email-number-password-textarea
+  guide: /en/panel#forms
+---
+
 # Password Form Type
 Showing a password input type
 

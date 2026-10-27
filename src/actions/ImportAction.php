@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Validator;
 /**
  * The import wizard: upload() stores the file, preview() maps its headings to the table's
  * columns, mapColumns() keeps the mapping and importChunk() inserts the rows, reporting progress.
+ *
+ * @deprecated 7.2 Only used by CBController modules. Import with a page (CrudBooster\Pages\Page::submit())
+ *     and Laravel Excel. See docs/en/deprecations.md.
  */
 class ImportAction extends CrudAction
 {

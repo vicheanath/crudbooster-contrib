@@ -84,7 +84,7 @@ class ResourceController extends Controller
         });
 
         $title = $resource->getRecordTitle($record);
-        $this->audit->log(cbLang('log_add', ['name' => $title, 'module' => $resource::getPluralLabel()]));
+        $this->audit->log(__('crudbooster::crudbooster.log_add', ['name' => $title, 'module' => $resource::getPluralLabel()]));
 
         $redirect = $request->input('_after') === 'create' && $resource->can('create')
             ? $resource::url('create')
@@ -136,7 +136,7 @@ class ResourceController extends Controller
         });
 
         $title = $resource->getRecordTitle($record);
-        $this->audit->log(cbLang('log_update', ['name' => $title, 'module' => $resource::getPluralLabel()]));
+        $this->audit->log(__('crudbooster::crudbooster.log_update', ['name' => $title, 'module' => $resource::getPluralLabel()]));
 
         return redirect($this->returnUrl($request, $resource))
             ->with($this->message(__(':label ":title" was saved.', ['label' => $resource::getLabel(), 'title' => $title])));
@@ -217,7 +217,7 @@ class ResourceController extends Controller
             $resource->afterDelete($record);
         });
 
-        $this->audit->log(cbLang('log_delete', ['name' => $resource->getRecordTitle($record), 'module' => $resource::getPluralLabel()]));
+        $this->audit->log(__('crudbooster::crudbooster.log_delete', ['name' => $resource->getRecordTitle($record), 'module' => $resource::getPluralLabel()]));
     }
 
     private function form(Resource $resource, ?Model $record)

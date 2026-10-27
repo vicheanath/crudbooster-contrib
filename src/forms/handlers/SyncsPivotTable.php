@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 /**
  * Replaces the row's pivot rows in 'relationship_table' with the selected ids.
  * The pivot's columns are found with BaseFieldHandler::foreignKey().
+ *
+ * @deprecated 7.2 Select::relationship()->multiple() and CheckboxList::relationship() sync the pivot table.
+ *     See docs/en/deprecations.md.
  */
 trait SyncsPivotTable
 {

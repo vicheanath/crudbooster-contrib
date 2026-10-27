@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "Override `table()` on the resource, a theme view, or a page for a fully custom screen."
+  migrate: /en/migration-examples#statistics-and-custom-screens
+  guide: /en/panel-pages
+---
+
 # How To Make A Custom View Of Index Method
 
 A way to custom the index method is override the existing index method. This is best way if CB can't handle the layout that you want

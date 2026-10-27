@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`TextInput::make('stock')->numeric()`."
+  migrate: /en/migration-examples#text-email-number-password-textarea
+  guide: /en/panel#forms
+---
+
 # Number Form Type
 Showing input number
 

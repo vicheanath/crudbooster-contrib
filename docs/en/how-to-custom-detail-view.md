@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "Override `detail()` on the resource, or a page for a fully custom screen."
+  migrate: /en/migration-examples#statistics-and-custom-screens
+  guide: /en/panel#detail-page
+---
+
 # How To Make A Custom View Of Detail Method
 
 A way to make a custom view of detail method is override it. This is a best way if CB can't handle the layout that you want.

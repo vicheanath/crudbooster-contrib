@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Select::make('customer_id')->relationship('customer', 'name')`."
+  migrate: /en/migration-examples#select-from-a-table
+  guide: /en/panel#forms
+---
+
 # Datamodal Form Type
 Showing popup that contains a data table that you can choose
 

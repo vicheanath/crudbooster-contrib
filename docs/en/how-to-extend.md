@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "Custom field, column and filter classes, plugins and render hooks on the panel."
+  migrate: /en/deprecations#extension-points-of-classic-modules
+  guide: /en/panel-extending
+---
+
 # How To Extend CRUDBooster
 
 Modules written for 5.x work unchanged: a controller extends `CBController`, fills its properties in `cbInit()` and overrides `hook_*()` methods. Under that API the work is split into small services bound in Laravel's container, so you can add or replace a piece without editing vendor code.
@@ -79,6 +86,9 @@ $this->app->bind(\crocodicstudio\crudbooster\actions\DeleteAction::class, \App\C
 ```
 
 ## Define a module with the fluent API
+
+> **Deprecated since 7.2.** `CrudController` still works in 7.x, but new code should use a [resource](./panel.md). See
+> [Deprecated APIs and How To Replace Them](./deprecations.md).
 
 New modules can extend `CrudController` and describe themselves in `setup()` instead of setting properties:
 

@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`FileUpload::make('document')`."
+  migrate: /en/migration-examples#date-upload-yes-no-hidden
+  guide: /en/panel#forms
+---
+
 # Filemanager Form Type
 
 Sorry this type is currently not available / in research.

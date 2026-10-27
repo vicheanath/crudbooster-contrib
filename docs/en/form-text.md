@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`TextInput::make('name')`."
+  migrate: /en/migration-examples#text-email-number-password-textarea
+  guide: /en/panel#forms
+---
+
 # Text Form Input Type
 Showing an input text
 

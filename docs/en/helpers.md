@@ -1,3 +1,9 @@
+---
+deprecated:
+  instead: "The service contracts (`AuthenticationServiceInterface`, `SettingsRepositoryInterface`, ...) and Laravel APIs."
+  migrate: /en/migration-examples#helpers
+---
+
 # Helpers
 
 | Helper                        | Description                 |

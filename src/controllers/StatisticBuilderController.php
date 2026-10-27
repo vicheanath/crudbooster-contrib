@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Excel;
 use Illuminate\Support\Facades\PDF;
 use Illuminate\Support\Facades\Request;
 
+/**
+ * @deprecated 7.2 The Statistic Builder. Build dashboards as a page (CrudBooster\Pages\Page, `php artisan
+ *     crudbooster:make-page`). See docs/en/deprecations.md.
+ */
 class StatisticBuilderController extends CBController
 {
     use RequiresSuperadmin;

@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "A `ViewField` with your editor, or your own field type."
+  migrate: /en/deprecations#form-types
+  guide: /en/panel#forms
+---
+
 # WYSIWYG Form Input Type
 Showing a wysiwyg textarea input type
 

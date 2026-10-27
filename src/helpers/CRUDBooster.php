@@ -24,10 +24,17 @@ use crocodicstudio\crudbooster\contracts\Settings\SettingsRepositoryInterface;
 use crocodicstudio\crudbooster\models\CmsModul;
 use crocodicstudio\crudbooster\models\CmsUser;
 
+/**
+ * @deprecated 7.2 Each method names its replacement: a service contract you inject
+ *     (crocodicstudio\crudbooster\contracts\...), a Laravel facade, or the resource layer. See
+ *     docs/en/deprecations.md.
+ */
 class CRUDBooster
 {
     /**
      *	Comma-delimited data output from the child table
+     *
+     * @deprecated 7.2 Show a relationship in a resource column: TextColumn::make('tags.name').
      */
     public static function echoSelect2Mult($values, $table, $id, $name) {
         $values = explode(",", $values);
@@ -36,21 +43,33 @@ class CRUDBooster
 
     }
 
+    /**
+     * @deprecated 7.2 Use app(FileUploaderInterface::class)->uploadBase64($value).
+     */
     public static function uploadBase64($value, $id = null)
     {
         return app(FileUploaderInterface::class)->uploadBase64((string) $value, $id);
     }
 
+    /**
+     * @deprecated 7.2 Use app(FileUploaderInterface::class)->upload($name), or a FileUpload field in a resource.
+     */
     public static function uploadFile($name, $encrypt = false, $resize_width = null, $resize_height = null, $id = null)
     {
         return app(FileUploaderInterface::class)->upload($name, (bool) $encrypt, $resize_width, $resize_height, $id);
     }
 
+    /**
+     * @deprecated 7.2 Use app(SettingsRepositoryInterface::class)->get($name).
+     */
     public static function getSetting($name)
     {
         return app(SettingsRepositoryInterface::class)->get((string) $name);
     }
 
+    /**
+     * @deprecated 7.2 Use Model::create($data) or DB::table($table)->insertGetId($data).
+     */
     public static function insert($table, $data = [])
     {
         if (! $data['created_at']) {
@@ -66,6 +85,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use Model::find($id) or DB::table($table)->where($conditions)->first().
+     */
     public static function first($table, $id)
     {
         $table = self::parseSqlTable($table)['table'];
@@ -83,6 +105,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 An Eloquent query (Model::where(...)->orderBy(...)->get()) or DB::table($table).
+     */
     public static function get($table, $string_conditions = null, $orderby = null, $limit = null, $skip = null)
     {
         $table = self::parseSqlTable($table);
@@ -104,32 +129,54 @@ class CRUDBooster
         return $query->get();
     }
 
+    /**
+     * @deprecated 7.2 Use CmsUser::find(app(AuthenticationServiceInterface::class)->currentUserId()), which
+     *     returns the CmsUser model.
+     */
     public static function me()
     {
         // A plain row, as in 5.x: callers may cast or iterate it.
         return CmsUser::query()->toBase()->find(Session::get('admin_id'));
     }
 
+    /**
+     * @deprecated 7.2 Use app(AuthenticationServiceInterface::class)->currentUserId().
+     */
     public static function myId()
     {
         return app(AuthenticationServiceInterface::class)->currentUserId();
     }
 
+    /**
+     * @deprecated 7.2 Use app(AuthenticationServiceInterface::class)->isSuperadmin().
+     */
     public static function isSuperadmin()
     {
         return app(AuthenticationServiceInterface::class)->isSuperadmin();
     }
 
+    /**
+     * @deprecated 7.2 The name attribute of
+     *     CmsUser::find(app(AuthenticationServiceInterface::class)->currentUserId()).
+     */
     public static function myName()
     {
         return Session::get('admin_name');
     }
 
+    /**
+     * @deprecated 7.2 The photo attribute of
+     *     CmsUser::find(app(AuthenticationServiceInterface::class)->currentUserId()).
+     */
     public static function myPhoto()
     {
         return Session::get('admin_photo');
     }
 
+    /**
+     * @deprecated 7.2 Ask for one ability with $resource->can() or
+     *     app(\CrudBooster\Auth\Authorizer::class)->allows().
+     */
     public static function myPrivilege()
     {
         $roles = Session::get('admin_privileges_roles');
@@ -142,21 +189,36 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 The id_cms_privileges attribute of
+     *     CmsUser::find(app(AuthenticationServiceInterface::class)->currentUserId()).
+     */
     public static function myPrivilegeId()
     {
         return Session::get('admin_privileges');
     }
 
+    /**
+     * @deprecated 7.2 Use the privilege relationship:
+     *     CmsUser::find(app(AuthenticationServiceInterface::class)->currentUserId())->privilege->name.
+     */
     public static function myPrivilegeName()
     {
         return Session::get('admin_privileges_name');
     }
 
+    /**
+     * @deprecated 7.2 Use session('admin_lock').
+     */
     public static function isLocked()
     {
         return Session::get('admin_lock');
     }
 
+    /**
+     * @deprecated 7.2 Return back()->with(['message' => $message, 'message_type' => $type]); in a resource
+     *     action, successMessage().
+     */
     public static function redirectBack($message, $type = 'warning')
     {
 
@@ -168,6 +230,10 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Return redirect($to)->with(['message' => $message, 'message_type' => $type]); in a
+     *     resource action, successMessage().
+     */
     public static function redirect($to, $message, $type = 'warning')
     {
         // Callers often pass $_SERVER['HTTP_REFERER'], which is missing on direct requests.
@@ -181,31 +247,54 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use $resource->can('viewAny', $record) in a resource, or
+     *     app(\CrudBooster\Auth\Authorizer::class)->allows('viewAny', $slug, $model).
+     */
     public static function isView()
     {
         return app(PermissionCheckerInterface::class)->canView();
     }
 
+    /**
+     * @deprecated 7.2 Use $resource->can('update', $record) in a resource, or
+     *     app(\CrudBooster\Auth\Authorizer::class)->allows('update', $slug, $model).
+     */
     public static function isUpdate()
     {
         return app(PermissionCheckerInterface::class)->canUpdate();
     }
 
+    /**
+     * @deprecated 7.2 Use $resource->can('create', $record) in a resource, or
+     *     app(\CrudBooster\Auth\Authorizer::class)->allows('create', $slug, $model).
+     */
     public static function isCreate()
     {
         return app(PermissionCheckerInterface::class)->canCreate();
     }
 
+    /**
+     * @deprecated 7.2 Use $resource->can('view', $record) in a resource, or
+     *     app(\CrudBooster\Auth\Authorizer::class)->allows('view', $slug, $model).
+     */
     public static function isRead()
     {
         return app(PermissionCheckerInterface::class)->canRead();
     }
 
+    /**
+     * @deprecated 7.2 Use $resource->can('delete', $record) in a resource, or
+     *     app(\CrudBooster\Auth\Authorizer::class)->allows('delete', $slug, $model).
+     */
     public static function isDelete()
     {
         return app(PermissionCheckerInterface::class)->canDelete();
     }
 
+    /**
+     * @deprecated 7.2 Check each ability with $resource->can().
+     */
     public static function isCRUD()
     {
         if (self::isSuperadmin()) {
@@ -224,6 +313,10 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Inside a resource, static::getSlug() and static::getLabel(); elsewhere
+     *     CmsModul::query()->forPath($path)->first().
+     */
     public static function getCurrentModule()
     {
         $modulepath = self::getModulePath();
@@ -239,6 +332,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Build dashboards as pages (CrudBooster\Pages\Page).
+     */
     public static function getCurrentDashboardId()
     {
         if (Request::get('d') != null) {
@@ -251,6 +347,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 NavigationItem::activeWhen() marks the active sidebar link.
+     */
     public static function getCurrentMenuId()
     {
         if (Request::get('m') != null) {
@@ -265,22 +364,34 @@ class CRUDBooster
 
     /**
      * Absolute path inside the package's src/ directory, wherever Composer installed it.
+     *
+     * @deprecated 7.2 Internal to the package; there is no public replacement.
      */
     public static function packagePath($path = '')
     {
         return dirname(__DIR__).($path !== '' ? '/'.ltrim($path, '/') : '');
     }
 
+    /**
+     * @deprecated 7.2 Use app(MenuRepositoryInterface::class)->dashboard().
+     */
     public static function sidebarDashboard()
     {
         return app(MenuRepositoryInterface::class)->dashboard();
     }
 
+    /**
+     * @deprecated 7.2 Use app(MenuRepositoryInterface::class)->sidebar(); add links with
+     *     Panel::navigationItems().
+     */
     public static function sidebarMenu()
     {
         return app(MenuRepositoryInterface::class)->sidebar();
     }
 
+    /**
+     * @deprecated 7.2 Use Action::make(...)->requiresConfirmation() in a resource.
+     */
     public static function deleteConfirm($redirectTo)
     {
         $legacy = "swal({   
@@ -310,6 +421,9 @@ class CRUDBooster
         echo "if (window.Swal && Swal.fire) { Swal.fire($options).then(function (result) { if (result.isConfirmed) { location.href = $url; } }); } else { $legacy }";
     }
 
+    /**
+     * @deprecated 7.2 Inside a resource or page, static::getSlug().
+     */
     public static function getModulePath()
     {
         // Check to position of admin_path
@@ -330,6 +444,9 @@ class CRUDBooster
         return Request::segment($segment);
     }
 
+    /**
+     * @deprecated 7.2 Use ProductResource::url() or route('cb.resources.products.index').
+     */
     public static function mainpath($path = null)
     {
 
@@ -347,11 +464,17 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use url(config('crudbooster.ADMIN_PATH').'/'.$path), or Resource::url() and Page::url().
+     */
     public static function adminPath($path = null)
     {
         return url(config('crudbooster.ADMIN_PATH').'/'.$path);
     }
 
+    /**
+     * @deprecated 7.2 Take the record from the route or the action closure ($record).
+     */
     public static function getCurrentId()
     {
         $id = Session::get('current_row_id');
@@ -362,6 +485,9 @@ class CRUDBooster
         return $id;
     }
 
+    /**
+     * @deprecated 7.2 Use request()->route()->getActionMethod().
+     */
     public static function getCurrentMethod()
     {
         $action = str_replace("App\Http\Controllers", "", Route::currentRouteAction());
@@ -371,6 +497,9 @@ class CRUDBooster
         return $method;
     }
 
+    /**
+     * @deprecated 7.2 Use Cache::forget($name).
+     */
     public static function clearCache($name)
     {
         if (Cache::forget($name)) {
@@ -380,16 +509,25 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use app(SchemaInspectorInterface::class)->isNullable($table, $field).
+     */
     public static function isColumnNULL($table, $field)
     {
         return app(SchemaInspectorInterface::class)->isNullable((string) $table, (string) $field);
     }
 
+    /**
+     * @deprecated 7.2 Use app(SchemaInspectorInterface::class)->columnType($table, $field).
+     */
     public static function getFieldType($table, $field)
     {
         return app(SchemaInspectorInterface::class)->columnType((string) $table, (string) $field);
     }
 
+    /**
+     * @deprecated 7.2 Read resource filters from request('filters.name').
+     */
     public static function getValueFilter($field)
     {
         $filter = Request::get('filter_column');
@@ -398,6 +536,10 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Read the sort from request('sort') and request('direction'), or use
+     *     Table::defaultSort().
+     */
     public static function getSortingFilter($field)
     {
         $filter = Request::get('filter_column');
@@ -406,6 +548,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use the filters in CrudBooster\Tables\Filters.
+     */
     public static function getTypeFilter($field)
     {
         $filter = Request::get('filter_column');
@@ -414,6 +559,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use Str::between($string, $start, $end).
+     */
     public static function stringBetween($string, $start, $end)
     {
         $string = ' '.$string;
@@ -427,6 +575,9 @@ class CRUDBooster
         return substr($string, $ini, $len);
     }
 
+    /**
+     * @deprecated 7.2 Use Carbon::parse($datetime)->diffForHumans().
+     */
     public static function timeAgo($datetime_to, $datetime_from = null, $full = false)
     {
         $datetime_from = ($datetime_from) ?: date('Y-m-d H:i:s');
@@ -464,21 +615,33 @@ class CRUDBooster
         return $string ? implode(', ', $string).' ' : 'just now';
     }
 
+    /**
+     * @deprecated 7.2 Use app(TemplateMailerInterface::class)->mailer().
+     */
     public static function mailer()
     {
         return app(TemplateMailerInterface::class)->mailer();
     }
 
+    /**
+     * @deprecated 7.2 Use app(TemplateMailerInterface::class)->sendQueued($queue).
+     */
     public static function sendEmailQueue($queue)
     {
         app(TemplateMailerInterface::class)->sendQueued($queue);
     }
 
+    /**
+     * @deprecated 7.2 Use app(TemplateMailerInterface::class)->send($config), or a Laravel Mailable.
+     */
     public static function sendEmail($config = [])
     {
         return app(TemplateMailerInterface::class)->send((array) $config);
     }
 
+    /**
+     * @deprecated 7.2 Use $request->validate($rules), or rules() on resource fields.
+     */
     public static function valid($arr = [], $type = 'json')
     {
         $input_arr = Request::all();
@@ -509,6 +672,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use DB::connection($name)->table($table) for another database.
+     */
     public static function parseSqlTable($table)
     {
 
@@ -525,6 +691,9 @@ class CRUDBooster
         return false;
     }
 
+    /**
+     * @deprecated 7.2 Use Cache::forever() or Cache::tags($section)->put().
+     */
     public static function putCache($section, $cache_name, $cache_value)
     {
         if (Cache::has($section)) {
@@ -539,6 +708,9 @@ class CRUDBooster
         return true;
     }
 
+    /**
+     * @deprecated 7.2 Use Cache::get().
+     */
     public static function getCache($section, $cache_name)
     {
 
@@ -551,11 +723,17 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use Cache::flush().
+     */
     public static function flushCache()
     {
         Cache::flush();
     }
 
+    /**
+     * @deprecated 7.2 Use Cache::forget().
+     */
     public static function forgetCache($section, $cache_name)
     {
         if (Cache::has($section)) {
@@ -569,6 +747,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use (new Model)->getKeyName(), or app(SchemaInspectorInterface::class)->primaryKey($table).
+     */
     public static function pk($table)
     {
         return self::findPrimaryKey($table);
@@ -600,11 +781,17 @@ class CRUDBooster
 //         }
 //     }
 
+    /**
+     * @deprecated 7.2 Use (new Model)->getKeyName(), or app(SchemaInspectorInterface::class)->primaryKey($table).
+     */
     public static function findPrimaryKey($table)
     {
         return app(SchemaInspectorInterface::class)->primaryKey((string) $table);
     }
 
+    /**
+     * @deprecated 7.2 Let the database assign ids (auto-increment, or HasUuids / HasUlids on the model).
+     */
     public static function newId($table)
     {
         $key = CRUDBooster::findPrimaryKey($table);
@@ -613,6 +800,9 @@ class CRUDBooster
         return $id;
     }
 
+    /**
+     * @deprecated 7.2 Use app(SchemaInspectorInterface::class)->hasColumn($table, $field) or Schema::hasColumn().
+     */
     public static function isColumnExists($table, $field)
     {
 
@@ -638,6 +828,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Define the relationship on the model (hasMany(), belongsTo()).
+     */
     public static function getForeignKey($parent_table, $child_table)
     {
         $parent_table = CRUDBooster::parseSqlTable($parent_table)['table'];
@@ -649,6 +842,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Define the relationship on the model (belongsTo()).
+     */
     public static function getTableForeignKey($fieldName)
     {
         $table = null;
@@ -661,6 +857,9 @@ class CRUDBooster
         return $table;
     }
 
+    /**
+     * @deprecated 7.2 Define the relationship on the model (belongsTo()).
+     */
     public static function isForeignKey($fieldName)
     {
         if (substr($fieldName, 0, 3) == 'id_') {
@@ -689,6 +888,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use ProductResource::url(parameters: ['filters' => [...], 'sort' => ...]).
+     */
     public static function urlFilterColumn($key, $type, $value = '', $singleSorting = true)
     {
         $params = Request::all();
@@ -713,16 +915,26 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use app(AuditLoggerInterface::class)->log($description, $details). Resources log create,
+     *     update and delete themselves.
+     */
     public static function insertLog($description, $details = '')
     {
         app(AuditLoggerInterface::class)->log((string) $description, (string) $details);
     }
 
+    /**
+     * @deprecated 7.2 Use url()->previous().
+     */
     public static function referer()
     {
         return Request::server('HTTP_REFERER');
     }
 
+    /**
+     * @deprecated 7.2 Use Schema::getTableListing().
+     */
     public static function listTables()
     {
         $tables = [];
@@ -755,6 +967,10 @@ class CRUDBooster
         return $tables;
     }
 
+    /**
+     * @deprecated 7.2 Keep state in the query string: resource filters, search and sort are links
+     *     (Resource::url(parameters: ...)).
+     */
     public static function getUrlParameters($exception = null)
     {
         @$get = $_GET;
@@ -783,6 +999,9 @@ class CRUDBooster
         return $inputhtml;
     }
 
+    /**
+     * @deprecated 7.2 Protect API routes with Sanctum or the CBAuthAPI middleware.
+     */
     public static function authAPI()
     {
         $allowedUserAgent = config('crudbooster.API_USER_AGENT_ALLOWED');
@@ -816,6 +1035,9 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Use app(NotificationSenderInterface::class)->send($content, $url, $userIds).
+     */
     public static function sendNotification($config = [])
     {
         app(NotificationSenderInterface::class)->send(
@@ -827,6 +1049,9 @@ class CRUDBooster
         return true;
     }
 
+    /**
+     * @deprecated 7.2 Use FCM::send((array) $tokens, $data), or a Laravel notification channel for FCM.
+     */
     public static function sendFCM($regID, $data)
     {
         if (! $data['title'] || ! $data['content']) {
@@ -836,17 +1061,27 @@ class CRUDBooster
         return FCM::send((array) $regID, $data);
     }
 
+    /**
+     * @deprecated 7.2 Use app(SchemaInspectorInterface::class)->columns($table) or
+     *     Schema::getColumnListing($table).
+     */
     public static function getTableColumns($table)
     {
         $table = CRUDBooster::parseSqlTable($table);
         return app(SchemaInspectorInterface::class)->columns(($table['database'] ? $table['database'].'.' : '').$table['table']);
     }
 
+    /**
+     * @deprecated 7.2 Set $recordTitleAttribute on a resource.
+     */
     public static function getNameTable($columns)
     {
         return app(ModuleGeneratorInterface::class)->titleColumn((array) $columns);
     }
 
+    /**
+     * @deprecated 7.2 Check for the resource with app(\CrudBooster\Panel\Panel::class)->getResource($slug).
+     */
     public static function isExistsController($table)
     {
         $controllername = ucwords(str_replace('_', ' ', $table));
@@ -860,11 +1095,17 @@ class CRUDBooster
         }
     }
 
+    /**
+     * @deprecated 7.2 Write API endpoints as Laravel routes and controllers.
+     */
     public static function generateAPI($controller_name, $table_name, $permalink, $method_type = 'post')
     {
         app(ApiGeneratorInterface::class)->generate((string) $controller_name, (string) $table_name, (string) $permalink, (string) $method_type);
     }
 
+    /**
+     * @deprecated 7.2 Use `php artisan crudbooster:make-resource Model --generate`.
+     */
     public static function generateController($table, $name = null)
     {
         return app(ModuleGeneratorInterface::class)->generate((string) $table, $name ? (string) $name : null);

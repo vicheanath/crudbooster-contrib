@@ -8,6 +8,9 @@ use Intervention\Image\Interfaces\ImageInterface;
 /**
  * Thin wrapper around Intervention Image v3, registered as the `Image` alias.
  * Replaces the removed Intervention\Image\ImageManagerStatic (v2).
+ *
+ * @deprecated 7.2 Use Intervention Image v3 directly: `Intervention\Image\ImageManager::gd()->read($path)`
+ *     (or the intervention/image-laravel facade). See docs/en/deprecations.md.
  */
 class CBImage
 {

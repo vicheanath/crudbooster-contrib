@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`Select::make()->relationship()`; dependent options need your own field type."
+  migrate: /en/migration-examples#select-from-a-table
+  guide: /en/panel-extending#your-own-field-type
+---
+
 ### How To Make A Graded Select Boxes In A Form (Parent Select -> Child Select -> Child Select)
 
 ### Provinces Table - `provinces`

@@ -6,6 +6,9 @@ use crocodicstudio\crudbooster\forms\FormContext;
 
 /**
  * The submitted list of texts is saved "|"-separated.
+ *
+ * @deprecated 7.2 Use a CheckboxList, a JSON-cast attribute with a custom field, or a child resource. See
+ *     docs/en/deprecations.md.
  */
 class MultitextFieldHandler extends BaseFieldHandler
 {

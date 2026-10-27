@@ -32,6 +32,9 @@ use Illuminate\Support\Str;
  * @method $this placeholder(string $text)
  * @method $this readonly(bool $readonly = true)
  * @method $this disabled(bool $disabled = true)
+ *
+ * @deprecated 7.2 Use the field classes in CrudBooster\Forms\Fields (TextInput, Select, FileUpload, ...). See
+ *     docs/en/deprecations.md.
  */
 class Field
 {

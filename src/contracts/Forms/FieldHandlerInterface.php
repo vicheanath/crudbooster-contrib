@@ -6,6 +6,9 @@ use crocodicstudio\crudbooster\forms\FormContext;
 
 /**
  * Turns the submitted value of one form field type into data to save.
+ *
+ * @deprecated 7.2 Only used by CBController modules. Add field types by extending
+ *     CrudBooster\Forms\Fields\Field, or use ViewField. See docs/en/deprecations.md.
  */
 interface FieldHandlerInterface
 {

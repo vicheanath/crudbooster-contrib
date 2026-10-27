@@ -6,6 +6,8 @@ use crocodicstudio\crudbooster\forms\FormContext;
 
 /**
  * Turns a laravel-filemanager URL into the "uploads/..." path CRUDBooster serves files from.
+ *
+ * @deprecated 7.2 Use CrudBooster\Forms\Fields\FileUpload. See docs/en/deprecations.md.
  */
 class FileManagerFieldHandler extends BaseFieldHandler
 {

@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Deletes a row (soft delete when the table has deleted_at), or with
  * `deleteImage()` the file in one of its columns.
+ *
+ * @deprecated 7.2 Only used by CBController modules; resources delete through Eloquent with
+ *     beforeDelete()/afterDelete(). See docs/en/deprecations.md.
  */
 class DeleteAction extends CrudAction
 {

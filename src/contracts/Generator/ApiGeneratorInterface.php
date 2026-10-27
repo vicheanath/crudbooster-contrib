@@ -2,6 +2,9 @@
 
 namespace crocodicstudio\crudbooster\contracts\Generator;
 
+/**
+ * @deprecated 7.2 Write API endpoints as Laravel routes and controllers. See docs/en/deprecations.md.
+ */
 interface ApiGeneratorInterface
 {
     /**

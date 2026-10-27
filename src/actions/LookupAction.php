@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\DB;
 /**
  * The JSON and modal lookups form inputs load their options from: select2 (findData),
  * dependent selects (dataTable) and the datamodal browser (modalData).
+ *
+ * @deprecated 7.2 Only used by CBController modules. Use Select::relationship() in a resource form. See
+ *     docs/en/deprecations.md.
  */
 class LookupAction
 {

@@ -4,6 +4,10 @@ namespace crocodicstudio\crudbooster\contracts\Export;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @deprecated 7.2 Only used by CBController modules. Export from a resource with a BulkAction that returns a
+ *     download. See docs/en/deprecations.md.
+ */
 interface ExporterInterface
 {
     /**

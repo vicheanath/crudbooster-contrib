@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "The `index.before` render hook."
+  migrate: /en/migration-examples#extra-html-javascript-and-css
+  guide: /en/panel-extending#render-hooks
+---
+
 # How To Create A Message Info At Top Of Grid Data (Bootstrap Alert)
 
 ```php

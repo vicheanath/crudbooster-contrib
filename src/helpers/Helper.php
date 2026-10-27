@@ -16,6 +16,8 @@ if(!function_exists('ends_with')) {
      * @param $text
      * @param $need
      * @return bool
+     *
+     * @deprecated 7.2 Use Str::endsWith($text, $need).
      */
     function ends_with($text, $need) {
         return \Illuminate\Support\Str::endsWith($text, $need);
@@ -28,6 +30,8 @@ if(!function_exists('cbLang')) {
      * @param array $replace
      * @param null $locale
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|null
+     *
+     * @deprecated 7.2 Use __('crudbooster::crudbooster.'.$key, $replace, $locale).
      */
     function cbLang($key, array $replace = [], $locale = null) {
         return trans("crudbooster::crudbooster.".$key, $replace, $locale);
@@ -38,6 +42,8 @@ if(!function_exists('db')) {
     /**
      * @param string $table
      * @return \Illuminate\Database\Query\Builder
+     *
+     * @deprecated 7.2 Use DB::table($table), or an Eloquent model.
      */
     function db(string $table) {
         return \Illuminate\Support\Facades\DB::table($table);
@@ -45,6 +51,9 @@ if(!function_exists('db')) {
 }
 
 if(!function_exists('assetThumbnail')) {
+    /**
+     * @deprecated 7.2 Use ImageColumn in a resource, or asset() with your own thumbnail path.
+     */
     function assetThumbnail($path) {
         $path = str_replace('uploads/','uploads_thumbnail/',$path);
         return asset($path);
@@ -52,6 +61,10 @@ if(!function_exists('assetThumbnail')) {
 }
 
 if(!function_exists('assetResize')) {
+    /**
+     * @deprecated 7.2 Use Intervention Image v3 (ImageManager::gd()->read($path)->cover($width, $height)), or
+     *     ImageColumn::size().
+     */
     function assetResize($path,$width,$height=null,$quality=70) {
         $basename = basename($path);
         $pathWithoutName = str_replace($basename, '', $path);
@@ -71,6 +84,9 @@ if(!function_exists('extract_unit')) {
     Credits: Bit Repository
     URL: http://www.bitrepository.com/extract-content-between-two-delimiters-with-php.html
     */
+    /**
+     * @deprecated 7.2 Use Str::between($string, $start, $end).
+     */
     function extract_unit($string, $start, $end)
     {
         $pos = stripos($string, $start);
@@ -85,6 +101,10 @@ if(!function_exists('extract_unit')) {
 
 
 if(!function_exists('now')) {
+    /**
+     * @deprecated 7.2 Use Laravel's now() (a Carbon instance). Laravel 12+ always defines it, so this fallback
+     *     never loads.
+     */
     function now() {
         return date('Y-m-d H:i:s');
     }
@@ -103,6 +123,8 @@ if(!function_exists('get_setting')) {
      * @param $key
      * @param null $default
      * @return bool
+     *
+     * @deprecated 7.2 Use app(SettingsRepositoryInterface::class)->get($key) ?: $default.
      */
     function get_setting($key, $default = null) {
         $setting = \crocodicstudio\crudbooster\helpers\CB::getSetting($key);
@@ -112,12 +134,18 @@ if(!function_exists('get_setting')) {
 }
 
 if(!function_exists('str_random')) {
+    /**
+     * @deprecated 7.2 Use Str::random($length).
+     */
     function str_random($length = 16) {
         return \Illuminate\Support\Str::random($length);
     }
 }
 
 if(!function_exists('str_slug')) {
+    /**
+     * @deprecated 7.2 Use Str::slug($text, $separator, $language).
+     */
     function str_slug($text, $separator = "-", $language = "en") {
         return \Illuminate\Support\Str::slug($text, $separator, $language);
     }
@@ -125,6 +153,9 @@ if(!function_exists('str_slug')) {
 
 if(!function_exists('str_limit')) {
     // Removed from Laravel 6; grid columns and exports use it for 'str_limit'.
+    /**
+     * @deprecated 7.2 Use Str::limit($value, $limit, $end), or TextColumn::limit() in a resource.
+     */
     function str_limit($value, $limit = 100, $end = '...') {
         return \Illuminate\Support\Str::limit((string) $value, (int) $limit, $end);
     }
@@ -135,6 +166,8 @@ if(!function_exists('g')) {
      * @param $key
      * @param null $default
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\Request|string
+     *
+     * @deprecated 7.2 Use request($key, $default).
      */
     function g($key, $default = null) {
         return request($key, $default);
@@ -142,6 +175,9 @@ if(!function_exists('g')) {
 }
 
 if(!function_exists('min_var_export')) {
+    /**
+     * @deprecated 7.2 Use var_export($input, true).
+     */
     function min_var_export($input) {
         if(is_array($input)) {
             $buffer = [];
@@ -157,6 +193,9 @@ if(!function_exists('rrmdir')) {
     /*
     * http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
     */
+    /**
+     * @deprecated 7.2 Use File::deleteDirectory($dir).
+     */
     function rrmdir($dir) {
         if (is_dir($dir)) {
             $objects = scandir($dir);

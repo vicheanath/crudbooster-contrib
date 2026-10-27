@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 
 /**
  * The add form (no id) and the edit form (an id).
+ *
+ * @deprecated 7.2 Only used by CBController modules; a resource's form() builds its create and edit pages.
+ *     See docs/en/deprecations.md.
  */
 class FormAction extends CrudAction
 {

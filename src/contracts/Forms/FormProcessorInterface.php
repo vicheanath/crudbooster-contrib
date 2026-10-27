@@ -4,6 +4,10 @@ namespace crocodicstudio\crudbooster\contracts\Forms;
 
 use crocodicstudio\crudbooster\forms\FormContext;
 
+/**
+ * @deprecated 7.2 Only used by CBController modules; resource fields save themselves (dehydrateStateUsing()).
+ *     See docs/en/deprecations.md.
+ */
 interface FormProcessorInterface
 {
     /**

@@ -1,3 +1,10 @@
+---
+deprecated:
+  instead: "`beforeCreate(array $data)` and `beforeUpdate(array $data, $record)` on the resource."
+  migrate: /en/migration-examples#hooks
+  guide: /en/panel#lifecycle-hooks
+---
+
 ## How To Inject A Post Data In Create/Update/Delete Data Process
 
 ### Products Table - products
