@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <nav role="navigation" aria-label="{{ __('Pagination') }}" class="flex items-center gap-1">
+    <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex items-center gap-1">
         @php
             $link = 'inline-flex size-8 items-center justify-center rounded-lg text-sm transition-all';
             $idle = $link.' hover:bg-muted hover:text-foreground';
