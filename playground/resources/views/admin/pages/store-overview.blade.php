@@ -5,6 +5,28 @@
     @endforeach
 </x-cb::grid>
 
+<x-cb::grid cols="2">
+<x-cb::card title="Latest orders" flush>
+    <x-slot:actions><x-cb::button :href="\App\Admin\Resources\Shop\OrderResource::url()" size="sm">All orders</x-cb::button></x-slot:actions>
+    <x-cb::table>
+        <table>
+            <thead><tr><th>Order</th><th>Customer</th><th>Status</th><th class="text-end">Total</th></tr></thead>
+            <tbody>
+            @forelse($latestOrders as $order)
+                <tr>
+                    <td><a href="{{ \App\Admin\Resources\Shop\OrderResource::url('view', $order) }}">{{ $order->order_number }}</a></td>
+                    <td>{{ $order->customer?->name }}</td>
+                    <td><x-cb::badge :color="\App\Admin\Resources\Shop\OrderResource::COLORS[$order->status] ?? 'secondary'">{{ \App\Models\ShopOrder::STATUSES[$order->status] ?? $order->status }}</x-cb::badge></td>
+                    <td class="text-end">${{ number_format((float) $order->total, 2) }}</td>
+                </tr>
+            @empty
+                <tr><td colspan="4">No orders yet.</td></tr>
+            @endforelse
+            </tbody>
+        </table>
+    </x-cb::table>
+</x-cb::card>
+
 <x-cb::card title="Low stock" description="Products with fewer than 10 units." flush>
     <x-cb::table>
         <table>
@@ -22,3 +44,4 @@
         </table>
     </x-cb::table>
 </x-cb::card>
+</x-cb::grid>

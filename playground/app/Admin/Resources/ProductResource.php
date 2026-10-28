@@ -28,7 +28,9 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'fa fa-cube';
 
-    protected static ?string $navigationGroup = 'Catalog (resources)';
+    protected static ?string $navigationGroup = 'E-commerce (resources)';
+
+    protected static int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'name';
 

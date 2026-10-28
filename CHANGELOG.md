@@ -53,6 +53,13 @@ Laravel replace. Everything keeps working in 7.x; removal is possible in 8.0 at 
 - New guide `docs/en/migration-examples.md`: a module migrated in six steps (keeping its URL and privileges), then
   before/after code for columns, filters, form types, hooks, buttons, exports, sub modules, render hooks, pages,
   helpers and API endpoints. Each classic page's "How to migrate" link opens its matching example.
+- Playground: resource examples for three systems, built only from the shipped components. **E-commerce**
+  (categories, customers, orders with a status workflow and order items, coupons), **HR** (departments,
+  employees, leave requests, skills, an HR dashboard) and **CRM** (companies, contacts, deals, activities, tags,
+  a sales pipeline page), with migrations, idempotent seeders and `tests/Feature/AdminExamplesTest.php`.
+- Fixed: on macOS and Windows, every paginated list in the Tailwind theme failed with "htmlspecialchars():
+  Argument #1 must be of type string, array given". The pagination's `__('Pagination')` label loaded Laravel's
+  `pagination.php` translation file on case-insensitive file systems; it now uses `__('Pagination Navigation')`.
 
 ### Resources and pages: a code-first admin layer (no changes needed in existing modules)
 A second way to build admin screens, next to classic modules. It lives in the new `CrudBooster\` namespace
@@ -77,7 +84,7 @@ A second way to build admin screens, next to classic modules. It lives in the ne
 - Classes in `app/Admin/Resources` and `app/Admin/Pages` are discovered; see the new `PANEL` config key.
 - The admin layout accepts a `page_header` section and the `head` / `body.end` render hooks; the sidebar lists
   panel links after the Menu Management menus. Classic module pages render as before.
-- Playground: `Products` and `Reviews` resources and a `Store Overview` page, under "Catalog (resources)", on
+- Playground: `Products` and `Reviews` resources and a `Store Overview` page, under "E-commerce (resources)", on
   the same tables as the classic shop modules.
 - 29 new tests (`tests/Feature/PanelTest.php`, `PanelCommandsTest.php`, `tests/Unit/Panel`).
 

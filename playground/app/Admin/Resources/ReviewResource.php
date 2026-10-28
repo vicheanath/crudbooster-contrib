@@ -26,9 +26,9 @@ class ReviewResource extends Resource
 
     protected static ?string $navigationIcon = 'fa fa-star-half-o';
 
-    protected static ?string $navigationGroup = 'Catalog (resources)';
+    protected static ?string $navigationGroup = 'E-commerce (resources)';
 
-    protected static int $navigationSort = 1;
+    protected static int $navigationSort = 3;
 
     protected static array $pages = ['index', 'view', 'edit'];
 
